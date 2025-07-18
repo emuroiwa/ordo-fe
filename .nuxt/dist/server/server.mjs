@@ -1,0 +1,1 @@
+export { default } from "file:///home/payfastdeveloper/Documents/projects/ordo/fe/node_modules/@nuxt/vite-builder/dist/runtime/vite-node.mjs"
