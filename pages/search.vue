@@ -8,17 +8,14 @@
             <NuxtLink to="/" class="text-2xl font-bold text-blue-600">ORDO</NuxtLink>
             <nav class="hidden md:flex space-x-8">
               <NuxtLink to="/search" class="text-blue-600 border-b-2 border-blue-600 pb-2 font-medium">Search</NuxtLink>
-              <a href="#" class="text-gray-700 hover:text-blue-600">Map Search</a>
-              <a href="#" class="text-gray-700 hover:text-blue-600">Find an Agent</a>
-              <a href="#" class="text-gray-700 hover:text-blue-600">How it Works</a>
-              <a href="#" class="text-gray-700 hover:text-blue-600">About us</a>
+              <NuxtLink to="/map-search" class="text-gray-700 hover:text-blue-600">Map Search</NuxtLink>
+              <NuxtLink to="/how-it-works" class="text-gray-700 hover:text-blue-600">How it Works</NuxtLink>
+              <NuxtLink to="/about" class="text-gray-700 hover:text-blue-600">About us</NuxtLink>
             </nav>
           </div>
           <div class="flex items-center space-x-4">
-            <select class="border-none text-gray-700">
-              <option>English</option>
-            </select>
-            <button class="text-blue-600 hover:text-blue-800">Login</button>
+            <NuxtLink to="/login" class="text-blue-600 hover:text-blue-800 transition-colors duration-200">Login</NuxtLink>
+            <NuxtLink to="/register" class="backdrop-blur-sm bg-white/20 border border-white/30 px-4 py-2 rounded-xl font-medium text-gray-700 hover:bg-white/30 transition-all duration-300">Register</NuxtLink>
             <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
               List a Service
             </button>
