@@ -1,419 +1,486 @@
 <template>
-  <div class="min-h-screen relative overflow-hidden">
-    <!-- Background Gradient -->
-    <div class="fixed inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1920&h=1080&fit=crop&crop=entropy&auto=format&q=80')] bg-cover bg-center opacity-10"></div>
-      <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-indigo-500/5 to-purple-500/5"></div>
+  <div class="min-h-screen bg-gray-50 flex">
+    <!-- Sidebar -->
+    <div class="w-64 bg-white shadow-lg border-r border-gray-200 fixed inset-y-0 left-0 z-50">
+      <!-- Logo -->
+      <div class="flex items-center h-16 px-6 border-b border-gray-200">
+        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2L3 7v11h4v-6h6v6h4V7l-7-5z"/>
+          </svg>
+        </div>
+        <span class="text-xl font-bold text-gray-900">ORDO</span>
+      </div>
+      
+      <!-- User Role Toggle -->
+      <div class="px-6 py-4 border-b border-gray-200">
+        <div class="flex items-center space-x-2">
+          <button 
+            @click="toggleRole('customer')"
+            :class="currentRole === 'customer' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:text-blue-600'"
+            class="flex-1 px-3 py-2 rounded-md text-sm font-medium text-center"
+          >
+            Customer
+          </button>
+          <button 
+            @click="toggleRole('vendor')"
+            :class="currentRole === 'vendor' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:text-purple-600'"
+            class="flex-1 px-3 py-2 rounded-md text-sm font-medium text-center"
+          >
+            Provider
+          </button>
+        </div>
+      </div>
+      
+      <!-- Navigation -->
+      <nav class="mt-6 px-3">
+        <div class="space-y-1">
+          <NuxtLink to="/dashboard" class="bg-blue-50 text-blue-600 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+            <svg class="text-blue-500 mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2z"/>
+            </svg>
+            Dashboard
+          </NuxtLink>
+          
+          <NuxtLink to="/dashboard/services" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+            <svg class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+            Services
+          </NuxtLink>
+          
+          <NuxtLink to="/dashboard/bookings" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+            <svg class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            Bookings
+          </NuxtLink>
+          
+          <NuxtLink to="/dashboard/calendar" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+            <svg class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            Calendar
+          </NuxtLink>
+          
+          <NuxtLink to="/dashboard/analytics" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+            <svg class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            Analytics
+          </NuxtLink>
+          
+          <NuxtLink to="/dashboard/payments" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+            <svg class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+            </svg>
+            Payments
+          </NuxtLink>
+        </div>
+      </nav>
+      
+      <!-- User Profile -->
+      <div class="absolute bottom-0 w-full px-6 py-4 border-t border-gray-200">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <img :src="user?.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face'" alt="User" class="w-10 h-10 rounded-full">
+            <div class="ml-3">
+              <div class="text-sm font-medium text-gray-900">{{ user?.name || 'User' }}</div>
+              <div class="text-xs text-gray-500">{{ currentRole === 'vendor' ? 'Service Provider' : 'Customer' }}</div>
+            </div>
+          </div>
+          <button 
+            @click="handleLogout"
+            class="p-2 text-gray-400 hover:text-red-600 transition-colors"
+            title="Logout"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
 
-    <!-- Glassmorphism Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-          <div class="flex items-center space-x-8">
-            <NuxtLink to="/" class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              ORDO
-            </NuxtLink>
+    <!-- Main Content Area -->
+    <div class="flex-1 ml-64">
+      <!-- Top Header -->
+      <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="px-6 py-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold text-gray-900">Good Morning, {{ user?.name || 'User' }}!</h1>
+              <p class="text-gray-600">Here's what's happening with your {{ currentRole === 'vendor' ? 'business' : 'bookings' }} today.</p>
+            </div>
             
-            <!-- Role Toggle (if user has multiple roles) -->
-            <div v-if="user.roles.length > 1" class="flex items-center space-x-2">
-              <button
-                @click="currentRole = 'customer'"
-                class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
-                :class="currentRole === 'customer' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:text-blue-600'"
-              >
-                <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            <div class="flex items-center space-x-4">
+              <!-- Search -->
+              <div class="relative">
+                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-                Customer
-              </button>
-              <button
-                @click="currentRole = 'vendor'"
-                class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
-                :class="currentRole === 'vendor' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:text-purple-600'"
-              >
-                <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-                Provider
-              </button>
+                <input type="text" placeholder="Search services, providers..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-64">
+              </div>
+              
+              <!-- Notifications -->
+              <NotificationDropdown />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="p-6">
+
+      <!-- Customer Dashboard -->
+      <div v-if="currentRole === 'customer'">
+        <!-- Customer Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-5 w-full">
+                <p class="text-sm font-medium text-gray-500">Total Bookings</p>
+                <p class="text-2xl font-bold text-gray-900">{{ customerStats.totalBookings }}</p>
+                <p class="text-sm text-green-600">+12% vs last month</p>
+              </div>
             </div>
           </div>
           
-          <div class="flex items-center space-x-4">
-            <!-- Notifications -->
-            <button class="backdrop-blur-sm bg-white/20 border border-white/30 p-2 rounded-full hover:bg-white/30 transition-all duration-300">
-              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4 12v7a2 2 0 002 2h5m0-9h4m-4-4h8m-8-4h8" />
-              </svg>
-            </button>
-            
-            <!-- Profile -->
-            <div class="flex items-center space-x-2">
-              <img :src="user.avatar" :alt="user.name" class="w-8 h-8 rounded-full object-cover" />
-              <span class="text-sm font-medium text-gray-700">{{ user.name }}</span>
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-5 w-full">
+                <p class="text-sm font-medium text-gray-500">Favorite Services</p>
+                <p class="text-2xl font-bold text-gray-900">{{ customerStats.favorites }}</p>
+                <p class="text-sm text-blue-600">+3 new this week</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-5 w-full">
+                <p class="text-sm font-medium text-gray-500">Total Spent</p>
+                <p class="text-2xl font-bold text-gray-900">R{{ customerStats.totalSpent.toLocaleString() }}</p>
+                <p class="text-sm text-purple-600">+R2,500 this month</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-5 w-full">
+                <p class="text-sm font-medium text-gray-500">Reviews Given</p>
+                <p class="text-2xl font-bold text-gray-900">{{ customerStats.reviewsGiven }}</p>
+                <p class="text-sm text-yellow-600">4.8 avg rating</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
+          <div class="p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <button class="p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center">
+                <svg class="w-8 h-8 text-blue-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <p class="font-medium text-gray-900">Find Services</p>
+                <p class="text-sm text-gray-500">Browse available services</p>
+              </button>
+              
+              <button class="p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors text-center">
+                <svg class="w-8 h-8 text-purple-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                </svg>
+                <p class="font-medium text-gray-900">Map Search</p>
+                <p class="text-sm text-gray-500">Find services nearby</p>
+              </button>
+              
+              <button class="p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors text-center">
+                <svg class="w-8 h-8 text-green-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <p class="font-medium text-gray-900">My Bookings</p>
+                <p class="text-sm text-gray-500">View appointments</p>
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="relative z-10 pt-16">
-      <!-- Welcome Section -->
-      <section class="py-8 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-          <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-6 shadow-lg">
-            <div class="flex items-center justify-between">
-              <div>
-                <h1 class="text-2xl font-bold text-gray-900">
-                  Welcome back, {{ user.firstName }}!
-                </h1>
-                <p class="text-gray-600 mt-1">
-                  <span v-if="currentRole === 'customer'">Find and book amazing services</span>
-                  <span v-else>Manage your services and bookings</span>
-                </p>
-              </div>
-              <div class="flex items-center space-x-4">
-                <div class="text-center">
-                  <div class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    {{ currentRole === 'customer' ? stats.bookings : stats.services }}
-                  </div>
-                  <div class="text-sm text-gray-600">
-                    {{ currentRole === 'customer' ? 'Bookings' : 'Services' }}
-                  </div>
-                </div>
-                <div class="text-center">
-                  <div class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    {{ currentRole === 'customer' ? stats.favorites : stats.clients }}
-                  </div>
-                  <div class="text-sm text-gray-600">
-                    {{ currentRole === 'customer' ? 'Favorites' : 'Clients' }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Customer Dashboard -->
-      <section v-if="currentRole === 'customer'" class="py-8 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto space-y-8">
-          <!-- Quick Actions -->
-          <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-6 shadow-lg">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <NuxtLink to="/search" class="backdrop-blur-sm bg-white/50 border border-white/30 rounded-xl p-4 hover:bg-white/70 transition-all duration-300 text-center">
-                <svg class="w-8 h-8 mx-auto mb-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <div class="font-medium text-gray-900">Find Services</div>
-                <div class="text-sm text-gray-600">Browse available services</div>
-              </NuxtLink>
-              
-              <NuxtLink to="/map-search" class="backdrop-blur-sm bg-white/50 border border-white/30 rounded-xl p-4 hover:bg-white/70 transition-all duration-300 text-center">
-                <svg class="w-8 h-8 mx-auto mb-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                </svg>
-                <div class="font-medium text-gray-900">Map Search</div>
-                <div class="text-sm text-gray-600">Find services nearby</div>
-              </NuxtLink>
-              
-              <button class="backdrop-blur-sm bg-white/50 border border-white/30 rounded-xl p-4 hover:bg-white/70 transition-all duration-300 text-center">
-                <svg class="w-8 h-8 mx-auto mb-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <div class="font-medium text-gray-900">My Bookings</div>
-                <div class="text-sm text-gray-600">View your appointments</div>
-              </button>
-            </div>
-          </div>
-
-          <!-- Recent Bookings -->
-          <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-6 shadow-lg">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Recent Bookings</h2>
-            <div class="space-y-3">
-              <div v-for="booking in customerBookings" :key="booking.id" class="backdrop-blur-sm bg-white/50 border border-white/30 rounded-xl p-4">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center space-x-3">
-                    <img :src="booking.serviceImage" :alt="booking.serviceName" class="w-12 h-12 rounded-lg object-cover" />
-                    <div>
-                      <div class="font-medium text-gray-900">{{ booking.serviceName }}</div>
-                      <div class="text-sm text-gray-600">{{ booking.providerName }}</div>
-                      <div class="text-xs text-gray-500">{{ booking.date }} at {{ booking.time }}</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center space-x-2">
-                    <span class="px-2 py-1 text-xs rounded-full" :class="getStatusClass(booking.status)">
-                      {{ booking.status }}
-                    </span>
-                    <button class="text-blue-600 hover:text-blue-800 text-sm">View</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <!-- Vendor Dashboard -->
-      <section v-if="currentRole === 'vendor'" class="py-8 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto space-y-8">
-          <!-- Vendor Onboarding (if needed) -->
-          <div v-if="showOnboarding" class="backdrop-blur-xl bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-2xl p-6 shadow-lg">
-            <div class="flex items-center justify-between">
-              <div>
-                <h2 class="text-lg font-semibold text-gray-900">Complete Your Business Profile</h2>
-                <p class="text-gray-600 mt-1">Set up your services and start receiving bookings</p>
+      <div v-else>
+        <!-- Vendor Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                  </svg>
+                </div>
               </div>
-              <button @click="completeOnboarding" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-300">
-                Complete Setup
-              </button>
+              <div class="ml-5 w-full">
+                <p class="text-sm font-medium text-gray-500">Total Bookings</p>
+                <p class="text-2xl font-bold text-gray-900">{{ vendorStats.totalBookings }}</p>
+                <p class="text-sm text-green-600">+14% vs last month</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-5 w-full">
+                <p class="text-sm font-medium text-gray-500">Revenue</p>
+                <p class="text-2xl font-bold text-gray-900">R{{ vendorStats.revenue.toLocaleString() }}</p>
+                <p class="text-sm text-green-600">+25% completion rate</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-5 w-full">
+                <p class="text-sm font-medium text-gray-500">Rating</p>
+                <p class="text-2xl font-bold text-gray-900">{{ vendorStats.rating }}</p>
+                <p class="text-sm text-yellow-600">+18 new this week</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-5 w-full">
+                <p class="text-sm font-medium text-gray-500">Active Services</p>
+                <p class="text-2xl font-bold text-gray-900">{{ vendorStats.activeServices }}</p>
+                <p class="text-sm text-purple-600">2 pending approval</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Business Overview and Recent Activity -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <!-- Business Overview -->
+          <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-medium text-gray-900">Business Overview</h2>
+                <button class="text-blue-600 hover:text-blue-800 text-sm">View Details</button>
+              </div>
+              <div class="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
+                <div class="text-center">
+                  <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                  </svg>
+                  <p class="text-gray-500">Chart Visualization</p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Vendor Stats -->
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-6 shadow-lg text-center">
-              <div class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                {{ vendorStats.totalBookings }}
+          <!-- Recent Activity -->
+          <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-medium text-gray-900">Recent Activity</h2>
+                <button class="text-blue-600 hover:text-blue-800 text-sm">View All</button>
               </div>
-              <div class="text-sm text-gray-600">Total Bookings</div>
-            </div>
-            
-            <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-6 shadow-lg text-center">
-              <div class="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-2">
-                R{{ vendorStats.totalEarnings.toLocaleString() }}
-              </div>
-              <div class="text-sm text-gray-600">Total Earnings</div>
-            </div>
-            
-            <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-6 shadow-lg text-center">
-              <div class="text-3xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent mb-2">
-                {{ vendorStats.rating }}
-              </div>
-              <div class="text-sm text-gray-600">Average Rating</div>
-            </div>
-            
-            <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-6 shadow-lg text-center">
-              <div class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
-                {{ vendorStats.activeServices }}
-              </div>
-              <div class="text-sm text-gray-600">Active Services</div>
-            </div>
-          </div>
-
-          <!-- Quick Actions -->
-          <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-6 shadow-lg">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <button class="backdrop-blur-sm bg-white/50 border border-white/30 rounded-xl p-4 hover:bg-white/70 transition-all duration-300 text-center">
-                <svg class="w-8 h-8 mx-auto mb-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                <div class="font-medium text-gray-900">Add Service</div>
-              </button>
-              
-              <button class="backdrop-blur-sm bg-white/50 border border-white/30 rounded-xl p-4 hover:bg-white/70 transition-all duration-300 text-center">
-                <svg class="w-8 h-8 mx-auto mb-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <div class="font-medium text-gray-900">Manage Calendar</div>
-              </button>
-              
-              <button class="backdrop-blur-sm bg-white/50 border border-white/30 rounded-xl p-4 hover:bg-white/70 transition-all duration-300 text-center">
-                <svg class="w-8 h-8 mx-auto mb-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                <div class="font-medium text-gray-900">View Analytics</div>
-              </button>
-              
-              <button class="backdrop-blur-sm bg-white/50 border border-white/30 rounded-xl p-4 hover:bg-white/70 transition-all duration-300 text-center">
-                <svg class="w-8 h-8 mx-auto mb-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                </svg>
-                <div class="font-medium text-gray-900">Messages</div>
-              </button>
-            </div>
-          </div>
-
-          <!-- Recent Bookings -->
-          <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-6 shadow-lg">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Recent Bookings</h2>
-            <div class="space-y-3">
-              <div v-for="booking in vendorBookings" :key="booking.id" class="backdrop-blur-sm bg-white/50 border border-white/30 rounded-xl p-4">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center space-x-3">
-                    <img :src="booking.customerAvatar" :alt="booking.customerName" class="w-12 h-12 rounded-full object-cover" />
-                    <div>
-                      <div class="font-medium text-gray-900">{{ booking.serviceName }}</div>
-                      <div class="text-sm text-gray-600">{{ booking.customerName }}</div>
-                      <div class="text-xs text-gray-500">{{ booking.date }} at {{ booking.time }}</div>
-                    </div>
+              <div class="space-y-4">
+                <div v-for="activity in recentActivities" :key="activity.id" class="flex items-center space-x-3">
+                  <div :class="activity.iconColor" class="w-8 h-8 rounded-full flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
                   </div>
-                  <div class="flex items-center space-x-2">
-                    <span class="px-2 py-1 text-xs rounded-full" :class="getStatusClass(booking.status)">
-                      {{ booking.status }}
-                    </span>
-                    <div class="text-lg font-semibold text-gray-900">R{{ booking.amount }}</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">{{ activity.title }}</p>
+                    <p class="text-xs text-gray-500">{{ activity.time }}</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    </main>
+
+        <!-- Service Management -->
+        <div class="bg-white rounded-lg shadow-sm">
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-medium text-gray-900">Service Management</h2>
+              <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                Add Service
+              </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <button class="p-4 border border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors">
+                <svg class="w-8 h-8 text-blue-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+                <p class="font-medium text-gray-900">Create Listing</p>
+                <p class="text-sm text-gray-500">Add new service</p>
+              </button>
+              
+              <button class="p-4 border border-gray-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors">
+                <svg class="w-8 h-8 text-purple-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <p class="font-medium text-gray-900">Set Availability</p>
+                <p class="text-sm text-gray-500">Manage calendar</p>
+              </button>
+              
+              <button class="p-4 border border-gray-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors">
+                <svg class="w-8 h-8 text-green-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                </svg>
+                <p class="font-medium text-gray-900">Define Pricing</p>
+                <p class="text-sm text-gray-500">Set rates & packages</p>
+              </button>
+              
+              <button class="p-4 border border-gray-300 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors">
+                <svg class="w-8 h-8 text-orange-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <p class="font-medium text-gray-900">View Analytics</p>
+                <p class="text-sm text-gray-500">Performance metrics</p>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </main>
+    </div>
   </div>
 </template>
 
-<script setup>
-import { ref, computed, onMounted } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
 
-// Mock user data with multiple roles
-const user = ref({
-  id: '1',
-  firstName: 'John',
-  lastName: 'Doe',
-  name: 'John Doe',
-  email: 'john@example.com',
-  avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
-  roles: ['customer', 'vendor'], // User has both roles
-  businessName: 'John\'s Barber Shop',
-  serviceCategory: 'barber'
+// Add authentication middleware
+definePageMeta({
+  middleware: 'auth'
 })
 
-// Current role state
-const currentRole = ref('customer')
-const showOnboarding = ref(false)
+// Use auth composable
+const { user, logout } = useAuth()
 
-// Stats
-const stats = ref({
-  bookings: 12,
+// User role state
+const currentRole = ref<'customer' | 'vendor'>('customer')
+
+// Customer stats
+const customerStats = ref({
+  totalBookings: 24,
   favorites: 8,
-  services: 4,
-  clients: 45
+  totalSpent: 15750,
+  reviewsGiven: 18
 })
 
 // Vendor stats
 const vendorStats = ref({
-  totalBookings: 127,
-  totalEarnings: 15750,
+  totalBookings: 678,
+  revenue: 89500,
   rating: 4.8,
-  activeServices: 4
+  activeServices: 12
 })
 
-// Customer bookings
-const customerBookings = ref([
+// Recent activities
+const recentActivities = ref([
   {
-    id: '1',
-    serviceName: 'Premium Haircut',
-    providerName: 'Elite Barber Co',
-    serviceImage: 'https://images.unsplash.com/photo-1503951458645-643d53bfd90f?w=100&h=100&fit=crop',
-    date: '2024-01-25',
-    time: '10:00 AM',
-    status: 'confirmed',
-    amount: 180
+    id: 1,
+    title: 'New booking confirmed for Hair Styling',
+    time: '2 hours ago',
+    iconColor: 'bg-green-500'
   },
   {
-    id: '2',
-    serviceName: 'Spa Treatment',
-    providerName: 'Luxury Spa',
-    serviceImage: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=100&h=100&fit=crop',
-    date: '2024-01-22',
-    time: '2:00 PM',
-    status: 'completed',
-    amount: 350
-  }
-])
-
-// Vendor bookings
-const vendorBookings = ref([
-  {
-    id: '1',
-    serviceName: 'Classic Haircut',
-    customerName: 'Mike Johnson',
-    customerAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face',
-    date: '2024-01-25',
-    time: '11:00 AM',
-    status: 'confirmed',
-    amount: 150
+    id: 2,
+    title: 'Monthly payment processed',
+    time: '4 hours ago',
+    iconColor: 'bg-blue-500'
   },
   {
-    id: '2',
-    serviceName: 'Beard Trim',
-    customerName: 'David Wilson',
-    customerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face',
-    date: '2024-01-25',
-    time: '3:00 PM',
-    status: 'pending',
-    amount: 80
+    id: 3,
+    title: 'New service added: Beard Trim',
+    time: '6 hours ago',
+    iconColor: 'bg-purple-500'
+  },
+  {
+    id: 4,
+    title: 'Customer review received (5 stars)',
+    time: '1 day ago',
+    iconColor: 'bg-yellow-500'
   }
 ])
 
 // Functions
-const getStatusClass = (status) => {
-  const classes = {
-    'confirmed': 'bg-green-100 text-green-800',
-    'pending': 'bg-yellow-100 text-yellow-800',
-    'completed': 'bg-blue-100 text-blue-800',
-    'cancelled': 'bg-red-100 text-red-800'
-  }
-  return classes[status] || 'bg-gray-100 text-gray-800'
+const toggleRole = (role: 'customer' | 'vendor') => {
+  currentRole.value = role
 }
 
-const completeOnboarding = () => {
-  showOnboarding.value = false
-  // Navigate to onboarding flow
+const handleLogout = async () => {
+  await logout()
+  await navigateTo('/')
 }
-
-// Check URL parameters on mount
-onMounted(() => {
-  const route = useRoute()
-  
-  // Set current role from URL
-  if (route.query.tab && user.value.roles.includes(route.query.tab)) {
-    currentRole.value = route.query.tab
-  } else {
-    // Default to first role
-    currentRole.value = user.value.roles[0]
-  }
-  
-  // Show onboarding if needed
-  if (route.query.onboarding === 'true' && currentRole.value === 'vendor') {
-    showOnboarding.value = true
-  }
-})
-
-// Watch for role changes and update URL
-watch(currentRole, (newRole) => {
-  navigateTo(`/dashboard?tab=${newRole}`, { replace: true })
-})
 
 // Set page title
 useHead({
   title: 'Dashboard - ORDO'
 })
+
+// Fetch user data on mount
+onMounted(async () => {
+  const { fetchUser } = useAuth()
+  await fetchUser()
+})
 </script>
-
-<style scoped>
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.5);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.7);
-}
-</style>

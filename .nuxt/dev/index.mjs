@@ -635,6 +635,36 @@ const _inlineRuntimeConfig = {
       "/__nuxt_error": {
         "cache": false
       },
+      "/": {
+        "ssr": true
+      },
+      "/about": {
+        "ssr": true
+      },
+      "/search": {
+        "ssr": true
+      },
+      "/map-search": {
+        "ssr": true
+      },
+      "/how-it-works": {
+        "ssr": true
+      },
+      "/dashboard/**": {
+        "ssr": false
+      },
+      "/login": {
+        "ssr": false
+      },
+      "/register": {
+        "ssr": false
+      },
+      "/forgot-password": {
+        "ssr": false
+      },
+      "/reset-password": {
+        "ssr": false
+      },
       "/_nuxt/builds/meta/**": {
         "headers": {
           "cache-control": "public, max-age=31536000, immutable"
@@ -647,7 +677,9 @@ const _inlineRuntimeConfig = {
       }
     }
   },
-  "public": {}
+  "public": {
+    "apiBase": "http://localhost:8001"
+  }
 };
 const envOptions = {
   prefix: "NITRO_",

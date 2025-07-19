@@ -54,6 +54,18 @@
 
           <Transition name="fade-up" appear>
             <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-8 shadow-lg">
+              <!-- Error Message -->
+              <div v-if="errorMessage" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div class="flex">
+                  <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                  </svg>
+                  <div class="ml-3">
+                    <p class="text-sm text-red-800">{{ errorMessage }}</p>
+                  </div>
+                </div>
+              </div>
+
               <form class="space-y-6" @submit.prevent="handleLogin">
                 <div>
                   <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
@@ -205,6 +217,11 @@
 <script setup>
 import { ref } from 'vue'
 
+// Add guest middleware
+definePageMeta({
+  middleware: 'guest'
+})
+
 // Form state
 const form = ref({
   email: '',
@@ -214,23 +231,31 @@ const form = ref({
 
 const showPassword = ref(false)
 const isLoading = ref(false)
+const errorMessage = ref('')
+
+// Use auth composable
+const { login } = useAuth()
 
 // Handle login
 const handleLogin = async () => {
   isLoading.value = true
+  errorMessage.value = ''
   
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    const result = await login({
+      email: form.value.email,
+      password: form.value.password
+    })
     
-    // Handle successful login
-    console.log('Login successful', form.value)
-    
-    // Redirect to dashboard or previous page
-    navigateTo('/')
+    if (result.success) {
+      // Redirect to dashboard on successful login
+      await navigateTo('/dashboard')
+    } else {
+      errorMessage.value = result.error || 'Login failed. Please try again.'
+    }
   } catch (error) {
     console.error('Login failed', error)
-    // Handle error (show toast, etc.)
+    errorMessage.value = 'An unexpected error occurred. Please try again.'
   } finally {
     isLoading.value = false
   }

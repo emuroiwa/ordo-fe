@@ -54,6 +54,18 @@
 
           <Transition name="fade-up" appear>
             <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-8 shadow-lg">
+              <!-- Error Message -->
+              <div v-if="errorMessage" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div class="flex">
+                  <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                  </svg>
+                  <div class="ml-3">
+                    <p class="text-sm text-red-800">{{ errorMessage }}</p>
+                  </div>
+                </div>
+              </div>
+
               <form class="space-y-6" @submit.prevent="handleRegister">
                 <!-- Account Type Selection -->
                 <div>
@@ -131,9 +143,13 @@
                       v-model="form.firstName"
                       type="text"
                       required
-                      class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900 placeholder-gray-500"
+                      :class="[
+                        'backdrop-blur-sm bg-white/50 w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 text-gray-900 placeholder-gray-500',
+                        validationErrors.firstName ? 'border-red-300 focus:ring-red-500/50' : 'border-white/30 focus:ring-blue-500/50'
+                      ]"
                       placeholder="First name"
                     />
+                    <p v-if="validationErrors.firstName" class="mt-1 text-sm text-red-600">{{ validationErrors.firstName }}</p>
                   </div>
 
                   <div>
@@ -145,9 +161,13 @@
                       v-model="form.lastName"
                       type="text"
                       required
-                      class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900 placeholder-gray-500"
+                      :class="[
+                        'backdrop-blur-sm bg-white/50 w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 text-gray-900 placeholder-gray-500',
+                        validationErrors.lastName ? 'border-red-300 focus:ring-red-500/50' : 'border-white/30 focus:ring-blue-500/50'
+                      ]"
                       placeholder="Last name"
                     />
+                    <p v-if="validationErrors.lastName" class="mt-1 text-sm text-red-600">{{ validationErrors.lastName }}</p>
                   </div>
                 </div>
 
@@ -199,9 +219,13 @@
                     type="email"
                     autocomplete="email"
                     required
-                    class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900 placeholder-gray-500"
+                    :class="[
+                      'backdrop-blur-sm bg-white/50 w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 text-gray-900 placeholder-gray-500',
+                      validationErrors.email ? 'border-red-300 focus:ring-red-500/50' : 'border-white/30 focus:ring-blue-500/50'
+                    ]"
                     placeholder="Enter your email"
                   />
+                  <p v-if="validationErrors.email" class="mt-1 text-sm text-red-600">{{ validationErrors.email }}</p>
                 </div>
 
                 <div>
@@ -213,9 +237,13 @@
                     v-model="form.phone"
                     type="tel"
                     required
-                    class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900 placeholder-gray-500"
+                    :class="[
+                      'backdrop-blur-sm bg-white/50 w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 text-gray-900 placeholder-gray-500',
+                      validationErrors.phone ? 'border-red-300 focus:ring-red-500/50' : 'border-white/30 focus:ring-blue-500/50'
+                    ]"
                     placeholder="Enter your phone number"
                   />
+                  <p v-if="validationErrors.phone" class="mt-1 text-sm text-red-600">{{ validationErrors.phone }}</p>
                 </div>
 
                 <div>
@@ -229,7 +257,10 @@
                       :type="showPassword ? 'text' : 'password'"
                       autocomplete="new-password"
                       required
-                      class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900 placeholder-gray-500"
+                      :class="[
+                        'backdrop-blur-sm bg-white/50 w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 text-gray-900 placeholder-gray-500',
+                        validationErrors.password ? 'border-red-300 focus:ring-red-500/50' : 'border-white/30 focus:ring-blue-500/50'
+                      ]"
                       placeholder="Create a password"
                     />
                     <button
@@ -258,6 +289,7 @@
                       </svg>
                     </button>
                   </div>
+                  <p v-if="validationErrors.password" class="mt-1 text-sm text-red-600">{{ validationErrors.password }}</p>
                 </div>
 
                 <div>
@@ -271,7 +303,10 @@
                       :type="showConfirmPassword ? 'text' : 'password'"
                       autocomplete="new-password"
                       required
-                      class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900 placeholder-gray-500"
+                      :class="[
+                        'backdrop-blur-sm bg-white/50 w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 text-gray-900 placeholder-gray-500',
+                        validationErrors.confirmPassword ? 'border-red-300 focus:ring-red-500/50' : 'border-white/30 focus:ring-blue-500/50'
+                      ]"
                       placeholder="Confirm your password"
                     />
                     <button
@@ -300,6 +335,7 @@
                       </svg>
                     </button>
                   </div>
+                  <p v-if="validationErrors.confirmPassword" class="mt-1 text-sm text-red-600">{{ validationErrors.confirmPassword }}</p>
                 </div>
 
                 <div class="flex items-center">
@@ -391,6 +427,11 @@
 <script setup>
 import { ref, computed } from 'vue'
 
+// Add guest middleware
+definePageMeta({
+  middleware: 'guest'
+})
+
 // Form state
 const form = ref({
   roles: [], // Array of roles: ['customer', 'vendor']
@@ -409,6 +450,10 @@ const form = ref({
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 const isLoading = ref(false)
+const errorMessage = ref('')
+
+// Use auth composable
+const { register } = useAuth()
 
 // Toggle role function
 const toggleRole = (role) => {
@@ -428,26 +473,82 @@ const toggleRole = (role) => {
   }
 }
 
-// Form validation
+// Enhanced form validation
 const isFormValid = computed(() => {
+  // Basic field validation
   const baseValidation = form.value.roles.length > 0 &&
-                        form.value.firstName &&
-                        form.value.lastName &&
-                        form.value.email &&
-                        form.value.phone &&
-                        form.value.password &&
-                        form.value.confirmPassword &&
+                        form.value.firstName.trim().length >= 2 &&
+                        form.value.lastName.trim().length >= 2 &&
+                        isValidEmail(form.value.email) &&
+                        isValidPhone(form.value.phone) &&
+                        isValidPassword(form.value.password) &&
                         form.value.password === form.value.confirmPassword &&
                         form.value.acceptTerms
 
   // Additional validation for vendors
   if (form.value.roles.includes('vendor')) {
     return baseValidation &&
-           form.value.businessName &&
+           form.value.businessName.trim().length >= 2 &&
            form.value.serviceCategory
   }
 
   return baseValidation
+})
+
+// Email validation
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email)
+}
+
+// Phone validation
+const isValidPhone = (phone) => {
+  const phoneRegex = /^\+?[1-9]\d{1,14}$/
+  return phoneRegex.test(phone.replace(/\s/g, ''))
+}
+
+// Password validation
+const isValidPassword = (password) => {
+  return password.length >= 8 &&
+         /[a-z]/.test(password) &&
+         /[A-Z]/.test(password) &&
+         /\d/.test(password) &&
+         /[!@#$%^&*(),.?":{}|<>]/.test(password)
+}
+
+// Real-time validation errors
+const validationErrors = computed(() => {
+  const errors = {}
+  
+  if (form.value.firstName && form.value.firstName.trim().length < 2) {
+    errors.firstName = 'First name must be at least 2 characters'
+  }
+  
+  if (form.value.lastName && form.value.lastName.trim().length < 2) {
+    errors.lastName = 'Last name must be at least 2 characters'
+  }
+  
+  if (form.value.email && !isValidEmail(form.value.email)) {
+    errors.email = 'Please enter a valid email address'
+  }
+  
+  if (form.value.phone && !isValidPhone(form.value.phone)) {
+    errors.phone = 'Please enter a valid phone number'
+  }
+  
+  if (form.value.password && !isValidPassword(form.value.password)) {
+    errors.password = 'Password must be at least 8 characters with uppercase, lowercase, number and symbol'
+  }
+  
+  if (form.value.confirmPassword && form.value.password !== form.value.confirmPassword) {
+    errors.confirmPassword = 'Passwords do not match'
+  }
+  
+  if (form.value.roles.includes('vendor') && form.value.businessName && form.value.businessName.trim().length < 2) {
+    errors.businessName = 'Business name must be at least 2 characters'
+  }
+  
+  return errors
 })
 
 // Handle registration
@@ -455,25 +556,38 @@ const handleRegister = async () => {
   if (!isFormValid.value) return
   
   isLoading.value = true
+  errorMessage.value = ''
   
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    // Prepare registration data
+    const registrationData = {
+      name: `${form.value.firstName} ${form.value.lastName}`,
+      email: form.value.email,
+      phone: form.value.phone,
+      password: form.value.password,
+      password_confirmation: form.value.confirmPassword,
+      roles: form.value.roles,
+      business_name: form.value.businessName || null,
+      service_category: form.value.serviceCategory || null
+    }
     
-    // Handle successful registration
-    console.log('Registration successful', form.value)
+    const result = await register(registrationData)
     
-    // Redirect based on roles
-    if (form.value.roles.includes('vendor')) {
-      // If they're a vendor (with or without customer role), start with vendor onboarding
-      navigateTo('/dashboard?tab=vendor&onboarding=true')
+    if (result.success) {
+      // Redirect based on roles
+      if (form.value.roles.includes('vendor')) {
+        // If they're a vendor (with or without customer role), start with vendor onboarding
+        await navigateTo('/dashboard?tab=vendor&onboarding=true')
+      } else {
+        // Customer only - go to dashboard
+        await navigateTo('/dashboard?tab=customer')
+      }
     } else {
-      // Customer only - go to dashboard
-      navigateTo('/dashboard?tab=customer')
+      errorMessage.value = result.error || 'Registration failed. Please try again.'
     }
   } catch (error) {
     console.error('Registration failed', error)
-    // Handle error (show toast, etc.)
+    errorMessage.value = 'An unexpected error occurred. Please try again.'
   } finally {
     isLoading.value = false
   }
