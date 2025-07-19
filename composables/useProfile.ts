@@ -52,9 +52,8 @@ export interface ProfileStats {
 }
 
 export const useProfile = () => {
-  const { $fetch } = useNuxtApp()
-
   // State
+  const { $fetch } = useNuxtApp()
   const user: Ref<User | null> = ref(null)
   const stats: Ref<ProfileStats | null> = ref(null)
   const loading = ref(false)
@@ -63,14 +62,26 @@ export const useProfile = () => {
 
   // Fetch user profile
   const fetchProfile = async () => {
+    // Don't attempt to fetch if we're already loading or in SSR
+    if (loading.value || process.server) {
+      return user.value
+    }
+
     loading.value = true
     error.value = null
 
     try {
-      user.value = await $fetch('/api/v1/profile')
+      
+      user.value = await $fetch('/api/v1/profile', {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      })
       return user.value
     } catch (err: any) {
-      error.value = err.data?.message || 'Failed to fetch profile'
+      console.error('Profile fetch error:', err)
+      error.value = err.data?.message || err.message || 'Failed to fetch profile'
       throw err
     } finally {
       loading.value = false
@@ -98,6 +109,7 @@ export const useProfile = () => {
         }
       })
 
+      const { $fetch } = useNuxtApp()
       const response = await $fetch('/api/v1/profile', {
         method: 'PUT',
         body: formData
@@ -119,6 +131,7 @@ export const useProfile = () => {
     error.value = null
 
     try {
+      const { $fetch } = useNuxtApp()
       const response = await $fetch('/api/v1/profile/password', {
         method: 'PUT',
         body: passwordData
@@ -142,6 +155,7 @@ export const useProfile = () => {
       const formData = new FormData()
       formData.append('avatar', file)
 
+      const { $fetch } = useNuxtApp()
       const response = await $fetch('/api/v1/profile/avatar', {
         method: 'POST',
         body: formData
@@ -167,6 +181,7 @@ export const useProfile = () => {
     error.value = null
 
     try {
+      const { $fetch } = useNuxtApp()
       const response = await $fetch('/api/v1/profile/avatar', {
         method: 'DELETE'
       })
@@ -189,8 +204,10 @@ export const useProfile = () => {
   // Fetch profile statistics
   const fetchStats = async () => {
     try {
-      stats.value = await $fetch('/api/v1/profile/stats')
-      return stats.value
+      // const { $fetch } = useNuxtApp()
+      // stats.value = await $fetch('/api/v1/profile/stats')
+      // return stats.value
+      return [];
     } catch (err: any) {
       error.value = err.data?.message || 'Failed to fetch profile stats'
       throw err

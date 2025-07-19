@@ -456,7 +456,7 @@ const _routes = [
     name: "dashboard",
     path: "/dashboard",
     meta: { ...__nuxt_page_meta$6 || {}, ...{ "middleware": "auth" } },
-    component: () => import('./index-zvqUdBTo.mjs')
+    component: () => import('./index-CU_pqVUP.mjs')
   },
   {
     name: "forgot-password",
@@ -473,19 +473,19 @@ const _routes = [
     name: "dashboard-notifications",
     path: "/dashboard/notifications",
     meta: { ...__nuxt_page_meta$4 || {}, ...{ "middleware": "auth" } },
-    component: () => import('./notifications-HMzUOatv.mjs')
+    component: () => import('./notifications-D8R5nbOA.mjs')
   },
   {
     name: "dashboard-profile",
     path: "/dashboard/profile",
     meta: { ...__nuxt_page_meta$3 || {}, ...{ "middleware": "auth" } },
-    component: () => import('./index-BaeMWMxp.mjs')
+    component: () => import('./index-BznldwV2.mjs')
   },
   {
     name: "dashboard-services",
     path: "/dashboard/services",
     meta: { ...__nuxt_page_meta$2 || {}, ...{ "middleware": "auth" } },
-    component: () => import('./index-CQP9CIcV.mjs')
+    component: () => import('./index-Bj3KZLM_.mjs')
   },
   {
     name: "dashboard-services-create",

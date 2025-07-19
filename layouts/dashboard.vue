@@ -326,12 +326,14 @@ onMounted(async () => {
     // Fetch basic user data first
     await fetchUser()
     
-    // Then try to fetch enhanced profile data (optional)
-    try {
-      await fetchProfile()
-    } catch (profileError) {
-      console.warn('Profile data not available:', profileError)
-      // Profile fetch failed, but continue with basic user data
+    // Only fetch profile data if we have a user authenticated
+    if (user.value) {
+      try {
+        await fetchProfile()
+      } catch (profileError) {
+        console.warn('Profile data not available:', profileError)
+        // Profile fetch failed, but continue with basic user data
+      }
     }
   } catch (authError) {
     console.error('Authentication failed:', authError)
