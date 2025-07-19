@@ -217,8 +217,8 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ service.bookingCount || 0 }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div class="flex items-center space-x-2">
-                      <NuxtLink :to="`/dashboard/services/${service.id}`" class="text-blue-600 hover:text-blue-900">Edit</NuxtLink>
-                      <button class="text-red-600 hover:text-red-900">Delete</button>
+                      <NuxtLink :to="`/dashboard/services/${service.id}/edit`" class="text-blue-600 hover:text-blue-900">Edit</NuxtLink>
+                      <button @click="deleteServiceHandler(service.id)" class="text-red-600 hover:text-red-900">Delete</button>
                     </div>
                   </td>
                 </tr>
@@ -242,6 +242,7 @@ definePageMeta({
 
 // Use composables
 const { currentRole } = useRole()
+const { deleteService } = useServices()
 
 // Customer filters
 const filters = ref({
@@ -309,6 +310,19 @@ const myServices = ref([
 const activeServices = computed(() => myServices.value.filter(s => s.status === 'active').length)
 const averageRating = computed(() => '4.8')
 const totalBookings = computed(() => myServices.value.reduce((sum, service) => sum + (service.bookingCount || 0), 0))
+
+// Methods
+const deleteServiceHandler = async (serviceId: string) => {
+  if (confirm('Are you sure you want to delete this service?')) {
+    try {
+      await deleteService(serviceId)
+      // Remove from local state
+      myServices.value = myServices.value.filter(s => s.id !== serviceId)
+    } catch (error) {
+      console.error('Failed to delete service:', error)
+    }
+  }
+}
 
 // Set page title
 useHead({

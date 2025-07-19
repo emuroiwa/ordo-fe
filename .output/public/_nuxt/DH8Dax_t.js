@@ -1,0 +1,1 @@
+import{j as r,a7 as c,r as l}from"./Pug_bBfL.js";const e=l("customer"),m=()=>{const s=o=>{e.value=o},t=o=>{e.value=o},u=r(()=>e.value==="customer"),n=r(()=>e.value==="vendor");return{currentRole:c(e),isCustomer:u,isVendor:n,toggleRole:s,setRole:t}};export{m as u};

@@ -1,0 +1,5 @@
+const resetPassword_vue_vue_type_style_index_0_scoped_bd0b1aab_lang = ".fade-up-enter-active[data-v-bd0b1aab],.fade-up-leave-active[data-v-bd0b1aab]{transition:all .6s cubic-bezier(.4,0,.2,1)}.fade-up-enter-from[data-v-bd0b1aab]{opacity:0;transform:translateY(30px)}.fade-up-leave-to[data-v-bd0b1aab]{opacity:0;transform:translateY(-30px)}.scale-up-enter-active[data-v-bd0b1aab]{transition:all .8s cubic-bezier(.4,0,.2,1)}.scale-up-enter-from[data-v-bd0b1aab]{opacity:0;transform:scale(.9) translateY(20px)}.slide-right-enter-active[data-v-bd0b1aab]{transition:all .6s cubic-bezier(.4,0,.2,1)}.slide-right-enter-from[data-v-bd0b1aab]{opacity:0;transform:translate(-30px)}.slide-left-enter-active[data-v-bd0b1aab]{transition:all .6s cubic-bezier(.4,0,.2,1)}.slide-left-enter-from[data-v-bd0b1aab]{opacity:0;transform:translate(30px)}";
+export {
+  resetPassword_vue_vue_type_style_index_0_scoped_bd0b1aab_lang as default
+};
+//# sourceMappingURL=reset-password-styles-1.mjs-ASoZLAJw.js.map

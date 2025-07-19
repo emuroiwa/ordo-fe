@@ -213,7 +213,7 @@
         <p class="text-sm text-gray-400">You're all caught up!</p>
       </div>
 
-      <div v-else>
+      <div v-else>{{ notifications.length }} notifications found
         <div v-for="notification in notifications" :key="notification.id" class="border-b border-gray-100 last:border-b-0">
           <div class="flex items-start p-4 hover:bg-gray-50">
             <!-- Checkbox -->

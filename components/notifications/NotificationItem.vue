@@ -30,6 +30,7 @@
             </p>
           </div>
           
+          
           <!-- Priority Indicator -->
           <div v-if="notification.priority !== 'normal'" class="flex-shrink-0 ml-2">
             <span 
