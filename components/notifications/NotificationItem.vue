@@ -90,8 +90,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
+import type { Notification } from '~/composables/useNotifications'
 
 // Import icons
 import {
@@ -109,14 +110,18 @@ import {
   HeartIcon
 } from '@heroicons/vue/24/outline'
 
-const props = defineProps({
-  notification: {
-    type: Object,
-    required: true
-  }
-})
+interface Props {
+  notification: Notification
+}
 
-const emit = defineEmits(['click', 'mark-read', 'mark-unread', 'delete'])
+const props = defineProps<Props>()
+
+const emit = defineEmits<{
+  click: [notification: Notification]
+  'mark-read': [notificationId: string]
+  'mark-unread': [notificationId: string]
+  delete: [notificationId: string]
+}>()
 
 const { 
   getNotificationTitle, 

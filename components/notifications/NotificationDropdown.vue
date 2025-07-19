@@ -110,7 +110,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { onMounted, onUnmounted } from 'vue'
+import type { Notification } from '~/composables/useNotifications'
+
 const {
   notifications,
   unreadCount,
@@ -138,7 +141,7 @@ onUnmounted(() => {
   stopAutoRefresh()
 })
 
-const handleNotificationClick = async (notification) => {
+const handleNotificationClick = async (notification: Notification): Promise<void> => {
   // Mark as read if unread
   if (!notification.read_at) {
     await markAsRead(notification.id)
@@ -153,8 +156,8 @@ const handleNotificationClick = async (notification) => {
 }
 
 // Close dropdown when clicking outside
-const handleClickOutside = (event) => {
-  if (!event.target.closest('.relative')) {
+const handleClickOutside = (event: MouseEvent): void => {
+  if (!(event.target as Element)?.closest('.relative')) {
     closeDropdown()
   }
 }
