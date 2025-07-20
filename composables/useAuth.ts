@@ -10,6 +10,9 @@ export interface User {
   avatar?: string | null
   avatar_url?: string | null
   phone?: string | null
+  roles?: string[]
+  business_name?: string | null
+  slug?: string | null
   created_at: string
   updated_at: string
 }
@@ -82,6 +85,7 @@ export const useAuth = () => {
     try {
       isLoading.value = true
       const config = useRuntimeConfig()
+      
       const response = await $fetch<LoginResponse>('/api/v1/login', {
         method: 'POST',
         baseURL: config.public.apiBase,
@@ -118,6 +122,7 @@ export const useAuth = () => {
     try {
       isLoading.value = true
       const config = useRuntimeConfig()
+      
       const response = await $fetch<RegisterResponse>('/api/v1/register', {
         method: 'POST',
         baseURL: config.public.apiBase,
@@ -186,7 +191,7 @@ export const useAuth = () => {
         return null
       }
 
-      const response = await $fetch<User>('/api/v1/user', {
+      const response = await $fetch<{user: User}>('/api/v1/user', {
         baseURL: config.public.apiBase,
         headers: {
           'Authorization': `Bearer ${token.value}`,
@@ -194,10 +199,10 @@ export const useAuth = () => {
         }
       })
 
-      user.value = response
-      userCookie.value = response
+      user.value = response.user
+      userCookie.value = response.user
       lastActivity.value = Date.now()
-      return response
+      return response.user
     } catch (error) {
       console.error('Fetch user error:', error)
       // If token is invalid, clear auth state

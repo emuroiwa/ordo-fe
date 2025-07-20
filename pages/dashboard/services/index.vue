@@ -23,12 +23,11 @@
           <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-              <select v-model="filters.category" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+              <select v-model="filters.category" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" :disabled="loading">
                 <option value="">All Categories</option>
-                <option value="beauty">Beauty & Wellness</option>
-                <option value="home">Home Services</option>
-                <option value="fitness">Fitness & Health</option>
-                <option value="tech">Technology</option>
+                <option v-for="category in categories" :key="category.id" :value="category.slug">
+                  {{ category.name }}
+                </option>
               </select>
             </div>
             <div>
@@ -242,7 +241,7 @@ definePageMeta({
 
 // Use composables
 const { currentRole } = useRole()
-const { deleteService } = useServices()
+const { deleteService, fetchCategories, categories, loading } = useServices()
 
 // Customer filters
 const filters = ref({
@@ -323,6 +322,15 @@ const deleteServiceHandler = async (serviceId: string) => {
     }
   }
 }
+
+// Load categories on mount
+onMounted(async () => {
+  try {
+    await fetchCategories()
+  } catch (error) {
+    console.error('Error loading categories:', error)
+  }
+})
 
 // Set page title
 useHead({

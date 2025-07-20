@@ -12,8 +12,8 @@
         <span class="text-xl font-bold text-gray-900">ORDO</span>
       </div>
       
-      <!-- User Role Toggle -->
-      <div class="px-6 py-4 border-b border-gray-200">
+      <!-- User Role Toggle (only show if user has multiple roles) -->
+      <div v-if="hasMultipleRoles" class="px-6 py-4 border-b border-gray-200">
         <div class="flex items-center space-x-2">
           <button 
             @click="toggleRole('customer')"
@@ -143,86 +143,18 @@
         </div>
       </nav>
       
-      <!-- User Profile -->
+      <!-- Logout Button -->
       <div class="absolute bottom-0 w-full px-6 py-4 border-t border-gray-200">
-        <div class="flex items-center justify-between">
-          <NuxtLink to="/dashboard/profile" class="flex items-center flex-1 group hover:bg-gray-50 rounded-lg p-2 -m-2 transition-colors">
-            <div class="relative">
-              <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
-                <img 
-                  v-if="profileUser?.avatar_url || user?.avatar" 
-                  :src="profileUser?.avatar_url || user?.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face'" 
-                  :alt="profileUser?.name || user?.name || 'User'" 
-                  class="w-full h-full object-cover"
-                >
-                <div v-else class="w-full h-full flex items-center justify-center bg-blue-500 text-white text-sm font-bold">
-                  {{ userInitials || (user?.name ? user.name.charAt(0).toUpperCase() : 'U') }}
-                </div>
-              </div>
-              <!-- Profile completion indicator -->
-              <div 
-                v-if="profileUser && profileCompletion < 100"
-                class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-orange-400 border-2 border-white rounded-full"
-                :title="`Profile ${profileCompletion}% complete`"
-              ></div>
-            </div>
-            <div class="ml-3 flex-1 min-w-0">
-              <div class="text-sm font-medium text-gray-900 truncate">
-                {{ displayName || user?.name || 'User' }}
-              </div>
-              <div class="text-xs text-gray-500 flex items-center">
-                <span>{{ currentRole === 'vendor' ? 'Service Provider' : 'Customer' }}</span>
-                <span v-if="profileUser && profileCompletion < 100" class="ml-2 text-orange-600">
-                  {{ profileCompletion }}% complete
-                </span>
-              </div>
-            </div>
-          </NuxtLink>
-          
-          <!-- Dropdown menu -->
-          <div class="relative" data-dropdown>
-            <button 
-              @click="showProfileMenu = !showProfileMenu"
-              class="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-              title="Profile menu"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
-              </svg>
-            </button>
-            
-            <!-- Dropdown -->
-            <div 
-              v-if="showProfileMenu"
-              class="absolute bottom-full right-0 mb-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50"
-            >
-              <NuxtLink 
-                to="/dashboard/profile" 
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                @click="showProfileMenu = false"
-              >
-                <div class="flex items-center">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                  </svg>
-                  Profile Settings
-                </div>
-              </NuxtLink>
-              <hr class="my-1">
-              <button 
-                @click="handleLogout"
-                class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-              >
-                <div class="flex items-center">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                  </svg>
-                  Logout
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
+        <button 
+          @click="handleLogout"
+          class="flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-200 hover:border-red-300"
+          title="Logout"
+        >
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+          Logout
+        </button>
       </div>
     </div>
 
@@ -248,6 +180,77 @@
               
               <!-- Notifications -->
               <NotificationsNotificationDropdown />
+              
+              <!-- User Profile -->
+              <div class="relative" data-dropdown>
+                <button 
+                  @click="showProfileMenu = !showProfileMenu"
+                  class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                  title="User profile"
+                >
+                  <div class="relative">
+                    <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
+                      <img 
+                        v-if="profileUser?.avatar_url || user?.avatar" 
+                        :src="profileUser?.avatar_url || user?.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face'" 
+                        :alt="profileUser?.name || user?.name || 'User'" 
+                        class="w-full h-full object-cover"
+                      >
+                      <div v-else class="w-full h-full flex items-center justify-center bg-blue-500 text-white text-xs font-bold">
+                        {{ userInitials || (user?.name ? user.name.charAt(0).toUpperCase() : 'U') }}
+                      </div>
+                    </div>
+                    <!-- Profile completion indicator -->
+                    <div 
+                      v-if="profileUser && profileCompletion < 100"
+                      class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-orange-400 border border-white rounded-full"
+                      :title="`Profile ${profileCompletion}% complete`"
+                    ></div>
+                  </div>
+                  <div class="hidden sm:block text-left">
+                    <div class="text-sm font-medium text-gray-900">
+                      {{ displayName || user?.name || 'User' }}
+                    </div>
+                    <div class="text-xs text-gray-500">
+                      {{ currentRole === 'vendor' ? 'Service Provider' : 'Customer' }}
+                    </div>
+                  </div>
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                  </svg>
+                </button>
+                
+                <!-- Dropdown Menu -->
+                <div 
+                  v-if="showProfileMenu"
+                  class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50"
+                >
+                  <NuxtLink 
+                    to="/dashboard/profile" 
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    @click="showProfileMenu = false"
+                  >
+                    <div class="flex items-center">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                      </svg>
+                      Profile Settings
+                    </div>
+                  </NuxtLink>
+                  <hr class="my-1">
+                  <button 
+                    @click="handleLogout"
+                    class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                  >
+                    <div class="flex items-center">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                      </svg>
+                      Logout
+                    </div>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -269,7 +272,7 @@ const { user, logout } = useAuth()
 const route = useRoute()
 
 // User role state
-const { currentRole, toggleRole } = useRole()
+const { currentRole, toggleRole, initializeRole, hasMultipleRoles } = useRole()
 
 // Profile composable for enhanced user data
 const { 
@@ -300,6 +303,7 @@ const pageTitle = computed(() => {
 const pageSubtitle = computed(() => {
   const path = route.path
   if (path === '/dashboard') return `Here's what's happening with your ${currentRole.value === 'vendor' ? 'business' : 'bookings'} today.`
+  if (path === '/dashboard/bookings') return currentRole.value === 'vendor' ? 'Manage your service appointments and customer bookings' : 'Track your booked services and appointments'
   if (path === '/dashboard/notifications') return 'Manage your notifications and stay updated'
   if (path === '/dashboard/profile') return 'Manage your account settings and preferences'
   return ''
@@ -330,9 +334,12 @@ onMounted(async () => {
     if (user.value) {
       try {
         await fetchProfile()
+        // Initialize role after we have user data
+        initializeRole()
       } catch (profileError) {
         console.warn('Profile data not available:', profileError)
         // Profile fetch failed, but continue with basic user data
+        initializeRole()
       }
     }
   } catch (authError) {

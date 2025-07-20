@@ -1,0 +1,1 @@
+import{a6 as e,q as a}from"./B0BgVZwo.js";import{u as o}from"./DoIc1ZKu.js";import"./BdfSQn7-.js";const f=e((r,s)=>{const{isAuthenticated:t}=o();if(t.value)return a("/dashboard")});export{f as default};

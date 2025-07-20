@@ -229,6 +229,7 @@
               <!-- Action Buttons -->
               <div class="space-y-3">
                 <button
+                  @click="handleBookNow"
                   class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                 >
                   Book Now
@@ -298,6 +299,12 @@ useHead({
 // Methods
 const setMainImage = (image: any) => {
   mainImage.value = image
+}
+
+const handleBookNow = () => {
+  if (service.value) {
+    navigateTo(`/services/${fullSlug.value}/book`)
+  }
 }
 
 // Fetch service on mount

@@ -14,6 +14,15 @@ type LazyComponent<T> = (T & DefineComponent<HydrationStrategies, {}, {}, {}, {}
 interface _GlobalComponents {
       'ImageUpload': typeof import("../components/ImageUpload.vue")['default']
     'ServiceForm': typeof import("../components/ServiceForm.vue")['default']
+    'BookingAvailabilityCalendar': typeof import("../components/booking/AvailabilityCalendar.vue")['default']
+    'BookingDetailsModal': typeof import("../components/booking/BookingDetailsModal.vue")['default']
+    'BookingForm': typeof import("../components/booking/BookingForm.vue")['default']
+    'BookingCancelModal': typeof import("../components/booking/CancelModal.vue")['default']
+    'BookingEmptyBookings': typeof import("../components/booking/EmptyBookings.vue")['default']
+    'BookingRescheduleModal': typeof import("../components/booking/RescheduleModal.vue")['default']
+    'CalendarAppointmentModal': typeof import("../components/calendar/AppointmentModal.vue")['default']
+    'CalendarAvailabilityModal': typeof import("../components/calendar/AvailabilityModal.vue")['default']
+    'CalendarBookingModal': typeof import("../components/calendar/BookingModal.vue")['default']
     'NotificationsNotificationDropdown': typeof import("../components/notifications/NotificationDropdown.vue")['default']
     'NotificationsNotificationItem': typeof import("../components/notifications/NotificationItem.vue")['default']
     'NuxtWelcome': typeof import("../node_modules/nuxt/dist/app/components/welcome.vue")['default']
@@ -42,6 +51,15 @@ interface _GlobalComponents {
     'NuxtRouteAnnouncer': typeof import("../node_modules/nuxt/dist/app/components/server-placeholder")['default']
       'LazyImageUpload': LazyComponent<typeof import("../components/ImageUpload.vue")['default']>
     'LazyServiceForm': LazyComponent<typeof import("../components/ServiceForm.vue")['default']>
+    'LazyBookingAvailabilityCalendar': LazyComponent<typeof import("../components/booking/AvailabilityCalendar.vue")['default']>
+    'LazyBookingDetailsModal': LazyComponent<typeof import("../components/booking/BookingDetailsModal.vue")['default']>
+    'LazyBookingForm': LazyComponent<typeof import("../components/booking/BookingForm.vue")['default']>
+    'LazyBookingCancelModal': LazyComponent<typeof import("../components/booking/CancelModal.vue")['default']>
+    'LazyBookingEmptyBookings': LazyComponent<typeof import("../components/booking/EmptyBookings.vue")['default']>
+    'LazyBookingRescheduleModal': LazyComponent<typeof import("../components/booking/RescheduleModal.vue")['default']>
+    'LazyCalendarAppointmentModal': LazyComponent<typeof import("../components/calendar/AppointmentModal.vue")['default']>
+    'LazyCalendarAvailabilityModal': LazyComponent<typeof import("../components/calendar/AvailabilityModal.vue")['default']>
+    'LazyCalendarBookingModal': LazyComponent<typeof import("../components/calendar/BookingModal.vue")['default']>
     'LazyNotificationsNotificationDropdown': LazyComponent<typeof import("../components/notifications/NotificationDropdown.vue")['default']>
     'LazyNotificationsNotificationItem': LazyComponent<typeof import("../components/notifications/NotificationItem.vue")['default']>
     'LazyNuxtWelcome': LazyComponent<typeof import("../node_modules/nuxt/dist/app/components/welcome.vue")['default']>
@@ -76,6 +94,15 @@ declare module 'vue' {
 
 export const ImageUpload: typeof import("../components/ImageUpload.vue")['default']
 export const ServiceForm: typeof import("../components/ServiceForm.vue")['default']
+export const BookingAvailabilityCalendar: typeof import("../components/booking/AvailabilityCalendar.vue")['default']
+export const BookingDetailsModal: typeof import("../components/booking/BookingDetailsModal.vue")['default']
+export const BookingForm: typeof import("../components/booking/BookingForm.vue")['default']
+export const BookingCancelModal: typeof import("../components/booking/CancelModal.vue")['default']
+export const BookingEmptyBookings: typeof import("../components/booking/EmptyBookings.vue")['default']
+export const BookingRescheduleModal: typeof import("../components/booking/RescheduleModal.vue")['default']
+export const CalendarAppointmentModal: typeof import("../components/calendar/AppointmentModal.vue")['default']
+export const CalendarAvailabilityModal: typeof import("../components/calendar/AvailabilityModal.vue")['default']
+export const CalendarBookingModal: typeof import("../components/calendar/BookingModal.vue")['default']
 export const NotificationsNotificationDropdown: typeof import("../components/notifications/NotificationDropdown.vue")['default']
 export const NotificationsNotificationItem: typeof import("../components/notifications/NotificationItem.vue")['default']
 export const NuxtWelcome: typeof import("../node_modules/nuxt/dist/app/components/welcome.vue")['default']
@@ -104,6 +131,15 @@ export const NuxtIsland: typeof import("../node_modules/nuxt/dist/app/components
 export const NuxtRouteAnnouncer: typeof import("../node_modules/nuxt/dist/app/components/server-placeholder")['default']
 export const LazyImageUpload: LazyComponent<typeof import("../components/ImageUpload.vue")['default']>
 export const LazyServiceForm: LazyComponent<typeof import("../components/ServiceForm.vue")['default']>
+export const LazyBookingAvailabilityCalendar: LazyComponent<typeof import("../components/booking/AvailabilityCalendar.vue")['default']>
+export const LazyBookingDetailsModal: LazyComponent<typeof import("../components/booking/BookingDetailsModal.vue")['default']>
+export const LazyBookingForm: LazyComponent<typeof import("../components/booking/BookingForm.vue")['default']>
+export const LazyBookingCancelModal: LazyComponent<typeof import("../components/booking/CancelModal.vue")['default']>
+export const LazyBookingEmptyBookings: LazyComponent<typeof import("../components/booking/EmptyBookings.vue")['default']>
+export const LazyBookingRescheduleModal: LazyComponent<typeof import("../components/booking/RescheduleModal.vue")['default']>
+export const LazyCalendarAppointmentModal: LazyComponent<typeof import("../components/calendar/AppointmentModal.vue")['default']>
+export const LazyCalendarAvailabilityModal: LazyComponent<typeof import("../components/calendar/AvailabilityModal.vue")['default']>
+export const LazyCalendarBookingModal: LazyComponent<typeof import("../components/calendar/BookingModal.vue")['default']>
 export const LazyNotificationsNotificationDropdown: LazyComponent<typeof import("../components/notifications/NotificationDropdown.vue")['default']>
 export const LazyNotificationsNotificationItem: LazyComponent<typeof import("../components/notifications/NotificationItem.vue")['default']>
 export const LazyNuxtWelcome: LazyComponent<typeof import("../node_modules/nuxt/dist/app/components/welcome.vue")['default']>

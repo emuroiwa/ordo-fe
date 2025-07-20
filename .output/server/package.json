@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@babel/parser": "7.28.0",
+    "@heroicons/vue": "2.2.0",
     "@vue/compiler-core": "3.5.17",
     "@vue/compiler-dom": "3.5.17",
     "@vue/compiler-ssr": "3.5.17",

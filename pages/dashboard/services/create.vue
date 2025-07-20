@@ -75,6 +75,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, watch } from 'vue'
 import type { ServiceForm } from '~/composables/useServices'
 
 // Meta
@@ -99,7 +100,7 @@ const showSuccessModal = ref(false)
 const createdService = ref(null)
 
 // Redirect if not vendor
-watch(currentRole, (role) => {
+watch(currentRole, (role: string) => {
   if (role === 'customer') {
     router.push('/dashboard')
   }

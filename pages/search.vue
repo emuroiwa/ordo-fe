@@ -47,13 +47,12 @@
                 <select
                   v-model="selectedCategory"
                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  :disabled="loading"
                 >
                   <option value="">All Categories</option>
-                  <option value="barber">Barber</option>
-                  <option value="wedding">Wedding</option>
-                  <option value="equipment">Equipment</option>
-                  <option value="photography">Photography</option>
-                  <option value="catering">Catering</option>
+                  <option v-for="category in categories" :key="category.id" :value="category.slug">
+                    {{ category.name }}
+                  </option>
                 </select>
               </div>
 
@@ -167,14 +166,14 @@
                 </button>
                 <div class="absolute top-3 left-3">
                   <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-                    {{ vendor.category }}
+                    {{ vendor.categoryName }}
                   </span>
                 </div>
               </div>
               
               <div class="p-4">
                 <div class="flex items-center justify-between mb-2">
-                  <span class="text-xl font-bold text-gray-900">R {{ vendor.price.toLocaleString() }}</span>
+                  <span class="text-xl font-bold text-gray-900">{{ formatPrice(vendor.price, 'ZAR') }}</span>
                   <button class="text-gray-400 hover:text-gray-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
@@ -183,7 +182,7 @@
                 </div>
                 
                 <h3 class="font-semibold text-gray-900 mb-1">{{ vendor.name }}</h3>
-                <p class="text-sm text-gray-600 mb-2">{{ vendor.category }} • {{ vendor.reviews }} reviews</p>
+                <p class="text-sm text-gray-600 mb-2">{{ vendor.categoryName }} • {{ vendor.reviews }} reviews</p>
                 
                 <div class="flex items-center text-sm text-gray-500 mb-3">
                   <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,6 +224,7 @@
 import { ref, computed, onMounted } from 'vue'
 
 const route = useRoute()
+const { fetchServices, fetchCategories, categories, loading, formatPrice } = useServices()
 
 const searchQuery = ref('')
 const selectedCategory = ref('')
@@ -232,87 +232,52 @@ const selectedLocation = ref('')
 const priceRange = ref([0, 5000])
 const availabilityFilter = ref([])
 const sortBy = ref('name')
+const services = ref([])
 
-onMounted(() => {
+onMounted(async () => {
   if (route.query.category) {
     selectedCategory.value = route.query.category
   }
+  
+  try {
+    // Load categories from backend
+    await fetchCategories()
+    
+    // Load services from backend
+    const response = await fetchServices({
+      per_page: 50,
+      sort: 'popular'
+    })
+    services.value = response.data || []
+  } catch (error) {
+    console.error('Error loading data:', error)
+  }
 })
 
-const vendors = ref([
-  {
-    id: 1,
-    name: 'Premium Cuts Barber',
-    category: 'barber',
-    location: 'Johannesburg',
-    price: 150,
-    rating: 4.8,
-    reviews: 127,
-    image: 'https://images.unsplash.com/photo-1503951458645-643d53bfd90f?w=400&h=300&fit=crop',
-    availability: ['today', 'weekend']
-  },
-  {
-    id: 2,
-    name: 'Elegant Weddings',
-    category: 'wedding',
-    location: 'Cape Town',
-    price: 2500,
-    rating: 4.9,
-    reviews: 89,
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=300&fit=crop',
-    availability: ['weekend']
-  },
-  {
-    id: 3,
-    name: 'Pro Equipment Rental',
-    category: 'equipment',
-    location: 'Durban',
-    price: 300,
-    rating: 4.6,
-    reviews: 45,
-    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop',
-    availability: ['today', 'evening']
-  },
-  {
-    id: 4,
-    name: 'Studio Flash Photography',
-    category: 'photography',
-    location: 'Pretoria',
-    price: 800,
-    rating: 4.7,
-    reviews: 73,
-    image: 'https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=400&h=300&fit=crop',
-    availability: ['weekend', 'evening']
-  },
-  {
-    id: 5,
-    name: 'Gourmet Catering Co.',
-    category: 'catering',
-    location: 'Cape Town',
-    price: 1200,
-    rating: 4.5,
-    reviews: 156,
-    image: 'https://images.unsplash.com/photo-1555244162-803834f70033?w=400&h=300&fit=crop',
-    availability: ['weekend']
-  },
-  {
-    id: 6,
-    name: 'Style & Shave',
-    category: 'barber',
-    location: 'Port Elizabeth',
-    price: 120,
-    rating: 4.4,
-    reviews: 92,
-    image: 'https://images.unsplash.com/photo-1503951458645-643d53bfd90f?w=400&h=300&fit=crop',
-    availability: ['today', 'evening']
+// Transform services for display
+const transformServiceForDisplay = (service) => {
+  return {
+    id: service.id,
+    name: service.title,
+    category: service.category?.slug || 'service',
+    categoryName: service.category?.name || 'Service',
+    location: service.location_display || 'Location not specified',
+    price: service.base_price,
+    rating: service.average_rating || 4.5,
+    reviews: service.review_count || 0,
+    image: service.primary_image?.url || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop',
+    availability: ['today'], // Mock for now, could be enhanced with real availability
+    full_slug: service.full_slug
   }
-])
+}
 
 const filteredVendors = computed(() => {
-  let filtered = vendors.value.filter(vendor => {
+  const transformedServices = services.value.map(transformServiceForDisplay)
+  
+  let filtered = transformedServices.filter(vendor => {
     const matchesSearch = !searchQuery.value || 
       vendor.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      vendor.category.toLowerCase().includes(searchQuery.value.toLowerCase())
+      vendor.categoryName.toLowerCase().includes(searchQuery.value.toLowerCase())
     
     const matchesCategory = !selectedCategory.value || vendor.category === selectedCategory.value
     const matchesLocation = !selectedLocation.value || vendor.location.toLowerCase().includes(selectedLocation.value.toLowerCase())
@@ -345,6 +310,11 @@ const clearFilters = () => {
 }
 
 const bookVendor = (vendor) => {
-  navigateTo(`/vendor/${vendor.id}`)
+  if (vendor.full_slug) {
+    navigateTo(`/services/${vendor.full_slug}`)
+  } else {
+    // Fallback for legacy URLs
+    navigateTo(`/vendor/${vendor.id}`)
+  }
 }
 </script>

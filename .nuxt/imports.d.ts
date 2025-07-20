@@ -29,6 +29,8 @@ export { withCtx, withDirectives, withKeys, withMemo, withModifiers, withScopeId
 export { requestIdleCallback, cancelIdleCallback } from '#app/compat/idle-callback';
 export { setInterval } from '#app/compat/interval';
 export { useAuth, LoginCredentials, RegisterData, AuthResponse, LoginResponse, RegisterResponse } from '../composables/useAuth';
+export { useAvailability, VendorAvailability, AvailabilityData, TimeSlot, WeeklyAvailability } from '../composables/useAvailability';
+export { useBooking } from '../composables/useBooking';
 export { useNotifications, NotificationData, NotificationMetadata, Notification, NotificationMeta, NotificationResponse, FetchNotificationsOptions, BulkActionPayload, CreateNotificationPayload } from '../composables/useNotifications';
 export { useProfile, User, ProfileForm, PasswordForm, ProfileStats } from '../composables/useProfile';
 export { useRole, UserRole } from '../composables/useRole';

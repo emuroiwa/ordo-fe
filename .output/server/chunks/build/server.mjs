@@ -383,8 +383,17 @@ async function getRouteRules(arg) {
     return defu({}, ..._routeRulesMatcher.matchAll(path).reverse());
   }
 }
-const __nuxt_page_meta$6 = {
+const __nuxt_page_meta$9 = {
   layout: "dashboard"
+};
+const __nuxt_page_meta$8 = {
+  layout: "default"
+};
+const __nuxt_page_meta$7 = {
+  layout: "default"
+};
+const __nuxt_page_meta$6 = {
+  layout: "default"
 };
 const __nuxt_page_meta$5 = {
   layout: "default"
@@ -408,96 +417,128 @@ const _routes = [
   {
     name: "about",
     path: "/about",
-    component: () => import('./about-XZsZhyyS.mjs')
+    component: () => import('./about-uympuemU.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-y6WuQzdG.mjs')
+    component: () => import('./index-BMSAPQ3N.mjs')
   },
   {
     name: "login",
     path: "/login",
     meta: { "middleware": "guest" },
-    component: () => import('./login-Mh_APV3U.mjs')
+    component: () => import('./login-BmH5n2Ma.mjs')
   },
   {
     name: "search",
     path: "/search",
-    component: () => import('./search-De8GHBAj.mjs')
+    component: () => import('./search-B-G44eWN.mjs')
   },
   {
     name: "register",
     path: "/register",
     meta: { "middleware": "guest" },
-    component: () => import('./register-I438shiw.mjs')
+    component: () => import('./register-Dc6qJ2MI.mjs')
   },
   {
     name: "map-search",
     path: "/map-search",
-    component: () => import('./map-search-CHjjKnMv.mjs')
+    component: () => import('./map-search-DASdoU-M.mjs')
   },
   {
     name: "vendor-id",
     path: "/vendor/:id()",
-    component: () => import('./_id_-LRs6doRI.mjs')
+    component: () => import('./_id_-DcM5YdEN.mjs')
   },
   {
     name: "how-it-works",
     path: "/how-it-works",
-    component: () => import('./how-it-works-CgZuV3Cg.mjs')
+    component: () => import('./how-it-works-Kl8TItkf.mjs')
   },
   {
     name: "reset-password",
     path: "/reset-password",
-    component: () => import('./reset-password-Ct7XXVEA.mjs')
+    component: () => import('./reset-password-BcYtb2wC.mjs')
   },
   {
     name: "dashboard",
     path: "/dashboard",
-    meta: { ...__nuxt_page_meta$6 || {}, ...{ "middleware": "auth" } },
-    component: () => import('./index-CU_pqVUP.mjs')
+    meta: { ...__nuxt_page_meta$9 || {}, ...{ "middleware": "auth" } },
+    component: () => import('./index-BPokX6tN.mjs')
   },
   {
     name: "forgot-password",
     path: "/forgot-password",
-    component: () => import('./forgot-password-CfqDtunH.mjs')
+    component: () => import('./forgot-password-DwRyFI8G.mjs')
+  },
+  {
+    name: "dashboard-bookings",
+    path: "/dashboard/bookings",
+    meta: { "middleware": "auth" },
+    component: () => import('./bookings-DDTWwITC.mjs')
+  },
+  {
+    name: "dashboard-calendar",
+    path: "/dashboard/calendar",
+    meta: { "middleware": "auth" },
+    component: () => import('./calendar-Bwcubqk8.mjs')
   },
   {
     name: "services-slug",
     path: "/services/:slug(.*)*",
+    meta: __nuxt_page_meta$7 || {},
+    component: () => import('./_...slug_-R7B75yFB.mjs'),
+    children: [
+      {
+        name: "services-slug-book",
+        path: "book",
+        meta: __nuxt_page_meta$8 || {},
+        component: () => import('./book-7UvIQUTY.mjs')
+      }
+    ]
+  },
+  {
+    name: "booking-confirmation",
+    path: "/booking/confirmation",
+    meta: __nuxt_page_meta$6 || {},
+    component: () => import('./confirmation-B0Db4-TI.mjs')
+  },
+  {
+    name: "booking-payment-id",
+    path: "/booking/payment/:id()",
     meta: __nuxt_page_meta$5 || {},
-    component: () => import('./_...slug_-B7K9D_rB.mjs')
+    component: () => import('./_id_-CkPZ4cnY.mjs')
   },
   {
     name: "dashboard-notifications",
     path: "/dashboard/notifications",
     meta: { ...__nuxt_page_meta$4 || {}, ...{ "middleware": "auth" } },
-    component: () => import('./notifications-D8R5nbOA.mjs')
+    component: () => import('./notifications-BT1CB1Xx.mjs')
   },
   {
     name: "dashboard-profile",
     path: "/dashboard/profile",
     meta: { ...__nuxt_page_meta$3 || {}, ...{ "middleware": "auth" } },
-    component: () => import('./index-BznldwV2.mjs')
+    component: () => import('./index-YrLVPh9S.mjs')
   },
   {
     name: "dashboard-services",
     path: "/dashboard/services",
     meta: { ...__nuxt_page_meta$2 || {}, ...{ "middleware": "auth" } },
-    component: () => import('./index-Bj3KZLM_.mjs')
+    component: () => import('./index-CmcZdFiN.mjs')
   },
   {
     name: "dashboard-services-create",
     path: "/dashboard/services/create",
     meta: { ...__nuxt_page_meta$1 || {}, ...{ "middleware": "auth" } },
-    component: () => import('./create-DSlrU3NL.mjs')
+    component: () => import('./create-BTBCwP-k.mjs')
   },
   {
     name: "dashboard-services-id-edit",
     path: "/dashboard/services/:id()/edit",
     meta: { ...__nuxt_page_meta || {}, ...{ "middleware": "auth" } },
-    component: () => import('./edit-ClcmaoVW.mjs')
+    component: () => import('./edit-c1YUWlB-.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -630,8 +671,8 @@ const globalMiddleware = [
   manifest_45route_45rule
 ];
 const namedMiddleware = {
-  auth: () => import('./auth-BZnm3FpD.mjs'),
-  guest: () => import('./guest-DhTWuFK_.mjs')
+  auth: () => import('./auth-DUtBihmJ.mjs'),
+  guest: () => import('./guest-COhL8Ng7.mjs')
 };
 const plugin = /* @__PURE__ */ defineNuxtPlugin({
   name: "nuxt:router",
@@ -988,7 +1029,7 @@ const _sfc_main$1 = {
     const statusMessage = _error.statusMessage ?? (is404 ? "Page Not Found" : "Internal Server Error");
     const description = _error.message || _error.toString();
     const stack = void 0;
-    const _Error404 = defineAsyncComponent(() => import('./error-404-CuyRvmhE.mjs'));
+    const _Error404 = defineAsyncComponent(() => import('./error-404-DO9MYOm5.mjs'));
     const _Error = defineAsyncComponent(() => import('./error-500-CbNcYDNj.mjs'));
     const ErrorTemplate = is404 ? _Error404 : _Error;
     return (_ctx, _push, _parent, _attrs) => {
@@ -1071,5 +1112,5 @@ let entry;
 }
 const entry$1 = (ssrContext) => entry(ssrContext);
 
-export { LayoutMetaSymbol as L, PageRouteSymbol as P, _export_sfc as _, useRuntimeConfig as a, useNuxtApp as b, appLayoutTransition as c, _wrapInTransition as d, entry$1 as default, useRouter as e, nuxtLinkDefaults as f, defineNuxtRouteMiddleware as g, navigateTo as n, resolveRouteObject as r, tryUseNuxtApp as t, useRoute as u };
+export { LayoutMetaSymbol as L, PageRouteSymbol as P, _export_sfc as _, useRuntimeConfig as a, useRouter as b, useNuxtApp as c, nuxtLinkDefaults as d, entry$1 as default, appLayoutTransition as e, _wrapInTransition as f, defineNuxtRouteMiddleware as g, navigateTo as n, resolveRouteObject as r, tryUseNuxtApp as t, useRoute as u };
 //# sourceMappingURL=server.mjs.map

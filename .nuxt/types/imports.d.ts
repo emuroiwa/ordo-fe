@@ -97,6 +97,8 @@ declare global {
   const useAsyncData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useAsyncData']
   const useAttrs: typeof import('../../node_modules/vue')['useAttrs']
   const useAuth: typeof import('../../composables/useAuth')['useAuth']
+  const useAvailability: typeof import('../../composables/useAvailability')['useAvailability']
+  const useBooking: typeof import('../../composables/useBooking')['useBooking']
   const useCookie: typeof import('../../node_modules/nuxt/dist/app/composables/cookie')['useCookie']
   const useCssModule: typeof import('../../node_modules/vue')['useCssModule']
   const useCssVars: typeof import('../../node_modules/vue')['useCssVars']
@@ -185,6 +187,9 @@ declare global {
   // @ts-ignore
   export type { LoginCredentials, RegisterData, AuthResponse, LoginResponse, RegisterResponse } from '../../composables/useAuth'
   import('../../composables/useAuth')
+  // @ts-ignore
+  export type { VendorAvailability, AvailabilityData, TimeSlot, WeeklyAvailability } from '../../composables/useAvailability'
+  import('../../composables/useAvailability')
   // @ts-ignore
   export type { NotificationData, NotificationMetadata, Notification, NotificationMeta, NotificationResponse, FetchNotificationsOptions, BulkActionPayload, CreateNotificationPayload } from '../../composables/useNotifications'
   import('../../composables/useNotifications')
@@ -298,6 +303,8 @@ declare module 'vue' {
     readonly useAsyncData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useAsyncData']>
     readonly useAttrs: UnwrapRef<typeof import('../../node_modules/vue')['useAttrs']>
     readonly useAuth: UnwrapRef<typeof import('../../composables/useAuth')['useAuth']>
+    readonly useAvailability: UnwrapRef<typeof import('../../composables/useAvailability')['useAvailability']>
+    readonly useBooking: UnwrapRef<typeof import('../../composables/useBooking')['useBooking']>
     readonly useCookie: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/cookie')['useCookie']>
     readonly useCssModule: UnwrapRef<typeof import('../../node_modules/vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('../../node_modules/vue')['useCssVars']>

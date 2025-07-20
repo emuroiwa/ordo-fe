@@ -135,14 +135,15 @@
                     <div class="flex flex-wrap gap-2">
                       <button
                         v-for="category in categories"
-                        :key="category"
-                        @click="toggleCategory(category)"
+                        :key="category.id"
+                        @click="toggleCategory(category.slug)"
+                        :disabled="loading"
                         class="px-3 py-1 rounded-full text-sm font-medium transition-all duration-200"
-                        :class="selectedCategories.includes(category) 
+                        :class="selectedCategories.includes(category.slug) 
                           ? 'bg-blue-600 text-white' 
                           : 'bg-white/50 text-gray-700 hover:bg-white/70'"
                       >
-                        {{ category }}
+                        {{ category.name }}
                       </button>
                     </div>
                   </div>
@@ -246,7 +247,7 @@
                             </div>
                             <div class="text-right">
                               <div class="text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                R{{ service.price }}
+                                {{ formatPrice(service.price, 'ZAR') }}
                               </div>
                               <div class="text-xs text-gray-500">{{ service.distance }} km away</div>
                             </div>
@@ -304,7 +305,7 @@
                 </div>
                 <div class="flex items-center justify-between">
                   <div class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    R{{ selectedService.price }}
+                    {{ formatPrice(selectedService.price, 'ZAR') }}
                   </div>
                   <div class="text-sm text-gray-500">{{ selectedService.distance }} km away</div>
                 </div>
@@ -333,7 +334,10 @@
 </template>
 
 <script setup>
-import { ref, computed, h } from 'vue'
+import { ref, computed, h, onMounted } from 'vue'
+
+// Use services composable
+const { fetchServices, fetchCategories, categories, loading, formatPrice } = useServices()
 
 // Search state
 const searchQuery = ref('')
@@ -347,114 +351,60 @@ const sortBy = ref('distance')
 const selectedMarker = ref(null)
 const selectedService = ref(null)
 
-// Available categories
-const categories = ref([
-  'Barber', 'Wedding', 'Equipment', 'Photography', 'Catering', 'Events'
-])
+// Services state - will be populated from backend
+const servicesData = ref([])
 
-// Map markers (positioned as percentages)
-const mapMarkers = ref([
-  { id: 1, x: 30, y: 40, category: 'Barber', name: 'Premium Cuts' },
-  { id: 2, x: 60, y: 35, category: 'Wedding', name: 'Elegant Weddings' },
-  { id: 3, x: 45, y: 60, category: 'Equipment', name: 'Pro Equipment' },
-  { id: 4, x: 70, y: 45, category: 'Photography', name: 'Studio Flash' },
-  { id: 5, x: 35, y: 70, category: 'Catering', name: 'Gourmet Catering' },
-  { id: 6, x: 55, y: 25, category: 'Barber', name: 'Urban Cuts' },
-  { id: 7, x: 25, y: 55, category: 'Events', name: 'Event Masters' },
-  { id: 8, x: 75, y: 65, category: 'Photography', name: 'Capture Moments' }
-])
-
-// Services data
-const services = ref([
-  {
-    id: 1,
-    name: 'Premium Cuts Barber',
-    category: 'Barber',
-    price: 150,
-    rating: 4.8,
-    reviews: 127,
-    distance: 1.2,
-    availability: 'Available Today',
-    image: 'https://images.unsplash.com/photo-1503951458645-643d53bfd90f?w=100&h=100&fit=crop'
-  },
-  {
-    id: 2,
-    name: 'Elegant Weddings',
-    category: 'Wedding',
-    price: 2500,
-    rating: 4.9,
-    reviews: 89,
-    distance: 2.5,
-    availability: 'Book in Advance',
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=100&h=100&fit=crop'
-  },
-  {
-    id: 3,
-    name: 'Pro Equipment Rental',
-    category: 'Equipment',
-    price: 300,
-    rating: 4.6,
-    reviews: 45,
-    distance: 0.8,
-    availability: 'Available Now',
-    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100&h=100&fit=crop'
-  },
-  {
-    id: 4,
-    name: 'Studio Flash Photography',
-    category: 'Photography',
-    price: 800,
-    rating: 4.7,
-    reviews: 73,
-    distance: 3.2,
-    availability: 'Weekend Available',
-    image: 'https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=100&h=100&fit=crop'
-  },
-  {
-    id: 5,
-    name: 'Gourmet Catering Co.',
-    category: 'Catering',
-    price: 1200,
-    rating: 4.5,
-    reviews: 156,
-    distance: 1.8,
-    availability: 'Available Today',
-    image: 'https://images.unsplash.com/photo-1555244162-803834f70033?w=100&h=100&fit=crop'
-  },
-  {
-    id: 6,
-    name: 'Urban Cuts',
-    category: 'Barber',
-    price: 180,
-    rating: 4.6,
-    reviews: 92,
-    distance: 2.1,
-    availability: 'Walk-ins Welcome',
-    image: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=100&h=100&fit=crop'
-  },
-  {
-    id: 7,
-    name: 'Event Masters',
-    category: 'Events',
-    price: 1500,
-    rating: 4.8,
-    reviews: 67,
-    distance: 1.5,
-    availability: 'Available Today',
-    image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=100&h=100&fit=crop'
-  },
-  {
-    id: 8,
-    name: 'Capture Moments',
-    category: 'Photography',
-    price: 1200,
-    rating: 4.9,
-    reviews: 134,
-    distance: 4.1,
-    availability: 'Book in Advance',
-    image: 'https://images.unsplash.com/photo-1606914469633-5fe06c9e8fcc?w=100&h=100&fit=crop'
+// Load data on mount
+onMounted(async () => {
+  try {
+    // Load categories from backend
+    await fetchCategories()
+    
+    // Load services from backend
+    const response = await fetchServices({
+      per_page: 50,
+      sort: 'popular'
+    })
+    servicesData.value = response.data || []
+  } catch (error) {
+    console.error('Error loading data:', error)
   }
-])
+})
+
+// Transform services for display
+const transformServiceForDisplay = (service) => {
+  return {
+    id: service.id,
+    name: service.title,
+    category: service.category?.name || 'Service',
+    categorySlug: service.category?.slug || 'service',
+    price: service.base_price,
+    rating: service.average_rating || 4.5,
+    reviews: service.review_count || 0,
+    distance: Math.random() * 5 + 0.5, // Mock distance for now
+    availability: 'Available Today', // Mock availability
+    image: service.primary_image?.url || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=100&h=100&fit=crop',
+    full_slug: service.full_slug
+  }
+}
+
+// Transform backend services to display format
+const services = computed(() => {
+  return servicesData.value.map(transformServiceForDisplay)
+})
+
+// Generate map markers from services
+const mapMarkers = computed(() => {
+  return services.value.slice(0, 8).map((service, index) => ({
+    id: service.id,
+    x: 30 + (index % 3) * 20 + Math.random() * 10,
+    y: 30 + Math.floor(index / 3) * 20 + Math.random() * 10,
+    category: service.category,
+    categorySlug: service.categorySlug,
+    name: service.name
+  }))
+})
+
 
 // Computed properties
 const filteredServices = computed(() => {
@@ -464,7 +414,7 @@ const filteredServices = computed(() => {
       service.category.toLowerCase().includes(searchQuery.value.toLowerCase())
     
     const matchesCategory = selectedCategories.value.length === 0 || 
-      selectedCategories.value.includes(service.category)
+      selectedCategories.value.includes(service.categorySlug)
     
     const matchesDistance = !selectedDistance.value || 
       service.distance <= parseFloat(selectedDistance.value)
@@ -523,11 +473,19 @@ const searchServices = () => {
 }
 
 const bookService = (service) => {
-  navigateTo(`/vendor/${service.id}`)
+  if (service.full_slug) {
+    navigateTo(`/services/${service.full_slug}`)
+  } else {
+    navigateTo(`/vendor/${service.id}`)
+  }
 }
 
 const viewService = (service) => {
-  navigateTo(`/vendor/${service.id}`)
+  if (service.full_slug) {
+    navigateTo(`/services/${service.full_slug}`)
+  } else {
+    navigateTo(`/vendor/${service.id}`)
+  }
 }
 
 // Marker icon helpers

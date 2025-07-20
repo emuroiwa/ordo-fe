@@ -103,7 +103,35 @@ export interface ServiceForm {
 
 export const useServices = () => {
   const config = useRuntimeConfig()
-  const { $fetch } = useNuxtApp()
+  
+  // Helper function to make API calls with proper error handling
+  const makeApiCall = async (url: string, options: any = {}) => {
+    // Get auth token from cookie
+    const tokenCookie = useCookie('auth-token')
+    
+    // Prepare headers with authentication
+    const headers: Record<string, string> = {
+      'Accept': 'application/json',
+      ...options.headers
+    }
+    
+    // Only set Content-Type for non-FormData requests
+    if (!(options.body instanceof FormData)) {
+      headers['Content-Type'] = 'application/json'
+    }
+    
+    // Add authorization header if token exists
+    if (tokenCookie.value) {
+      headers['Authorization'] = `Bearer ${tokenCookie.value}`
+    }
+    
+    // Use global $fetch that should be available in Nuxt 3
+    return await $fetch(url, {
+      ...options,
+      baseURL: config.public.apiBase,
+      headers
+    })
+  }
 
   // State
   const services: Ref<Service[]> = ref([])
@@ -132,7 +160,7 @@ export const useServices = () => {
         }
       })
 
-      const response = await $fetch(`/api/v1/services?${queryParams.toString()}`)
+      const response = await makeApiCall(`/api/v1/services?${queryParams.toString()}`)
       
       services.value = response.data
       pagination.value = {
@@ -160,7 +188,7 @@ export const useServices = () => {
       const slugParts = fullSlug.split('/')
       if (slugParts.length === 2) {
         const [userSlug, serviceSlug] = slugParts
-        service.value = await $fetch(`/api/v1/services/${userSlug}/${serviceSlug}`)
+        service.value = await makeApiCall(`/api/v1/services/${userSlug}/${serviceSlug}`)
       } else {
         throw new Error('Invalid service slug format')
       }
@@ -179,7 +207,7 @@ export const useServices = () => {
     error.value = null
 
     try {
-      service.value = await $fetch(`/api/v1/services/${id}/edit`)
+      service.value = await makeApiCall(`/api/v1/services/${id}/edit`)
       return service.value
     } catch (err: any) {
       error.value = err.data?.message || 'Failed to fetch service'
@@ -192,7 +220,7 @@ export const useServices = () => {
   // Fetch service categories
   const fetchCategories = async () => {
     try {
-      categories.value = await $fetch('/api/v1/service-categories')
+      categories.value = await makeApiCall('/api/v1/service-categories')
       return categories.value
     } catch (err: any) {
       error.value = err.data?.message || 'Failed to fetch categories'
@@ -225,7 +253,7 @@ export const useServices = () => {
         })
       }
 
-      const newService = await $fetch('/api/v1/services', {
+      const newService = await makeApiCall('/api/v1/services', {
         method: 'POST',
         body: formData
       })
@@ -270,7 +298,7 @@ export const useServices = () => {
         })
       }
 
-      const updatedService = await $fetch(`/api/v1/services/${id}`, {
+      const updatedService = await makeApiCall(`/api/v1/services/${id}`, {
         method: 'POST', // Laravel expects POST with _method=PUT for file uploads
         body: formData
       })
@@ -301,7 +329,7 @@ export const useServices = () => {
     error.value = null
 
     try {
-      await $fetch(`/api/v1/services/${id}`, {
+      await makeApiCall(`/api/v1/services/${id}`, {
         method: 'DELETE'
       })
 
@@ -341,7 +369,7 @@ export const useServices = () => {
         }
       })
 
-      const response = await $fetch(`/api/v1/services/my-services?${queryParams.toString()}`)
+      const response = await makeApiCall(`/api/v1/services/my-services?${queryParams.toString()}`)
       
       services.value = response.data
       pagination.value = {
@@ -363,7 +391,7 @@ export const useServices = () => {
   // Get service analytics
   const fetchServiceAnalytics = async (serviceId: string) => {
     try {
-      return await $fetch(`/api/v1/services/${serviceId}/analytics`)
+      return await makeApiCall(`/api/v1/services/${serviceId}/analytics`)
     } catch (err: any) {
       error.value = err.data?.message || 'Failed to fetch analytics'
       throw err

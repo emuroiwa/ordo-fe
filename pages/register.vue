@@ -195,16 +195,13 @@
                       id="serviceCategory"
                       v-model="form.serviceCategory"
                       required
+                      :disabled="categoriesLoading"
                       class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900"
                     >
-                      <option value="">Select category</option>
-                      <option value="barber">Barber & Hair</option>
-                      <option value="beauty">Beauty & Spa</option>
-                      <option value="fitness">Fitness & Wellness</option>
-                      <option value="home">Home Services</option>
-                      <option value="automotive">Automotive</option>
-                      <option value="events">Events & Photography</option>
-                      <option value="other">Other</option>
+                      <option value="">{{ categoriesLoading ? 'Loading categories...' : 'Select category' }}</option>
+                      <option v-for="category in categories" :key="category.id" :value="category.id">
+                        {{ category.name }}
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -425,11 +422,23 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 // Add guest middleware
 definePageMeta({
   middleware: 'guest'
+})
+
+// Use services composable for categories
+const { fetchCategories, categories, loading: categoriesLoading } = useServices()
+
+// Load categories on mount
+onMounted(async () => {
+  try {
+    await fetchCategories()
+  } catch (error) {
+    console.error('Error loading categories:', error)
+  }
 })
 
 // Form state

@@ -77,10 +77,10 @@
                 </div>
                 <div class="flex-1">
                   <select class="glass-input w-full px-6 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300">
-                    <option>Service Type</option>
-                    <option>Barber</option>
-                    <option>Wedding</option>
-                    <option>Equipment</option>
+                    <option value="">Service Type</option>
+                    <option v-for="category in categories.slice(0, 10)" :key="category.id" :value="category.slug">
+                      {{ category.name }}
+                    </option>
                   </select>
                 </div>
                 <div class="flex-1">
@@ -130,7 +130,18 @@
               </div>
 
               <div class="overflow-x-auto scrollbar-hide" ref="featuredScrollContainer" @scroll="updateFeaturedDots">
-                <div class="flex space-x-6 pb-4" style="width: max-content;">
+                <div v-if="loading" class="flex space-x-6 pb-4">
+                  <!-- Loading skeletons -->
+                  <div v-for="i in 6" :key="i" class="glass-card flex-shrink-0 w-80 animate-pulse">
+                    <div class="bg-gray-200 h-48 rounded-2xl mb-4"></div>
+                    <div class="p-6">
+                      <div class="bg-gray-200 h-6 rounded mb-2"></div>
+                      <div class="bg-gray-200 h-4 rounded mb-4"></div>
+                      <div class="bg-gray-200 h-4 rounded w-3/4"></div>
+                    </div>
+                  </div>
+                </div>
+                <div v-else class="flex space-x-6 pb-4" style="width: max-content;">
                   <TransitionGroup name="card-stagger" appear>
                     <div
                       v-for="(vendor, index) in featuredVendors"
@@ -156,7 +167,7 @@
                       <div class="p-6">
                         <div class="flex items-center justify-between mb-3">
                           <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                            R {{ vendor.price.toLocaleString() }}
+                            {{ formatPrice(vendor.price, 'ZAR') }}
                           </span>
                           <button class="glass-button p-2 rounded-full hover:scale-110 transition-all duration-300">
                             <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -191,13 +202,21 @@
                     </div>
                   </TransitionGroup>
                 </div>
+                
+                <!-- Empty state for featured services -->
+                <div v-if="!loading && featuredVendors.length === 0" class="text-center py-12">
+                  <div class="glass-card max-w-md mx-auto">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">No Featured Services</h3>
+                    <p class="text-gray-600">Check back later for featured services in your area.</p>
+                  </div>
+                </div>
               </div>
               
               <!-- Pagination Dots for Featured Services -->
               <div class="flex justify-center mt-6">
                 <div class="flex space-x-2">
                   <button
-                    v-for="(dot, index) in featuredDots"
+                    v-for="(_, index) in featuredDots"
                     :key="index"
                     @click="scrollToFeatured(index)"
                     class="w-2 h-2 rounded-full transition-all duration-300"
@@ -226,7 +245,18 @@
               </div>
 
               <div class="overflow-x-auto scrollbar-hide" ref="highDemandScrollContainer" @scroll="updateHighDemandDots">
-                <div class="flex space-x-6 pb-4 pt-4" style="width: max-content;">
+                <div v-if="loading" class="flex space-x-6 pb-4 pt-4">
+                  <!-- Loading skeletons -->
+                  <div v-for="i in 6" :key="i" class="glass-card flex-shrink-0 w-80 animate-pulse">
+                    <div class="bg-gray-200 h-48 rounded-2xl mb-4"></div>
+                    <div class="p-6">
+                      <div class="bg-gray-200 h-6 rounded mb-2"></div>
+                      <div class="bg-gray-200 h-4 rounded mb-4"></div>
+                      <div class="bg-gray-200 h-4 rounded w-3/4"></div>
+                    </div>
+                  </div>
+                </div>
+                <div v-else class="flex space-x-6 pb-4 pt-4" style="width: max-content;">
                   <TransitionGroup name="card-stagger" appear>
                     <div
                       v-for="(vendor, index) in highDemandVendors"
@@ -257,7 +287,7 @@
                       <div class="p-6">
                         <div class="flex items-center justify-between mb-3">
                           <span class="text-2xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                            R {{ vendor.price.toLocaleString() }}
+                            {{ formatPrice(vendor.price, 'ZAR') }}
                           </span>
                           <button class="glass-button p-2 rounded-full hover:scale-110 transition-all duration-300">
                             <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -292,13 +322,21 @@
                     </div>
                   </TransitionGroup>
                 </div>
+                
+                <!-- Empty state for high demand services -->
+                <div v-if="!loading && highDemandVendors.length === 0" class="text-center py-12">
+                  <div class="glass-card max-w-md mx-auto">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">No High Demand Services</h3>
+                    <p class="text-gray-600">Check back later for popular services in your area.</p>
+                  </div>
+                </div>
               </div>
               
               <!-- Pagination Dots for High Demand Services -->
               <div class="flex justify-center mt-6">
                 <div class="flex space-x-2">
                   <button
-                    v-for="(dot, index) in highDemandDots"
+                    v-for="(_, index) in highDemandDots"
                     :key="index"
                     @click="scrollToHighDemand(index)"
                     class="w-2 h-2 rounded-full transition-all duration-300"
@@ -365,7 +403,17 @@
 </template>
 
 <script setup>
-import { ref, h, onMounted, onUnmounted } from 'vue'
+import { ref, h, onMounted, onUnmounted, computed } from 'vue'
+
+// Use services composable
+const { 
+  categories, 
+  loading, 
+  fetchServices, 
+  fetchCategories,
+  formatPrice,
+  getOptimizedImageUrl 
+} = useServices()
 
 // Typing animation for hero text
 const fullText = 'Find a new service in'
@@ -402,150 +450,63 @@ const startCursorBlink = () => {
   }, 500)
 }
 
-// Popular search tags
-const popularTags = ref([
-  'Weddings', 'Barbers', 'Equipment', 'Photography', 'Catering', 'Events'
-])
+// Popular search tags - fetch from categories
+const popularTags = computed(() => {
+  return categories.value
+    .filter(cat => cat.is_active && cat.services_count > 0)
+    .slice(0, 6)
+    .map(cat => cat.name)
+})
 
-// Featured vendors data
-const featuredVendors = ref([
-  {
-    id: 1,
-    name: 'Premium Cuts',
-    category: 'Barber',
-    details: '2 Services • 1 Location',
-    price: 150,
-    rating: 4.8,
-    location: 'Sandton, Johannesburg',
-    image: 'https://images.unsplash.com/photo-1503951458645-643d53bfd90f?w=400&h=300&fit=crop',
-    timeAgo: '2 days ago'
-  },
-  {
-    id: 2,
-    name: 'Elegant Weddings',
-    category: 'Wedding',
-    details: '5 Services • 3 Locations',
-    price: 2500,
-    rating: 4.9,
-    location: 'Camps Bay, Cape Town',
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=300&fit=crop',
-    timeAgo: '1 week ago'
-  },
-  {
-    id: 3,
-    name: 'Pro Equipment',
-    category: 'Equipment',
-    details: '10 Items • Same Day',
-    price: 300,
-    rating: 4.6,
-    location: 'Umhlanga, Durban',
-    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop',
-    timeAgo: '3 days ago'
-  },
-  {
-    id: 4,
-    name: 'Studio Flash',
-    category: 'Photography',
-    details: '3 Packages • Weekend',
-    price: 800,
-    rating: 4.7,
-    location: 'Hatfield, Pretoria',
-    image: 'https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=400&h=300&fit=crop',
-    timeAgo: '5 days ago'
-  },
-  {
-    id: 5,
-    name: 'Urban Cuts',
-    category: 'Barber',
-    details: '3 Services • 2 Locations',
-    price: 180,
-    rating: 4.6,
-    location: 'Rosebank, Johannesburg',
-    image: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400&h=300&fit=crop',
-    timeAgo: '1 day ago'
-  },
-  {
-    id: 6,
-    name: 'Luxury Events',
-    category: 'Event Planning',
-    details: '8 Services • 4 Locations',
-    price: 3500,
-    rating: 4.9,
-    location: 'Waterfront, Cape Town',
-    image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&h=300&fit=crop',
-    timeAgo: '3 days ago'
-  }
-])
+// Separate services data
+const featuredServices = ref([])
+const highDemandServices = ref([])
 
-// High demand vendors data
-const highDemandVendors = ref([
-  {
-    id: 11,
-    name: 'Elite Barber Co',
-    category: 'Barber',
-    details: '4 Services • 2 Locations',
-    price: 200,
-    rating: 4.9,
-    location: 'Hyde Park, Johannesburg',
-    image: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=400&h=300&fit=crop',
-    bookingsToday: 15
-  },
-  {
-    id: 12,
-    name: 'Dream Weddings',
-    category: 'Wedding',
-    details: '10 Services • 6 Locations',
-    price: 4500,
-    rating: 5.0,
-    location: 'Melrose, Johannesburg',
-    image: 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=400&h=300&fit=crop',
-    bookingsToday: 8
-  },
-  {
-    id: 13,
-    name: 'Pro Audio Rentals',
-    category: 'Equipment',
-    details: '15 Items • Instant Delivery',
-    price: 450,
-    rating: 4.8,
-    location: 'Fourways, Johannesburg',
-    image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop',
-    bookingsToday: 22
-  },
-  {
-    id: 14,
-    name: 'Capture Moments',
-    category: 'Photography',
-    details: '6 Packages • Same Day Edit',
-    price: 1200,
-    rating: 4.9,
-    location: 'Bryanston, Johannesburg',
-    image: 'https://images.unsplash.com/photo-1606914469633-5fe06c9e8fcc?w=400&h=300&fit=crop',
-    bookingsToday: 12
-  },
-  {
-    id: 15,
-    name: 'Gourmet Caterers',
-    category: 'Catering',
-    details: '12 Menus • 500+ Reviews',
-    price: 1800,
-    rating: 4.8,
-    location: 'Randburg, Johannesburg',
-    image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop',
-    bookingsToday: 18
-  },
-  {
-    id: 16,
-    name: 'Skilled Barbers',
-    category: 'Barber',
-    details: '5 Services • Walk-ins Welcome',
-    price: 120,
-    rating: 4.7,
-    location: 'Midrand, Johannesburg',
-    image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400&h=300&fit=crop',
-    bookingsToday: 25
+// Transform services for the frontend display
+const transformServiceForDisplay = (service) => {
+  return {
+    id: service.id,
+    name: service.title,
+    category: service.category?.name || 'Service',
+    details: `${service.duration_minutes ? service.duration_minutes + ' min' : ''} • ${service.location_display || 'Various locations'}`,
+    price: service.base_price,
+    rating: service.average_rating || 4.5,
+    location: service.location_display || 'Location not specified',
+    image: service.primary_image 
+      ? getOptimizedImageUrl(service.primary_image, 'medium') 
+      : 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop',
+    timeAgo: formatTimeAgo(service.created_at),
+    bookingsToday: service.booking_count || Math.floor(Math.random() * 30) + 5, // Mock for now
+    slug: service.full_slug,
+    vendor: service.user
   }
-])
+}
+
+// Computed properties for transformed services
+const featuredVendors = computed(() => {
+  return featuredServices.value.map(transformServiceForDisplay)
+})
+
+const highDemandVendors = computed(() => {
+  return highDemandServices.value.map(transformServiceForDisplay)
+})
+
+// Helper function to format time ago
+const formatTimeAgo = (dateString) => {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffInHours = Math.floor((now - date) / (1000 * 60 * 60))
+  
+  if (diffInHours < 24) {
+    return `${diffInHours} hours ago`
+  } else if (diffInHours < 168) {
+    const days = Math.floor(diffInHours / 24)
+    return `${days} ${days === 1 ? 'day' : 'days'} ago`
+  } else {
+    const weeks = Math.floor(diffInHours / 168)
+    return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`
+  }
+}
 
 // Features data with icon components
 const features = ref([
@@ -639,11 +600,44 @@ const updateHighDemandDots = () => {
 
 // Navigation functions
 const viewVendor = (vendorId) => {
-  navigateTo(`/vendor/${vendorId}`)
+  // Find the service by ID to get the full slug
+  const service = [...featuredServices.value, ...highDemandServices.value]
+    .find(s => s.id === vendorId)
+  
+  if (service && service.full_slug) {
+    navigateTo(`/services/${service.full_slug}`)
+  } else {
+    // Fallback for legacy links
+    navigateTo(`/vendor/${vendorId}`)
+  }
 }
 
-const searchCategory = (category) => {
-  navigateTo(`/search?category=${category}`)
+
+// Load services data
+const loadServicesData = async () => {
+  try {
+    // Load categories first
+    await fetchCategories()
+
+    // Load featured services (featured flag = true)
+    const featuredResponse = await fetchServices({ 
+      featured: true, 
+      per_page: 6,
+      sort: 'rating'
+    })
+    featuredServices.value = featuredResponse.data || []
+
+    // Load high demand services (sort by booking count/popularity)
+    const highDemandResponse = await fetchServices({ 
+      per_page: 6,
+      sort: 'popular',
+      min_rating: 4.5
+    })
+    highDemandServices.value = highDemandResponse.data || []
+
+  } catch (error) {
+    console.error('Error loading services data:', error)
+  }
 }
 
 // Lifecycle hooks
@@ -653,6 +647,9 @@ onMounted(() => {
     startTypingAnimation()
     startCursorBlink()
   }, 500)
+
+  // Load services data
+  loadServicesData()
 })
 
 onUnmounted(() => {
