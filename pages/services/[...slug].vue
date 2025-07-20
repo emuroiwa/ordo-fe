@@ -121,6 +121,7 @@
                     >
                   </div>
                   
+                  
                   <!-- Image Gallery -->
                   <div v-if="service.service_images?.length > 1" class="flex gap-2 p-4 overflow-x-auto">
                     <button
@@ -222,8 +223,8 @@
                     </div>
                   </div>
                   <div v-if="service.user?.slug" class="ml-4">
-                    <NuxtLink :to="`/providers/${service.user.slug}`" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                      View Profile
+                    <NuxtLink :to="`/search?provider=${service.user.slug}`" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                      View More Services
                     </NuxtLink>
                   </div>
                 </div>
@@ -434,6 +435,13 @@
       </div>
     </div>
   </div>
+
+  <!-- Booking Modal -->
+  <BookingModal 
+    :is-open="showBookingModal" 
+    :service="service"
+    @close="closeBookingModal"
+  />
 </template>
 
 <script setup lang="ts">
@@ -448,6 +456,7 @@ const route = useRoute()
 
 // State
 const mainImage = ref(null)
+const showBookingModal = ref(false)
 
 // Computed
 const fullSlug = computed(() => {
@@ -460,22 +469,17 @@ const setMainImage = (image: any) => {
   mainImage.value = image
 }
 
-const handleBookNow = async () => {
+const handleBookNow = () => {
   if (service.value) {
-    const bookingUrl = `/services/${fullSlug.value}/book`
-    console.log('Navigating to booking page:', bookingUrl)
-    console.log('Full slug:', fullSlug.value)
-    console.log('Service data:', service.value)
-    
-    try {
-      await navigateTo(bookingUrl)
-      console.log('Navigation successful')
-    } catch (error) {
-      console.error('Navigation failed:', error)
-    }
+    console.log('Opening booking modal for service:', service.value.title)
+    showBookingModal.value = true
   } else {
     console.error('No service data available for booking')
   }
+}
+
+const closeBookingModal = () => {
+  showBookingModal.value = false
 }
 
 const handleImageError = (event: Event) => {

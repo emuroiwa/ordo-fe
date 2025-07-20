@@ -42,6 +42,7 @@
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
         <p class="text-gray-600">Loading booking calendar...</p>
+        <p class="text-xs text-gray-400 mt-2">Debug: Loading = {{ loading }}</p>
       </div>
     </div>
 
@@ -55,12 +56,26 @@
         </div>
         <h3 class="text-lg font-medium text-gray-900 mb-2">Service Not Found</h3>
         <p class="text-sm text-gray-600 mb-4">{{ error }}</p>
+        <p class="text-xs text-gray-400 mt-2">Debug: Error = {{ error }}</p>
+        <p class="text-xs text-gray-400">Loading = {{ loading }}</p>
+        <p class="text-xs text-gray-400">Service = {{ !!service }}</p>
         <NuxtLink
           to="/search"
           class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
         >
           Browse Services
         </NuxtLink>
+      </div>
+    </div>
+
+    <!-- Debug State -->
+    <div v-else-if="!loading && !error && !service" class="flex items-center justify-center min-h-screen">
+      <div class="text-center bg-yellow-50 rounded-lg p-8 shadow-lg">
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Debug State</h3>
+        <p class="text-sm text-gray-600">Loading: {{ loading }}</p>
+        <p class="text-sm text-gray-600">Error: {{ error }}</p>
+        <p class="text-sm text-gray-600">Service: {{ !!service }}</p>
+        <p class="text-sm text-gray-600">FullSlug: {{ fullSlug }}</p>
       </div>
     </div>
 
@@ -346,6 +361,9 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted, watch } from 'vue'
+
+
 // Meta
 definePageMeta({
   layout: false // Don't use any layout since we're implementing our own
@@ -513,12 +531,21 @@ useHead({
   ]
 })
 
+// Debug logging
+console.log('Book component loading...')
+
 // Fetch service on mount
 onMounted(async () => {
-  console.log('Booking page loading for slug:', fullSlug.value)
+  console.log('onMounted called')
+  console.log('fullSlug:', fullSlug.value)
+  console.log('loading state:', loading.value)
+  console.log('service state:', service.value)
+  console.log('error state:', error.value)
+  
   try {
+    console.log('Calling fetchService...')
     await fetchService(fullSlug.value)
-    console.log('Service loaded successfully')
+    console.log('fetchService completed, service:', service.value)
   } catch (err) {
     console.error('Failed to fetch service:', err)
   }

@@ -407,6 +407,37 @@ export const useBooking = () => {
     return hoursUntilBooking > 24 // Can reschedule 24+ hours before
   }
 
+  // Fetch available slots for a service
+  const fetchAvailableSlots = async (userSlug: string, serviceSlug: string, params: {
+    start_date?: string
+    end_date?: string
+    duration?: number
+  } = {}) => {
+    loading.value = true
+    error.value = null
+
+    try {
+      const queryParams = new URLSearchParams()
+      
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          queryParams.append(key, String(value))
+        }
+      })
+
+      const response = await makeApiCall(
+        `/api/v1/services/${userSlug}/${serviceSlug}/available-slots?${queryParams.toString()}`
+      )
+      
+      return response.data || []
+    } catch (err: any) {
+      error.value = err.data?.message || 'Failed to fetch available slots'
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     // State
     bookings,
@@ -424,6 +455,7 @@ export const useBooking = () => {
     markInProgress,
     completeBooking,
     rescheduleBooking,
+    fetchAvailableSlots,
 
     // Utilities
     getBookingStatus,

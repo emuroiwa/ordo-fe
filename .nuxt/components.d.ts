@@ -12,7 +12,8 @@ type HydrationStrategies = {
 }
 type LazyComponent<T> = (T & DefineComponent<HydrationStrategies, {}, {}, {}, {}, {}, {}, { hydrated: () => void }>)
 interface _GlobalComponents {
-      'ImageUpload': typeof import("../components/ImageUpload.vue")['default']
+      'BookingModal': typeof import("../components/BookingModal.vue")['default']
+    'ImageUpload': typeof import("../components/ImageUpload.vue")['default']
     'ServiceForm': typeof import("../components/ServiceForm.vue")['default']
     'BookingAvailabilityCalendar': typeof import("../components/booking/AvailabilityCalendar.vue")['default']
     'BookingDetailsModal': typeof import("../components/booking/BookingDetailsModal.vue")['default']
@@ -49,7 +50,8 @@ interface _GlobalComponents {
     'Body': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
     'NuxtIsland': typeof import("../node_modules/nuxt/dist/app/components/nuxt-island")['default']
     'NuxtRouteAnnouncer': typeof import("../node_modules/nuxt/dist/app/components/server-placeholder")['default']
-      'LazyImageUpload': LazyComponent<typeof import("../components/ImageUpload.vue")['default']>
+      'LazyBookingModal': LazyComponent<typeof import("../components/BookingModal.vue")['default']>
+    'LazyImageUpload': LazyComponent<typeof import("../components/ImageUpload.vue")['default']>
     'LazyServiceForm': LazyComponent<typeof import("../components/ServiceForm.vue")['default']>
     'LazyBookingAvailabilityCalendar': LazyComponent<typeof import("../components/booking/AvailabilityCalendar.vue")['default']>
     'LazyBookingDetailsModal': LazyComponent<typeof import("../components/booking/BookingDetailsModal.vue")['default']>
@@ -92,6 +94,7 @@ declare module 'vue' {
   export interface GlobalComponents extends _GlobalComponents { }
 }
 
+export const BookingModal: typeof import("../components/BookingModal.vue")['default']
 export const ImageUpload: typeof import("../components/ImageUpload.vue")['default']
 export const ServiceForm: typeof import("../components/ServiceForm.vue")['default']
 export const BookingAvailabilityCalendar: typeof import("../components/booking/AvailabilityCalendar.vue")['default']
@@ -129,6 +132,7 @@ export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/compone
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
 export const NuxtIsland: typeof import("../node_modules/nuxt/dist/app/components/nuxt-island")['default']
 export const NuxtRouteAnnouncer: typeof import("../node_modules/nuxt/dist/app/components/server-placeholder")['default']
+export const LazyBookingModal: LazyComponent<typeof import("../components/BookingModal.vue")['default']>
 export const LazyImageUpload: LazyComponent<typeof import("../components/ImageUpload.vue")['default']>
 export const LazyServiceForm: LazyComponent<typeof import("../components/ServiceForm.vue")['default']>
 export const LazyBookingAvailabilityCalendar: LazyComponent<typeof import("../components/booking/AvailabilityCalendar.vue")['default']>
