@@ -1,35 +1,50 @@
 <template>
-  <div class="min-h-screen bg-white">
-    <!-- Header -->
-    <header class="bg-white shadow-sm border-b">
+  <div class="min-h-screen relative overflow-hidden">
+    <!-- Background Gradient -->
+    <div class="fixed inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1920&h=1080&fit=crop&crop=entropy&auto=format&q=80')] bg-cover bg-center opacity-10"></div>
+      <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-indigo-500/5 to-purple-500/5"></div>
+    </div>
+
+    <!-- Glassmorphism Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center space-x-8">
-            <NuxtLink to="/" class="text-2xl font-bold text-blue-600">ORDO</NuxtLink>
+            <NuxtLink to="/" class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              ORDO
+            </NuxtLink>
             <nav class="hidden md:flex space-x-8">
-              <NuxtLink to="/search" class="text-blue-600 border-b-2 border-blue-600 pb-2 font-medium">Search</NuxtLink>
-              <NuxtLink to="/map-search" class="text-gray-700 hover:text-blue-600">Map Search</NuxtLink>
-              <NuxtLink to="/how-it-works" class="text-gray-700 hover:text-blue-600">How it Works</NuxtLink>
-              <NuxtLink to="/about" class="text-gray-700 hover:text-blue-600">About us</NuxtLink>
+              <NuxtLink to="/search" class="text-blue-600 font-medium relative">
+                Search
+                <div class="absolute -bottom-2 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
+              </NuxtLink>
+              <NuxtLink to="/map-search" class="text-gray-700 hover:text-blue-600 transition-colors duration-200">Map Search</NuxtLink>
+              <NuxtLink to="/how-it-works" class="text-gray-700 hover:text-blue-600 transition-colors duration-200">How it Works</NuxtLink>
+              <NuxtLink to="/about" class="text-gray-700 hover:text-blue-600 transition-colors duration-200">About us</NuxtLink>
             </nav>
           </div>
+          
           <div class="flex items-center space-x-4">
             <NuxtLink to="/login" class="text-blue-600 hover:text-blue-800 transition-colors duration-200">Login</NuxtLink>
             <NuxtLink to="/register" class="backdrop-blur-sm bg-white/20 border border-white/30 px-4 py-2 rounded-xl font-medium text-gray-700 hover:bg-white/30 transition-all duration-300">Register</NuxtLink>
-            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-              List a Service
-            </button>
+            <NuxtLink to="/register">
+              <button class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-300">
+                 List a Service
+              </button>
+            </NuxtLink> 
           </div>
         </div>
       </div>
     </header>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div class="lg:col-span-1">
-          <div class="bg-white rounded-lg shadow-sm p-6 sticky top-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Filters</h2>
+    <!-- Main Content -->
+    <div class="relative z-10 pt-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div class="lg:col-span-1">
+            <div class="backdrop-blur-sm bg-white/80 rounded-2xl shadow-xl border border-white/20 p-6 sticky top-24">
+              <h2 class="text-lg font-semibold text-gray-900 mb-4">Filters</h2>
             
             <div class="space-y-6">
               <div>
@@ -124,13 +139,13 @@
 
               <button
                 @click="clearFilters"
-                class="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                class="w-full px-4 py-2 backdrop-blur-sm bg-white/20 border border-white/30 rounded-xl text-gray-700 hover:bg-white/30 transition-all duration-300 font-medium"
               >
                 Clear Filters
               </button>
             </div>
+            </div>
           </div>
-        </div>
 
         <div class="lg:col-span-3">
           <div class="flex justify-between items-center mb-6">
@@ -150,7 +165,7 @@
             <div
               v-for="vendor in filteredVendors"
               :key="vendor.id"
-              class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
+              class="backdrop-blur-sm bg-white/80 rounded-2xl shadow-xl border border-white/20 overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer group transform hover:scale-105"
               @click="bookVendor(vendor)"
             >
               <div class="relative">
@@ -208,11 +223,12 @@
           <div v-if="filteredVendors.length === 0" class="text-center py-12">
             <div class="text-gray-400 mb-4">
               <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-1.007-5.824-2.562M12 9l3 3-3 3m0-6l-3 3 3 3" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0712 15c-2.34 0-4.29-1.007-5.824-2.562M12 9l3 3-3 3m0-6l-3 3 3 3" />
               </svg>
             </div>
             <h3 class="text-lg font-medium text-gray-900 mb-2">No vendors found</h3>
             <p class="text-gray-600">Try adjusting your filters to find more results.</p>
+          </div>
           </div>
         </div>
       </div>
@@ -222,6 +238,11 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+
+// Meta
+definePageMeta({
+  layout: false // Don't use any layout since we're implementing our own
+})
 
 const route = useRoute()
 const { fetchServices, fetchCategories, categories, loading, formatPrice } = useServices()
@@ -318,3 +339,24 @@ const bookVendor = (vendor) => {
   }
 }
 </script>
+
+<style scoped>
+/* Glassmorphism effects */
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
+}
+
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px);
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover effects */
+.transform:hover {
+  transform: translateY(-2px);
+}
+</style>

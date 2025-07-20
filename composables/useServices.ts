@@ -188,7 +188,9 @@ export const useServices = () => {
       const slugParts = fullSlug.split('/')
       if (slugParts.length === 2) {
         const [userSlug, serviceSlug] = slugParts
-        service.value = await makeApiCall(`/api/v1/services/${userSlug}/${serviceSlug}`)
+        const response = await makeApiCall(`/api/v1/services/${userSlug}/${serviceSlug}`)
+        // ServiceResource returns data wrapped in a 'data' property
+        service.value = response.data || response
       } else {
         throw new Error('Invalid service slug format')
       }
@@ -207,7 +209,9 @@ export const useServices = () => {
     error.value = null
 
     try {
-      service.value = await makeApiCall(`/api/v1/services/${id}/edit`)
+      const response = await makeApiCall(`/api/v1/services/${id}/edit`)
+      // ServiceResource returns data wrapped in a 'data' property
+      service.value = response.data || response
       return service.value
     } catch (err: any) {
       error.value = err.data?.message || 'Failed to fetch service'
