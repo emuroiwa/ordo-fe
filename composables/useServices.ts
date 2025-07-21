@@ -123,7 +123,13 @@ export const useServices = () => {
     // Add authorization header if token exists
     if (tokenCookie.value) {
       headers['Authorization'] = `Bearer ${tokenCookie.value}`
+      console.log('Auth token found:', tokenCookie.value.substring(0, 20) + '...')
+    } else {
+      console.warn('No auth token found in cookies')
     }
+    
+    console.log('Making API call to:', url)
+    console.log('With headers:', headers)
     
     // Use global $fetch that should be available in Nuxt 3
     return await $fetch(url, {
@@ -333,9 +339,13 @@ export const useServices = () => {
     error.value = null
 
     try {
-      await makeApiCall(`/api/v1/services/${id}`, {
+      console.log('Deleting service with ID:', id)
+      
+      const response = await makeApiCall(`/api/v1/services/${id}`, {
         method: 'DELETE'
       })
+      
+      console.log('Delete response:', response)
 
       // Remove from services list
       services.value = services.value.filter(s => s.id !== id)
@@ -347,7 +357,12 @@ export const useServices = () => {
 
       return true
     } catch (err: any) {
-      error.value = err.data?.message || 'Failed to delete service'
+      console.error('Delete service error:', err)
+      console.error('Error response:', err.response)
+      console.error('Error data:', err.data)
+      console.error('Error status:', err.status)
+      
+      error.value = err.data?.message || err.message || 'Failed to delete service'
       throw err
     } finally {
       loading.value = false

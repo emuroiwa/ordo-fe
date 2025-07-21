@@ -12,7 +12,9 @@ type HydrationStrategies = {
 }
 type LazyComponent<T> = (T & DefineComponent<HydrationStrategies, {}, {}, {}, {}, {}, {}, { hydrated: () => void }>)
 interface _GlobalComponents {
-      'BookingModal': typeof import("../components/BookingModal.vue")['default']
+      'AnalyticsQuickStats': typeof import("../components/Analytics/QuickStats.vue")['default']
+    'BookingModal': typeof import("../components/BookingModal.vue")['default']
+    'EarningsQuickStats': typeof import("../components/Earnings/QuickStats.vue")['default']
     'ImageUpload': typeof import("../components/ImageUpload.vue")['default']
     'ServiceForm': typeof import("../components/ServiceForm.vue")['default']
     'BookingAvailabilityCalendar': typeof import("../components/booking/AvailabilityCalendar.vue")['default']
@@ -50,7 +52,9 @@ interface _GlobalComponents {
     'Body': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
     'NuxtIsland': typeof import("../node_modules/nuxt/dist/app/components/nuxt-island")['default']
     'NuxtRouteAnnouncer': typeof import("../node_modules/nuxt/dist/app/components/server-placeholder")['default']
-      'LazyBookingModal': LazyComponent<typeof import("../components/BookingModal.vue")['default']>
+      'LazyAnalyticsQuickStats': LazyComponent<typeof import("../components/Analytics/QuickStats.vue")['default']>
+    'LazyBookingModal': LazyComponent<typeof import("../components/BookingModal.vue")['default']>
+    'LazyEarningsQuickStats': LazyComponent<typeof import("../components/Earnings/QuickStats.vue")['default']>
     'LazyImageUpload': LazyComponent<typeof import("../components/ImageUpload.vue")['default']>
     'LazyServiceForm': LazyComponent<typeof import("../components/ServiceForm.vue")['default']>
     'LazyBookingAvailabilityCalendar': LazyComponent<typeof import("../components/booking/AvailabilityCalendar.vue")['default']>
@@ -94,7 +98,9 @@ declare module 'vue' {
   export interface GlobalComponents extends _GlobalComponents { }
 }
 
+export const AnalyticsQuickStats: typeof import("../components/Analytics/QuickStats.vue")['default']
 export const BookingModal: typeof import("../components/BookingModal.vue")['default']
+export const EarningsQuickStats: typeof import("../components/Earnings/QuickStats.vue")['default']
 export const ImageUpload: typeof import("../components/ImageUpload.vue")['default']
 export const ServiceForm: typeof import("../components/ServiceForm.vue")['default']
 export const BookingAvailabilityCalendar: typeof import("../components/booking/AvailabilityCalendar.vue")['default']
@@ -132,7 +138,9 @@ export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/compone
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
 export const NuxtIsland: typeof import("../node_modules/nuxt/dist/app/components/nuxt-island")['default']
 export const NuxtRouteAnnouncer: typeof import("../node_modules/nuxt/dist/app/components/server-placeholder")['default']
+export const LazyAnalyticsQuickStats: LazyComponent<typeof import("../components/Analytics/QuickStats.vue")['default']>
 export const LazyBookingModal: LazyComponent<typeof import("../components/BookingModal.vue")['default']>
+export const LazyEarningsQuickStats: LazyComponent<typeof import("../components/Earnings/QuickStats.vue")['default']>
 export const LazyImageUpload: LazyComponent<typeof import("../components/ImageUpload.vue")['default']>
 export const LazyServiceForm: LazyComponent<typeof import("../components/ServiceForm.vue")['default']>
 export const LazyBookingAvailabilityCalendar: LazyComponent<typeof import("../components/booking/AvailabilityCalendar.vue")['default']>

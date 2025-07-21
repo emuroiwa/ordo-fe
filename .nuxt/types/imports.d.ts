@@ -93,6 +93,7 @@ declare global {
   const tryUseNuxtApp: typeof import('../../node_modules/nuxt/dist/app/nuxt')['tryUseNuxtApp']
   const unref: typeof import('../../node_modules/vue')['unref']
   const updateAppConfig: typeof import('../../node_modules/nuxt/dist/app/config')['updateAppConfig']
+  const useAnalytics: typeof import('../../composables/useAnalytics')['useAnalytics']
   const useAppConfig: typeof import('../../node_modules/nuxt/dist/app/config')['useAppConfig']
   const useAsyncData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useAsyncData']
   const useAttrs: typeof import('../../node_modules/vue')['useAttrs']
@@ -102,6 +103,8 @@ declare global {
   const useCookie: typeof import('../../node_modules/nuxt/dist/app/composables/cookie')['useCookie']
   const useCssModule: typeof import('../../node_modules/vue')['useCssModule']
   const useCssVars: typeof import('../../node_modules/vue')['useCssVars']
+  const useDashboard: typeof import('../../composables/useDashboard')['useDashboard']
+  const useEarnings: typeof import('../../composables/useEarnings')['useEarnings']
   const useError: typeof import('../../node_modules/nuxt/dist/app/composables/error')['useError']
   const useFetch: typeof import('../../node_modules/nuxt/dist/app/composables/fetch')['useFetch']
   const useHead: typeof import('../../node_modules/nuxt/dist/app/composables/head')['useHead']
@@ -117,6 +120,7 @@ declare global {
   const useNuxtApp: typeof import('../../node_modules/nuxt/dist/app/nuxt')['useNuxtApp']
   const useNuxtData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useNuxtData']
   const useNuxtDevTools: typeof import('../../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools')['useNuxtDevTools']
+  const usePayments: typeof import('../../composables/usePayments')['usePayments']
   const usePreviewMode: typeof import('../../node_modules/nuxt/dist/app/composables/preview')['usePreviewMode']
   const useProfile: typeof import('../../composables/useProfile')['useProfile']
   const useRequestEvent: typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestEvent']
@@ -125,6 +129,7 @@ declare global {
   const useRequestHeaders: typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestHeaders']
   const useRequestURL: typeof import('../../node_modules/nuxt/dist/app/composables/url')['useRequestURL']
   const useResponseHeader: typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useResponseHeader']
+  const useReviews: typeof import('../../composables/useReviews')['useReviews']
   const useRole: typeof import('../../composables/useRole')['useRole']
   const useRoute: typeof import('../../node_modules/nuxt/dist/app/composables/router')['useRoute']
   const useRouteAnnouncer: typeof import('../../node_modules/nuxt/dist/app/composables/route-announcer')['useRouteAnnouncer']
@@ -185,17 +190,32 @@ declare global {
   export type { Component, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from '../../node_modules/vue'
   import('../../node_modules/vue')
   // @ts-ignore
+  export type { AnalyticsOverview, TrendData, AnalyticsData } from '../../composables/useAnalytics'
+  import('../../composables/useAnalytics')
+  // @ts-ignore
   export type { LoginCredentials, RegisterData, AuthResponse, LoginResponse, RegisterResponse } from '../../composables/useAuth'
   import('../../composables/useAuth')
   // @ts-ignore
   export type { VendorAvailability, AvailabilityData, TimeSlot, WeeklyAvailability } from '../../composables/useAvailability'
   import('../../composables/useAvailability')
   // @ts-ignore
+  export type { VendorStats, CustomerStats, QuickStats, Activity, PerformanceTrend, TopService, ServiceBreakdown, UpcomingBooking, FavoriteService, ServiceRecommendation, VendorDashboardData, CustomerDashboardData, DashboardData } from '../../composables/useDashboard'
+  import('../../composables/useDashboard')
+  // @ts-ignore
+  export type { EarningsOverview, EarningsTrendData, MonthlyBreakdown, ServiceEarning, PayoutMethod, PayoutRequest, PayoutResponse, EarningsData, DateRange } from '../../composables/useEarnings'
+  import('../../composables/useEarnings')
+  // @ts-ignore
   export type { NotificationData, NotificationMetadata, Notification, NotificationMeta, NotificationResponse, FetchNotificationsOptions, BulkActionPayload, CreateNotificationPayload } from '../../composables/useNotifications'
   import('../../composables/useNotifications')
   // @ts-ignore
+  export type { Payment, Transaction, PaymentMethod, VendorPaymentsOverview, CustomerPaymentsOverview, PaymentMethodBreakdown, MonthlyData, VendorPaymentsData, CustomerPaymentsData, PaymentsData, PaymentFilters, TransactionFilters, PaymentMethodData } from '../../composables/usePayments'
+  import('../../composables/usePayments')
+  // @ts-ignore
   export type { User, ProfileForm, PasswordForm, ProfileStats } from '../../composables/useProfile'
   import('../../composables/useProfile')
+  // @ts-ignore
+  export type { Review, ReviewAnalytics, ServiceOption, ReviewFilters, ReviewResponse, PaginationData } from '../../composables/useReviews'
+  import('../../composables/useReviews')
   // @ts-ignore
   export type { UserRole } from '../../composables/useRole'
   import('../../composables/useRole')
@@ -299,6 +319,7 @@ declare module 'vue' {
     readonly tryUseNuxtApp: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/nuxt')['tryUseNuxtApp']>
     readonly unref: UnwrapRef<typeof import('../../node_modules/vue')['unref']>
     readonly updateAppConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/config')['updateAppConfig']>
+    readonly useAnalytics: UnwrapRef<typeof import('../../composables/useAnalytics')['useAnalytics']>
     readonly useAppConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/config')['useAppConfig']>
     readonly useAsyncData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useAsyncData']>
     readonly useAttrs: UnwrapRef<typeof import('../../node_modules/vue')['useAttrs']>
@@ -308,6 +329,8 @@ declare module 'vue' {
     readonly useCookie: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/cookie')['useCookie']>
     readonly useCssModule: UnwrapRef<typeof import('../../node_modules/vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('../../node_modules/vue')['useCssVars']>
+    readonly useDashboard: UnwrapRef<typeof import('../../composables/useDashboard')['useDashboard']>
+    readonly useEarnings: UnwrapRef<typeof import('../../composables/useEarnings')['useEarnings']>
     readonly useError: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/error')['useError']>
     readonly useFetch: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/fetch')['useFetch']>
     readonly useHead: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/head')['useHead']>
@@ -323,6 +346,7 @@ declare module 'vue' {
     readonly useNuxtApp: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/nuxt')['useNuxtApp']>
     readonly useNuxtData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useNuxtData']>
     readonly useNuxtDevTools: UnwrapRef<typeof import('../../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools')['useNuxtDevTools']>
+    readonly usePayments: UnwrapRef<typeof import('../../composables/usePayments')['usePayments']>
     readonly usePreviewMode: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/preview')['usePreviewMode']>
     readonly useProfile: UnwrapRef<typeof import('../../composables/useProfile')['useProfile']>
     readonly useRequestEvent: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestEvent']>
@@ -331,6 +355,7 @@ declare module 'vue' {
     readonly useRequestHeaders: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestHeaders']>
     readonly useRequestURL: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/url')['useRequestURL']>
     readonly useResponseHeader: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useResponseHeader']>
+    readonly useReviews: UnwrapRef<typeof import('../../composables/useReviews')['useReviews']>
     readonly useRole: UnwrapRef<typeof import('../../composables/useRole')['useRole']>
     readonly useRoute: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['useRoute']>
     readonly useRouteAnnouncer: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/route-announcer')['useRouteAnnouncer']>
