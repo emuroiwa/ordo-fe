@@ -1,6 +1,6 @@
 import { ref, readonly, computed, type Ref } from 'vue'
 
-export type UserRole = 'customer' | 'vendor'
+export type UserRole = 'customer' | 'vendor' | 'admin'
 
 // Global state
 const currentRole: Ref<UserRole> = ref('customer')
@@ -33,17 +33,21 @@ export const useRole = () => {
 
   const primaryRole = computed(() => {
     const userRoles = user.value?.roles || ['customer']
+    if (userRoles.includes('admin')) return 'admin'
     if (userRoles.includes('vendor')) return 'vendor'
     return 'customer'
   })
 
   const isCustomer = computed(() => currentRole.value === 'customer')
   const isVendor = computed(() => currentRole.value === 'vendor')
+  const isAdmin = computed(() => currentRole.value === 'admin')
 
   // Auto-set role based on user's roles
   const initializeRole = () => {
     if (user.value?.roles) {
-      if (user.value.roles.includes('vendor') && user.value.roles.includes('customer')) {
+      if (user.value.roles.includes('admin')) {
+        currentRole.value = 'admin'
+      } else if (user.value.roles.includes('vendor') && user.value.roles.includes('customer')) {
         // User has both roles, keep current selection or default to vendor
         if (!hasRole(currentRole.value)) {
           currentRole.value = 'vendor'
@@ -63,6 +67,7 @@ export const useRole = () => {
     // Computed
     isCustomer,
     isVendor,
+    isAdmin,
     hasMultipleRoles,
     primaryRole,
     

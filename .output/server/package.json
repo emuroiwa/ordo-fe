@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@babel/parser": "7.28.0",
+    "@googlemaps/js-api-loader": "1.16.10",
     "@heroicons/vue": "2.2.0",
     "@vue/compiler-core": "3.5.17",
     "@vue/compiler-dom": "3.5.17",
@@ -19,6 +20,7 @@
     "entities": "4.5.0",
     "estree-walker": "2.0.2",
     "hookable": "5.5.3",
+    "lodash-es": "4.17.21",
     "source-map-js": "1.2.1",
     "ufo": "1.6.1",
     "unhead": "2.0.12",

@@ -9,47 +9,84 @@
     <!-- Glassmorphism Header -->
     <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
+        <div class="flex items-center justify-between h-16 sm:h-20">
           <Transition name="slide-right" appear>
-            <div class="flex items-center space-x-8">
-              <div class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <div class="flex items-center space-x-4 sm:space-x-8">
+              <div class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 ORDO
               </div>
-              <nav class="hidden md:flex space-x-8">
-                <a href="#" class="text-blue-600 font-medium relative">
+              <nav class="hidden lg:flex space-x-6 xl:space-x-8">
+                <a href="#" class="text-blue-600 font-medium relative text-sm xl:text-base">
                   Search
                   <div class="absolute -bottom-2 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
                 </a>
-                <NuxtLink to="/map-search" class="text-gray-700 hover:text-blue-600 transition-colors duration-200">Map Search</NuxtLink>
-                <NuxtLink to="/how-it-works" class="text-gray-700 hover:text-blue-600 transition-colors duration-200">How it Works</NuxtLink>
-                <NuxtLink to="/about" class="text-gray-700 hover:text-blue-600 transition-colors duration-200">About us</NuxtLink>
+                <NuxtLink to="/map-search" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 text-sm xl:text-base">Map Search</NuxtLink>
+                <NuxtLink to="/how-it-works" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 text-sm xl:text-base">How it Works</NuxtLink>
+                <NuxtLink to="/about" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 text-sm xl:text-base">About us</NuxtLink>
               </nav>
             </div>
           </Transition>
           
           <Transition name="slide-left" appear>
-            <div class="flex items-center space-x-4">
-              <NuxtLink to="/login" class="text-blue-600 hover:text-blue-800 transition-colors duration-200">Login</NuxtLink>
-              <NuxtLink to="/register" class="backdrop-blur-sm bg-white/20 border border-white/30 px-4 py-2 rounded-xl font-medium text-gray-700 hover:bg-white/30 transition-all duration-300">Register</NuxtLink>
-              <NuxtLink to="/register">
-                <button class="glass-button bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-300">
-                   List a Service
+            <div class="flex items-center space-x-2 sm:space-x-4">
+              <!-- Mobile menu button -->
+              <button 
+                @click="mobileMenuOpen = !mobileMenuOpen"
+                class="lg:hidden p-2 rounded-lg hover:bg-white/20 transition-colors duration-200 touch-target"
+                :class="{ 'bg-white/20': mobileMenuOpen }"
+              >
+                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                  <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              
+              <!-- Desktop actions -->
+              <NuxtLink to="/login" class="hidden sm:block text-blue-600 hover:text-blue-800 transition-colors duration-200 text-sm lg:text-base">Login</NuxtLink>
+              <NuxtLink to="/register" class="hidden md:block backdrop-blur-sm bg-white/20 border border-white/30 px-3 py-2 lg:px-4 lg:py-2 rounded-xl font-medium text-gray-700 hover:bg-white/30 transition-all duration-300 text-sm lg:text-base">Register</NuxtLink>
+              <NuxtLink to="/register" class="hidden sm:block">
+                <button class="glass-button bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-2 lg:px-4 lg:py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-300 text-sm lg:text-base touch-target">
+                   List Service
                 </button>
               </NuxtLink> 
             </div>
           </Transition>
         </div>
+        
+        <!-- Mobile Navigation Menu -->
+        <Transition name="mobile-menu">
+          <div v-if="mobileMenuOpen" class="lg:hidden absolute top-full left-0 right-0 backdrop-blur-xl bg-white/95 border-b border-white/20 shadow-lg">
+            <nav class="px-4 py-6 space-y-4">
+              <a href="#" class="block text-blue-600 font-medium py-3 px-4 rounded-lg bg-blue-50/80 touch-target">
+                Search
+              </a>
+              <NuxtLink to="/map-search" class="block text-gray-700 hover:text-blue-600 transition-colors duration-200 py-3 px-4 rounded-lg hover:bg-white/50 touch-target">Map Search</NuxtLink>
+              <NuxtLink to="/how-it-works" class="block text-gray-700 hover:text-blue-600 transition-colors duration-200 py-3 px-4 rounded-lg hover:bg-white/50 touch-target">How it Works</NuxtLink>
+              <NuxtLink to="/about" class="block text-gray-700 hover:text-blue-600 transition-colors duration-200 py-3 px-4 rounded-lg hover:bg-white/50 touch-target">About us</NuxtLink>
+              
+              <div class="border-t border-gray-200/50 pt-4 mt-4 space-y-3">
+                <NuxtLink to="/login" class="block text-center text-blue-600 hover:text-blue-800 transition-colors duration-200 py-3 px-4 rounded-lg hover:bg-blue-50/80 font-medium touch-target">Login</NuxtLink>
+                <NuxtLink to="/register" class="block text-center backdrop-blur-sm bg-white/40 border border-white/30 py-3 px-4 rounded-xl font-medium text-gray-700 hover:bg-white/60 transition-all duration-300 touch-target">Register</NuxtLink>
+                <NuxtLink to="/register" class="block">
+                  <button class="w-full glass-button bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-medium hover:shadow-lg transition-all duration-300 touch-target">
+                     List a Service
+                  </button>
+                </NuxtLink>
+              </div>
+            </nav>
+          </div>
+        </Transition>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="relative z-10 pt-16">
+    <main class="relative z-10 pt-16 sm:pt-20">
       <!-- Hero Section -->
-      <section class="py-20 px-4 sm:px-6 lg:px-8">
+      <section class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto text-center">
           <Transition name="fade-up" appear>
-            <div class="mb-12">
-              <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent leading-tight">
+            <div class="mb-8 sm:mb-12">
+              <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent leading-tight px-4 sm:px-0">
                 <!-- <span class="typing-text">{{ displayedText }}</span>
                 <span class="typing-cursor" :class="{ 'animate-blink': showCursor }">|</span>
                 <br> -->
@@ -58,7 +95,7 @@
                   South Africa
                 </span>
               </h1>
-              <p class="text-xl md:text-2xl text-gray-600 mb-12 max-w-2xl mx-auto">
+              <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 mb-8 sm:mb-12 max-w-2xl mx-auto px-4 sm:px-0 leading-relaxed">
                 Discover trusted vendors while you stay at home
               </p>
             </div>
@@ -66,17 +103,18 @@
           
           <!-- Glassmorphism Search Bar -->
           <Transition name="scale-up" appear>
-            <div class="glass-card max-w-5xl mx-auto mb-8">
-              <div class="flex flex-col md:flex-row gap-4">
+            <div class="glass-card max-w-5xl mx-auto mb-6 sm:mb-8 mx-4 sm:mx-auto">
+              <form @submit.prevent="handleSearch" class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <div class="flex-1">
                   <input
+                    v-model="searchForm.location"
                     type="text"
                     placeholder="Enter Location, Project or Landmark"
                     class="glass-input w-full px-6 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
                   />
                 </div>
                 <div class="flex-1">
-                  <select class="glass-input w-full px-6 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300">
+                  <select v-model="searchForm.category" class="glass-input w-full px-6 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300">
                     <option value="">Service Type</option>
                     <option v-for="category in categories.slice(0, 10)" :key="category.id" :value="category.slug">
                       {{ category.name }}
@@ -84,23 +122,24 @@
                   </select>
                 </div>
                 <div class="flex-1">
-                  <select class="glass-input w-full px-6 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300">
-                    <option>Budget</option>
-                    <option>R100 - R500</option>
-                    <option>R500 - R2000</option>
-                    <option>R2000+</option>
+                  <select v-model="searchForm.budget" class="glass-input w-full px-6 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300">
+                    <option value="">Budget</option>
+                    <option value="100-500">R100 - R500</option>
+                    <option value="500-2000">R500 - R2000</option>
+                    <option value="2000+">R2000+</option>
                   </select>
                 </div>
-                <button class="glass-button bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-4 rounded-2xl font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                <button type="submit" class="glass-button bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-4 rounded-2xl font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 touch-target">
                   Search
                 </button>
-              </div>
+              </form>
               
               <!-- Quick Links -->
               <div class="flex flex-wrap gap-3 mt-8 justify-center">
                 <span class="text-gray-600 font-medium">Popular:</span>
                 <button v-for="tag in popularTags" :key="tag" 
-                        class="px-4 py-2 bg-white/50 backdrop-blur-sm rounded-full text-sm font-medium text-blue-600 hover:bg-white/70 transition-all duration-200 hover:scale-105">
+                        @click="searchByCategory(tag)"
+                        class="px-4 py-2 bg-white/50 backdrop-blur-sm rounded-full text-sm font-medium text-blue-600 hover:bg-white/70 transition-all duration-200 hover:scale-105 touch-target">
                   {{ tag }}
                 </button>
               </div>
@@ -110,28 +149,121 @@
       </section>
 
       <!-- Services Section -->
-      <section class="py-20 px-4 sm:px-6 lg:px-8">
+      <section class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
           <!-- First Row - Services You May Like -->
           <Transition name="fade-up" appear>
-            <div class="mb-16">
-              <div class="flex items-center justify-between mb-8">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
+            <div class="mb-12 sm:mb-16">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+                <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
                   Services You May Like in 
                   <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     Johannesburg
                   </span>
                 </h2>
-                <button class="glass-button p-3 rounded-full hover:shadow-lg transition-all duration-300">
-                  <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button class="glass-button p-2 sm:p-3 rounded-full hover:shadow-lg transition-all duration-300 flex-shrink-0 touch-target">
+                  <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                   </svg>
                 </button>
               </div>
 
-              <div class="overflow-x-auto scrollbar-hide" ref="featuredScrollContainer" @scroll="updateFeaturedDots">
+              <!-- Mobile: Grid layout -->
+              <div class="block sm:hidden">
+                <div v-if="loading" class="grid grid-cols-1 gap-4">
+                  <!-- Mobile Loading skeletons -->
+                  <div v-for="i in 3" :key="i" class="glass-card animate-pulse">
+                    <div class="bg-gray-200 h-48 rounded-2xl mb-4"></div>
+                    <div class="p-4">
+                      <div class="bg-gray-200 h-6 rounded mb-2"></div>
+                      <div class="bg-gray-200 h-4 rounded mb-4"></div>
+                      <div class="bg-gray-200 h-4 rounded w-3/4"></div>
+                    </div>
+                  </div>
+                </div>
+                <div v-else class="grid grid-cols-1 gap-4">
+                  <TransitionGroup name="card-stagger" appear>
+                    <div
+                      v-for="(vendor, index) in featuredVendors.slice(0, 3)"
+                      :key="vendor.id"
+                      :style="{ '--delay': index * 0.1 + 's' }"
+                      class="glass-card-hover group cursor-pointer"
+                      @click="viewVendor(vendor.id)"
+                    >
+                      <div class="relative overflow-hidden rounded-2xl">
+                        <img
+                          :src="vendor.image"
+                          :alt="vendor.name"
+                          class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                      </div>
+                      
+                      <div class="p-4 sm:p-6">
+                        <div class="flex items-center justify-between mb-3">
+                          <span class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            {{ formatPrice(vendor.price, 'ZAR') }}
+                          </span>
+                          <button 
+                            @click.stop="handleShare(vendor)"
+                            class="glass-button p-2 rounded-full hover:scale-110 transition-all duration-300 touch-target"
+                          >
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                            </svg>
+                          </button>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ vendor.name }}</h3>
+                        <p class="text-sm text-gray-600 mb-3">{{ vendor.category }} • {{ vendor.details }}</p>
+                        
+                        <div class="flex items-center text-sm text-gray-500 mb-4">
+                          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          {{ vendor.location }}
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <span class="text-sm font-medium text-gray-700">{{ vendor.rating }}</span>
+                          </div>
+                          <span class="text-xs text-gray-500 bg-green-100 px-2 py-1 rounded-full">
+                            Available Today
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </TransitionGroup>
+                </div>
+                
+                <!-- View All button for mobile -->
+                <div v-if="!loading && featuredVendors.length > 3" class="mt-6 text-center">
+                  <NuxtLink to="/search" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all duration-300 touch-target">
+                    View All Services
+                    <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </NuxtLink>
+                </div>
+                
+                <!-- Empty state for featured services - Mobile -->
+                <div v-if="!loading && featuredVendors.length === 0" class="text-center py-8">
+                  <div class="glass-card">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">No Featured Services</h3>
+                    <p class="text-gray-600 text-sm">Check back later for featured services in your area.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Desktop: Horizontal scroll -->
+              <div class="hidden sm:block overflow-x-auto scrollbar-hide" ref="featuredScrollContainer" @scroll="updateFeaturedDots">
                 <div v-if="loading" class="flex space-x-6 pb-4">
-                  <!-- Loading skeletons -->
+                  <!-- Desktop Loading skeletons -->
                   <div v-for="i in 6" :key="i" class="glass-card flex-shrink-0 w-80 animate-pulse">
                     <div class="bg-gray-200 h-48 rounded-2xl mb-4"></div>
                     <div class="p-6">
@@ -157,11 +289,6 @@
                           class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                         />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                        <button class="absolute top-4 right-4 glass-button p-2 rounded-full hover:scale-110 transition-all duration-300">
-                          <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                          </svg>
-                        </button>
                       </div>
                       
                       <div class="p-6">
@@ -169,7 +296,10 @@
                           <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                             {{ formatPrice(vendor.price, 'ZAR') }}
                           </span>
-                          <button class="glass-button p-2 rounded-full hover:scale-110 transition-all duration-300">
+                          <button 
+                            @click.stop="handleShare(vendor)"
+                            class="glass-button p-2 rounded-full hover:scale-110 transition-all duration-300"
+                          >
                             <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                             </svg>
@@ -277,11 +407,6 @@
                           class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                         />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                        <button class="absolute top-4 right-4 glass-button p-2 rounded-full hover:scale-110 transition-all duration-300">
-                          <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                          </svg>
-                        </button>
                       </div>
                       
                       <div class="p-6">
@@ -289,7 +414,10 @@
                           <span class="text-2xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
                             {{ formatPrice(vendor.price, 'ZAR') }}
                           </span>
-                          <button class="glass-button p-2 rounded-full hover:scale-110 transition-all duration-300">
+                          <button 
+                            @click.stop="handleShare(vendor)"
+                            class="glass-button p-2 rounded-full hover:scale-110 transition-all duration-300"
+                          >
                             <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                             </svg>
@@ -414,6 +542,18 @@ const {
   formatPrice,
   getOptimizedImageUrl 
 } = useServices()
+
+const { share } = useShare()
+
+// Mobile menu state
+const mobileMenuOpen = ref(false)
+
+// Search form state
+const searchForm = ref({
+  location: '',
+  category: '',
+  budget: ''
+})
 
 // Typing animation for hero text
 const fullText = 'Find a new service in'
@@ -661,6 +801,71 @@ onUnmounted(() => {
     clearInterval(cursorTimer)
   }
 })
+
+
+// Share functionality
+const handleShare = async (vendor) => {
+  const shareData = {
+    title: `${vendor.name} - ${vendor.category}`,
+    text: `Check out this ${vendor.category.toLowerCase()} service: ${vendor.name} starting from ${formatPrice(vendor.price, 'ZAR')}`,
+    url: `${window.location.origin}/services/${vendor.slug || `vendor/${vendor.id}`}`
+  }
+  
+  await share(shareData, { 
+    fallbackToClipboard: true, 
+    showSuccessMessage: true 
+  })
+}
+
+// Search functionality
+const handleSearch = async () => {
+  try {
+    const query = {}
+    
+    // Add non-empty form values to query parameters
+    if (searchForm.value.location?.trim()) {
+      query.location = searchForm.value.location.trim()
+    }
+    
+    if (searchForm.value.category?.trim()) {
+      query.category = searchForm.value.category.trim()
+    }
+    
+    if (searchForm.value.budget?.trim()) {
+      query.budget = searchForm.value.budget.trim()
+    }
+    
+    // Navigate to search page with parameters
+    await navigateTo({
+      path: '/search',
+      query
+    })
+  } catch (error) {
+    console.error('Failed to perform search:', error)
+  }
+}
+
+// Popular tags search functionality
+const searchByCategory = async (categoryName) => {
+  try {
+    // Find the category slug from the name
+    const category = categories.value.find(cat => 
+      cat.name.toLowerCase() === categoryName.toLowerCase()
+    )
+    
+    const query = {
+      category: category?.slug || categoryName.toLowerCase().replace(/\s+/g, '-')
+    }
+    
+    // Navigate to search page with category filter
+    await navigateTo({
+      path: '/search',
+      query
+    })
+  } catch (error) {
+    console.error('Failed to search by category:', error)
+  }
+}
 </script>
 
 <style scoped>
@@ -831,5 +1036,29 @@ onUnmounted(() => {
   .flex-shrink-0.w-80 {
     width: 280px;
   }
+}
+
+/* Touch targets for mobile */
+.touch-target {
+  @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+}
+
+/* Mobile menu animations */
+.mobile-menu-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.mobile-menu-leave-active {
+  transition: all 0.3s ease-in;
+}
+
+.mobile-menu-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.mobile-menu-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 </style>

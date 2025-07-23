@@ -301,3 +301,43 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style scoped>
+/* Touch targets for mobile */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Enhanced touch feedback */
+@media (max-width: 768px) {
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  /* Larger form elements on mobile */
+  input[type="radio"] {
+    transform: scale(1.2);
+  }
+  
+  input[type="checkbox"] {
+    transform: scale(1.2);
+  }
+  
+  /* Better button sizing */
+  button {
+    min-height: 48px;
+    font-size: 16px;
+  }
+  
+  /* Enhanced form labels */
+  label {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}
+</style>

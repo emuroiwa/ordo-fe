@@ -678,7 +678,8 @@ const _inlineRuntimeConfig = {
     }
   },
   "public": {
-    "apiBase": "http://localhost:8001"
+    "apiBase": "http://localhost:8001",
+    "googleMapsApiKey": "AIzaSyAZ76y-0GLHeU6OqbZu0QD6F_9urif0Fw4"
   }
 };
 const envOptions = {

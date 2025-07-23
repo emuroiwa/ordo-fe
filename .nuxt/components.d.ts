@@ -15,7 +15,11 @@ interface _GlobalComponents {
       'AnalyticsQuickStats': typeof import("../components/Analytics/QuickStats.vue")['default']
     'BookingModal': typeof import("../components/BookingModal.vue")['default']
     'EarningsQuickStats': typeof import("../components/Earnings/QuickStats.vue")['default']
+    'GoogleMapsAddressAutocomplete': typeof import("../components/GoogleMapsAddressAutocomplete.vue")['default']
+    'GoogleMapsView': typeof import("../components/GoogleMapsView.vue")['default']
     'ImageUpload': typeof import("../components/ImageUpload.vue")['default']
+    'LocationSelector': typeof import("../components/LocationSelector.vue")['default']
+    'ServiceCreationWizard': typeof import("../components/ServiceCreationWizard.vue")['default']
     'ServiceForm': typeof import("../components/ServiceForm.vue")['default']
     'BookingAvailabilityCalendar': typeof import("../components/booking/AvailabilityCalendar.vue")['default']
     'BookingDetailsModal': typeof import("../components/booking/BookingDetailsModal.vue")['default']
@@ -55,7 +59,11 @@ interface _GlobalComponents {
       'LazyAnalyticsQuickStats': LazyComponent<typeof import("../components/Analytics/QuickStats.vue")['default']>
     'LazyBookingModal': LazyComponent<typeof import("../components/BookingModal.vue")['default']>
     'LazyEarningsQuickStats': LazyComponent<typeof import("../components/Earnings/QuickStats.vue")['default']>
+    'LazyGoogleMapsAddressAutocomplete': LazyComponent<typeof import("../components/GoogleMapsAddressAutocomplete.vue")['default']>
+    'LazyGoogleMapsView': LazyComponent<typeof import("../components/GoogleMapsView.vue")['default']>
     'LazyImageUpload': LazyComponent<typeof import("../components/ImageUpload.vue")['default']>
+    'LazyLocationSelector': LazyComponent<typeof import("../components/LocationSelector.vue")['default']>
+    'LazyServiceCreationWizard': LazyComponent<typeof import("../components/ServiceCreationWizard.vue")['default']>
     'LazyServiceForm': LazyComponent<typeof import("../components/ServiceForm.vue")['default']>
     'LazyBookingAvailabilityCalendar': LazyComponent<typeof import("../components/booking/AvailabilityCalendar.vue")['default']>
     'LazyBookingDetailsModal': LazyComponent<typeof import("../components/booking/BookingDetailsModal.vue")['default']>
@@ -101,7 +109,11 @@ declare module 'vue' {
 export const AnalyticsQuickStats: typeof import("../components/Analytics/QuickStats.vue")['default']
 export const BookingModal: typeof import("../components/BookingModal.vue")['default']
 export const EarningsQuickStats: typeof import("../components/Earnings/QuickStats.vue")['default']
+export const GoogleMapsAddressAutocomplete: typeof import("../components/GoogleMapsAddressAutocomplete.vue")['default']
+export const GoogleMapsView: typeof import("../components/GoogleMapsView.vue")['default']
 export const ImageUpload: typeof import("../components/ImageUpload.vue")['default']
+export const LocationSelector: typeof import("../components/LocationSelector.vue")['default']
+export const ServiceCreationWizard: typeof import("../components/ServiceCreationWizard.vue")['default']
 export const ServiceForm: typeof import("../components/ServiceForm.vue")['default']
 export const BookingAvailabilityCalendar: typeof import("../components/booking/AvailabilityCalendar.vue")['default']
 export const BookingDetailsModal: typeof import("../components/booking/BookingDetailsModal.vue")['default']
@@ -141,7 +153,11 @@ export const NuxtRouteAnnouncer: typeof import("../node_modules/nuxt/dist/app/co
 export const LazyAnalyticsQuickStats: LazyComponent<typeof import("../components/Analytics/QuickStats.vue")['default']>
 export const LazyBookingModal: LazyComponent<typeof import("../components/BookingModal.vue")['default']>
 export const LazyEarningsQuickStats: LazyComponent<typeof import("../components/Earnings/QuickStats.vue")['default']>
+export const LazyGoogleMapsAddressAutocomplete: LazyComponent<typeof import("../components/GoogleMapsAddressAutocomplete.vue")['default']>
+export const LazyGoogleMapsView: LazyComponent<typeof import("../components/GoogleMapsView.vue")['default']>
 export const LazyImageUpload: LazyComponent<typeof import("../components/ImageUpload.vue")['default']>
+export const LazyLocationSelector: LazyComponent<typeof import("../components/LocationSelector.vue")['default']>
+export const LazyServiceCreationWizard: LazyComponent<typeof import("../components/ServiceCreationWizard.vue")['default']>
 export const LazyServiceForm: LazyComponent<typeof import("../components/ServiceForm.vue")['default']>
 export const LazyBookingAvailabilityCalendar: LazyComponent<typeof import("../components/booking/AvailabilityCalendar.vue")['default']>
 export const LazyBookingDetailsModal: LazyComponent<typeof import("../components/booking/BookingDetailsModal.vue")['default']>

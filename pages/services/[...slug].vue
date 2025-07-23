@@ -23,14 +23,57 @@
           </div>
           
           <div class="flex items-center space-x-4">
-            <NuxtLink to="/login" class="text-blue-600 hover:text-blue-800 transition-colors duration-200">Login</NuxtLink>
-            <NuxtLink to="/register" class="backdrop-blur-sm bg-white/20 border border-white/30 px-4 py-2 rounded-xl font-medium text-gray-700 hover:bg-white/30 transition-all duration-300">Register</NuxtLink>
-            <NuxtLink to="/register">
-              <button class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-300">
-                 List a Service
-              </button>
-            </NuxtLink> 
+            <div class="hidden sm:flex items-center space-x-4">
+              <NuxtLink to="/login" class="text-blue-600 hover:text-blue-800 transition-colors duration-200">Login</NuxtLink>
+              <NuxtLink to="/register" class="backdrop-blur-sm bg-white/20 border border-white/30 px-4 py-2 rounded-xl font-medium text-gray-700 hover:bg-white/30 transition-all duration-300">Register</NuxtLink>
+              <NuxtLink to="/register">
+                <button class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-300">
+                   List a Service
+                </button>
+              </NuxtLink>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button 
+              @click="showMobileMenu = !showMobileMenu"
+              class="sm:hidden p-2 rounded-lg hover:bg-white/10 transition-colors touch-target"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path v-if="!showMobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
+        </div>
+      </div>
+      
+      <!-- Mobile Navigation Menu -->
+      <div 
+        v-if="showMobileMenu" 
+        class="sm:hidden backdrop-blur-xl bg-white/90 border-t border-white/20"
+      >
+        <div class="px-4 py-4 space-y-3">
+          <NuxtLink 
+            to="/search" 
+            class="block py-3 px-4 rounded-xl text-gray-700 hover:bg-white/50 transition-colors touch-target"
+            @click="showMobileMenu = false"
+          >
+            Search Services
+          </NuxtLink>
+          <NuxtLink 
+            to="/login" 
+            class="block py-3 px-4 rounded-xl text-blue-700 hover:bg-blue-50 transition-colors touch-target"
+            @click="showMobileMenu = false"
+          >
+            Sign In
+          </NuxtLink>
+          <NuxtLink 
+            to="/register" 
+            class="block py-3 px-4 rounded-xl bg-blue-600 text-white font-medium touch-target text-center"
+            @click="showMobileMenu = false"
+          >
+            List a Service
+          </NuxtLink>
         </div>
       </div>
     </header>
@@ -69,33 +112,33 @@
 
     <!-- Service Detail -->
     <div v-else-if="service" class="relative z-10 pt-16">
-      <!-- Breadcrumb -->
+      <!-- Mobile-Friendly Breadcrumb -->
       <div class="bg-white/60 backdrop-blur-sm border-b border-white/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav class="flex py-4 text-sm" aria-label="Breadcrumb">
-            <ol class="inline-flex items-center space-x-1 md:space-x-3">
-              <li class="inline-flex items-center">
-                <NuxtLink to="/" class="text-gray-500 hover:text-blue-600 transition-colors">
-                  Home
+          <nav class="flex py-3 sm:py-4 text-sm" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2 md:space-x-3 overflow-x-auto">
+              <li class="flex items-center">
+                <NuxtLink to="/" class="text-gray-500 hover:text-blue-600 transition-colors whitespace-nowrap touch-target">
+                  <svg class="w-4 h-4 sm:hidden" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                  </svg>
+                  <span class="hidden sm:inline">Home</span>
                 </NuxtLink>
               </li>
-              <li>
-                <div class="flex items-center">
-                  <svg class="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                  </svg>
-                  <NuxtLink to="/search" class="text-gray-500 hover:text-blue-600 transition-colors">
-                    Services
-                  </NuxtLink>
-                </div>
+              <li class="flex items-center">
+                <svg class="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <NuxtLink to="/search" class="text-gray-500 hover:text-blue-600 transition-colors whitespace-nowrap">
+                  <span class="hidden sm:inline">Services</span>
+                  <span class="sm:hidden">Search</span>
+                </NuxtLink>
               </li>
-              <li>
-                <div class="flex items-center">
-                  <svg class="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                  </svg>
-                  <span class="text-gray-900 font-medium">{{ service.title }}</span>
-                </div>
+              <li class="flex items-center">
+                <svg class="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-gray-900 font-medium truncate max-w-[120px] sm:max-w-none">{{ service.title }}</span>
               </li>
             </ol>
           </nav>
@@ -106,8 +149,47 @@
       <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="lg:grid lg:grid-cols-3 lg:gap-8">
+            <!-- Mobile: Price and Booking First -->
+            <div class="lg:hidden mb-6">
+              <div class="backdrop-blur-sm bg-white/90 rounded-2xl shadow-xl border border-white/20 p-4">
+                <!-- Price -->  
+                <div class="flex items-center justify-between mb-4">
+                  <div>
+                    <div class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                      {{ service.formatted_price }}
+                    </div>
+                    <div v-if="service.price_type" class="text-sm text-gray-600">
+                      {{ service.price_type === 'hourly' ? 'per hour' : service.price_type === 'per_project' ? 'per project' : 'negotiable' }}
+                    </div>
+                  </div>
+                  <div v-if="service.average_rating > 0" class="flex items-center bg-yellow-50 px-2 py-1 rounded-lg">
+                    <svg class="w-4 h-4 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    <span class="text-sm font-medium text-gray-900">{{ service.average_rating }}</span>
+                    <span class="text-xs text-gray-500 ml-1">({{ service.review_count }})</span>
+                  </div>
+                </div>
+                
+                <!-- Mobile Action Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                  <button
+                    @click="handleBookNow"
+                    class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 touch-target text-center"
+                  >
+                    Book Now
+                  </button>
+                  <button
+                    class="border border-white/30 backdrop-blur-sm bg-white/20 text-gray-700 py-3 px-4 rounded-xl font-semibold hover:bg-white/30 transition-all duration-300 touch-target text-center"
+                  >
+                    Contact
+                  </button>
+                </div>
+              </div>
+            </div>
+            
             <!-- Left Column - Service Details -->
-            <div class="lg:col-span-2 space-y-6">
+            <div class="lg:col-span-2 space-y-4 sm:space-y-6">
               <!-- Service Images -->
               <div class="backdrop-blur-sm bg-white/80 rounded-2xl shadow-xl border border-white/20 overflow-hidden">
                 <div v-if="service.service_images?.length || service.primary_image" class="relative">
@@ -151,13 +233,35 @@
               </div>
 
               <!-- Service Information -->
-              <div class="backdrop-blur-sm bg-white/80 rounded-2xl shadow-xl border border-white/20 p-6">
+              <div class="backdrop-blur-sm bg-white/80 rounded-2xl shadow-xl border border-white/20 p-4 sm:p-6">
                 <!-- Title and Provider -->
-                <div class="mb-6">
+                <div class="mb-4 sm:mb-6">
                   <div class="flex items-start justify-between">
                     <div class="flex-1">
-                      <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ service.title }}</h1>
-                      <div class="flex items-center space-x-4 text-sm text-gray-600 mb-4">
+                      <h1 class="text-xl sm:text-3xl font-bold text-gray-900 mb-2 leading-tight">{{ service.title }}</h1>
+                      <!-- Mobile: Key info in grid -->
+                      <div class="grid grid-cols-2 gap-2 sm:hidden text-sm text-gray-600 mb-3">
+                        <div class="flex items-center">
+                          <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span class="truncate">{{ service.category?.name }}</span>
+                        </div>
+                        <div v-if="service.duration_minutes" class="flex items-center">
+                          <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                          </svg>
+                          <span>{{ service.duration_minutes }}min</span>
+                        </div>
+                        <div class="flex items-center col-span-2">
+                          <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                          </svg>
+                          <span class="truncate">{{ service.location_display }}</span>
+                        </div>
+                      </div>
+                      <!-- Desktop: Horizontal layout -->
+                      <div class="hidden sm:flex items-center space-x-4 text-sm text-gray-600 mb-4">
                         <div class="flex items-center">
                           <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -184,19 +288,19 @@
                         </div>
                       </div>
                       <!-- Status and Featured Badges -->
-                      <div class="flex items-center space-x-2 mb-4">
-                        <span v-if="service.status === 'active'" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <div class="flex flex-wrap gap-2 mb-3 sm:mb-4">
+                        <span v-if="service.status === 'active'" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           Active
                         </span>
-                        <span v-if="service.is_featured" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                        <span v-if="service.is_featured" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                           Featured
                         </span>
-                        <span v-if="service.instant_booking" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <span v-if="service.instant_booking" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                           Instant Booking
                         </span>
                       </div>
                     </div>
-                    <div class="flex items-center space-x-2">
+                    <div class="hidden lg:flex items-center space-x-2">
                       <div v-if="service.average_rating > 0" class="flex items-center bg-yellow-50 px-2 py-1 rounded-lg">
                         <svg class="w-4 h-4 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -209,7 +313,7 @@
                 </div>
 
                 <!-- Provider Info -->
-                <div class="flex items-center bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 mb-6">
+                <div class="flex items-center bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
                   <img
                     :src="service.user?.avatar_url || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjQiIGN5PSIyNCIgcj0iMjQiIGZpbGw9IiNGM0Y0RjYiLz4KPHN2ZyB4PSIxMiIgeT0iMTIiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSI+CjxwYXRoIGQ9Ik0xMiAxMkM5Ljc5IDEyIDggMTAuMjEgOCA4UzkuNzkgNCA0IEM2LjIxIDQgOCA1Ljc5IDggOFMxMC4yMSAxMiAxMiAxMloiIGZpbGw9IiM5Q0EzQUYiLz4KPHN0cm9rZSBkPSJNMTIgMTRWMjJIM2MwIDIuNzYgNC40NSA1IDkgNVM5Ljc5IDEyIDEyIDEyWiIgZmlsbD0iIzlDQTNBRiIvPgo8L3N2Zz4KPC9zdmc+Cjwvc3ZnPgo='"
                     :alt="service.user?.name"
@@ -407,12 +511,23 @@
                     Contact Provider
                   </button>
                   <button
-                    class="w-full border border-white/30 backdrop-blur-sm bg-white/20 text-gray-700 py-3 px-4 rounded-xl font-semibold hover:bg-white/30 transition-all duration-300 flex items-center justify-center"
+                    @click="handleToggleFavorite"
+                    :disabled="favoritesLoading || !service?.id"
+                    class="w-full border border-white/30 backdrop-blur-sm bg-white/20 py-3 px-4 rounded-xl font-semibold hover:bg-white/30 transition-all duration-300 flex items-center justify-center disabled:opacity-50"
+                    :class="{ 
+                      'text-red-500': service?.id && isFavorited(service.id), 
+                      'text-gray-700': !service?.id || !isFavorited(service.id) 
+                    }"
                   >
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg 
+                      class="w-5 h-5 mr-2" 
+                      :fill="service?.id && isFavorited(service.id) ? 'currentColor' : 'none'" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
-                    Add to Favorites
+                    {{ service?.id && isFavorited(service.id) ? 'Remove from Favorites' : 'Add to Favorites' }}
                   </button>
                 </div>
 
@@ -452,11 +567,13 @@ definePageMeta({
 
 // Composables
 const { fetchService, service, loading, error } = useServices()
+const { toggleFavorite, isFavorited, loading: favoritesLoading } = useFavorites()
 const route = useRoute()
 
 // State
 const mainImage = ref(null)
 const showBookingModal = ref(false)
+const showMobileMenu = ref(false)
 
 // Computed
 const fullSlug = computed(() => {
@@ -486,6 +603,16 @@ const handleImageError = (event: Event) => {
   const img = event.target as HTMLImageElement
   // Use inline SVG data URL to avoid network requests
   img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOUNBM0FGIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiI+Tm8gSW1hZ2U8L3RleHQ+Cjwvc3ZnPgo='
+}
+
+const handleToggleFavorite = async () => {
+  if (!service.value?.id) return
+  
+  try {
+    await toggleFavorite(service.value.id)
+  } catch (error) {
+    console.error('Failed to toggle favorite:', error)
+  }
 }
 
 // Head
@@ -549,5 +676,50 @@ onMounted(async () => {
 /* Hover effects */
 .transform:hover {
   transform: translateY(-2px);
+}
+
+/* Touch targets and mobile optimizations */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile responsive improvements */
+@media (max-width: 768px) {
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  /* Better scrolling for image gallery */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Enhanced button sizing */
+  button {
+    min-height: 44px;
+    font-size: 16px;
+  }
+  
+  /* Better text sizing */
+  .text-xs {
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+  
+  .text-sm {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  
+  /* Improved spacing */
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
 }
 </style>

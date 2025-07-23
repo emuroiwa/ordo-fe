@@ -26,7 +26,10 @@
           
           <Transition name="slide-left" appear>
             <div class="flex items-center space-x-4">
-              <button class="glass-button p-2 rounded-full hover:scale-110 transition-all duration-300">
+              <button 
+                @click="handleShare"
+                class="glass-button p-2 rounded-full hover:scale-110 transition-all duration-300"
+              >
                 <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                 </svg>
@@ -45,35 +48,35 @@
     </header>
 
     <!-- Main Content -->
-    <main class="relative z-10 pt-16">
+    <main class="relative z-10 pt-16 sm:pt-20">
       <!-- Back Button -->
-      <section class="py-6 px-4 sm:px-6 lg:px-8">
+      <section class="py-4 sm:py-6 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
           <Transition name="slide-right" appear>
-            <NuxtLink to="/" class="glass-button inline-flex items-center space-x-2 px-4 py-2 rounded-xl hover:shadow-lg transition-all duration-300">
-              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <NuxtLink to="/" class="glass-button inline-flex items-center space-x-2 px-4 py-3 rounded-xl hover:shadow-lg transition-all duration-300 touch-target">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
-              <span class="text-gray-700">Back to Services</span>
+              <span class="text-gray-700 text-sm sm:text-base">Back to Services</span>
             </NuxtLink>
           </Transition>
         </div>
       </section>
 
       <!-- Service Details -->
-      <section class="py-8 px-4 sm:px-6 lg:px-8">
+      <section class="py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
             <!-- Image Gallery -->
             <Transition name="scale-up" appear>
-              <div class="space-y-6">
+              <div class="space-y-4 sm:space-y-6">
                 <!-- Main Image -->
                 <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-0 overflow-hidden shadow-lg">
                   <div class="relative">
                     <img
                       :src="currentImage"
                       :alt="vendor.name"
-                      class="w-full h-96 object-cover"
+                      class="w-full h-64 sm:h-80 lg:h-96 object-cover"
                     />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     <div class="absolute top-4 right-4 flex space-x-2">
@@ -82,7 +85,10 @@
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                       </button>
-                      <button class="backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg hover:bg-white/30 p-2 rounded-full hover:scale-110 transition-all duration-300">
+                      <button 
+                        @click="handleShare"
+                        class="backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg hover:bg-white/30 p-2 rounded-full hover:scale-110 transition-all duration-300"
+                      >
                         <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                         </svg>
@@ -92,12 +98,12 @@
                 </div>
 
                 <!-- Thumbnail Gallery -->
-                <div class="flex space-x-4 overflow-x-auto scrollbar-hide">
+                <div class="flex space-x-3 sm:space-x-4 overflow-x-auto scrollbar-hide pb-2">
                   <button
                     v-for="(image, index) in vendor.images"
                     :key="index"
                     @click="currentImage = image"
-                    class="backdrop-blur-sm bg-white/60 border border-white/30 rounded-xl p-0 overflow-hidden flex-shrink-0 w-24 h-24 transition-all duration-300 hover:bg-white/80"
+                    class="backdrop-blur-sm bg-white/60 border border-white/30 rounded-xl p-0 overflow-hidden flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 transition-all duration-300 hover:bg-white/80 touch-target"
                     :class="currentImage === image ? 'ring-2 ring-blue-500 scale-105 bg-white/80' : 'hover:scale-105'"
                   >
                     <img :src="image" :alt="`${vendor.name} ${index + 1}`" class="w-full h-full object-cover" />
@@ -108,13 +114,13 @@
 
             <!-- Service Information -->
             <Transition name="fade-up" appear>
-              <div class="space-y-8">
+              <div class="space-y-6 sm:space-y-8">
                 <!-- Title and Basic Info -->
-                <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-6 shadow-lg">
+                <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-4 sm:p-6 shadow-lg">
                   <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4">
                     <div class="flex-1 mb-4 lg:mb-0">
-                      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{{ vendor.name }}</h1>
-                      <p class="text-lg text-gray-600 mb-3">{{ vendor.description }}</p>
+                      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 leading-tight">{{ vendor.name }}</h1>
+                      <p class="text-base sm:text-lg text-gray-600 mb-3 leading-relaxed">{{ vendor.description }}</p>
                       <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 text-sm text-gray-500">
                         <div class="flex items-center">
                           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -180,23 +186,23 @@
                 </div>
 
                 <!-- Booking Section -->
-                <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-6 shadow-lg">
-                  <h3 class="text-xl font-semibold text-gray-900 mb-6">Book Now</h3>
-                  <div class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="backdrop-blur-xl bg-white/70 border border-white/20 rounded-2xl p-4 sm:p-6 shadow-lg">
+                  <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">Book Now</h3>
+                  <div class="space-y-4 sm:space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Select Date</label>
                         <input
                           type="date"
                           v-model="selectedDate"
-                          class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900"
+                          class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900 text-base touch-target"
                         />
                       </div>
                       <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Select Time</label>
                         <select
                           v-model="selectedTime"
-                          class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900"
+                          class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900 text-base touch-target"
                         >
                           <option value="">Choose time</option>
                           <option v-for="time in availableTimes" :key="time" :value="time">
@@ -212,20 +218,20 @@
                         v-model="specialRequests"
                         rows="3"
                         placeholder="Any special requests or notes..."
-                        class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900 placeholder-gray-500"
+                        class="backdrop-blur-sm bg-white/50 border border-white/30 w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 text-gray-900 placeholder-gray-500 text-base resize-none touch-target"
                       ></textarea>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                       <button
                         @click="bookService"
-                        class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-0"
+                        class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-0 text-base touch-target active:scale-95"
                       >
                         Book Service - R {{ selectedServicePrice.toLocaleString() }}
                       </button>
                       <button
                         @click="contactVendor"
-                        class="backdrop-blur-sm bg-white/20 border border-white/30 px-6 py-3 rounded-xl font-medium text-gray-700 hover:bg-white/30 hover:shadow-lg transition-all duration-300"
+                        class="sm:flex-none sm:w-auto backdrop-blur-sm bg-white/20 border border-white/30 px-6 py-4 rounded-xl font-medium text-gray-700 hover:bg-white/30 hover:shadow-lg transition-all duration-300 text-base touch-target active:scale-95"
                       >
                         Message
                       </button>
@@ -239,7 +245,7 @@
       </section>
 
       <!-- Reviews Section -->
-      <section class="py-16 px-4 sm:px-6 lg:px-8">
+      <section class="py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
           <Transition name="fade-up" appear>
             <div class="glass-card">
@@ -339,7 +345,7 @@
                         </svg>
                         <span class="text-sm font-medium text-gray-700">{{ similar.rating }}</span>
                       </div>
-                      <span class="text-xs text-gray-500 bg-green-100 px-2 py-1 rounded-full">
+                      <span class="text-xs text-green-700 bg-green-100 px-2 py-1 rounded-full">
                         Available
                       </span>
                     </div>
@@ -356,6 +362,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+
+const { share } = useShare()
 
 // Get vendor ID from route
 const route = useRoute()
@@ -505,6 +513,20 @@ const viewSimilar = (id) => {
   navigateTo(`/vendor/${id}`)
 }
 
+const handleShare = async () => {
+  const shareData = {
+    title: `${vendor.value.name} - Professional ${vendor.value.category} Services`,
+    text: `Check out ${vendor.value.name} in ${vendor.value.location}. ${vendor.value.description} Starting from R${vendor.value.price}`,
+    url: window.location.href,
+    image: vendor.value.images[0]
+  }
+  
+  await share(shareData, { 
+    fallbackToClipboard: true, 
+    showSuccessMessage: true 
+  })
+}
+
 // Set page title
 useHead({
   title: `${vendor.value.name} - ORDO`
@@ -593,10 +615,42 @@ useHead({
   display: none;
 }
 
+/* Touch targets for mobile */
+.touch-target {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
   .flex-shrink-0.w-80 {
     width: 280px;
+  }
+  
+  /* Improve button sizing on mobile */
+  .touch-target {
+    min-height: 48px;
+  }
+  
+  /* Better text sizing for mobile */
+  .text-base {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  /* Improve form controls on mobile */
+  input[type="date"], 
+  input[type="time"], 
+  select, 
+  textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  /* Better spacing for mobile forms */
+  .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1rem;
   }
 }
 </style>

@@ -213,7 +213,10 @@
         <p class="text-sm text-gray-400">You're all caught up!</p>
       </div>
 
-      <div v-else>{{ notifications.length }} notifications found
+      <div v-else>
+        <div class="p-4 border-b border-gray-200 bg-gray-50">
+          <p class="text-sm text-gray-600">{{ notifications.length }} notifications found</p>
+        </div>
         <div v-for="notification in notifications" :key="notification.id" class="border-b border-gray-100 last:border-b-0">
           <div class="flex items-start p-4 hover:bg-gray-50">
             <!-- Checkbox -->
@@ -228,14 +231,46 @@
 
             <!-- Notification Item -->
             <div class="flex-1">
-              <NotificationItem
-                :notification="notification"
-                @click="handleNotificationClick"
-                @mark-read="markAsRead"
-                @mark-unread="markAsUnread"
-                @delete="deleteNotification"
-                class="border-0"
-              />
+              <!-- Debug info
+              <div class="text-xs text-red-500 mb-2">
+                Debug: {{ notification.id }} - {{ notification.data?.title || 'No title' }}
+              </div> -->
+              
+              <!-- Simple notification display -->
+              <div class="p-4 border rounded-lg bg-white hover:bg-gray-50 cursor-pointer"
+                   :class="{ 'border-l-4 border-l-blue-500 bg-blue-50': !notification.read_at }"
+                   @click="handleNotificationClick(notification)">
+                <div class="flex items-start justify-between">
+                  <div class="flex-1">
+                    <h4 class="text-sm font-medium text-gray-900" 
+                        :class="{ 'font-semibold': !notification.read_at }">
+                      {{ notification.data?.title || 'Notification' }}
+                    </h4>
+                    <p class="text-sm text-gray-600 mt-1">
+                      {{ notification.data?.message || 'No message' }}
+                    </p>
+                    <p class="text-xs text-gray-500 mt-2">
+                      {{ new Date(notification.created_at).toLocaleString() }}
+                    </p>
+                  </div>
+                  <div class="flex items-center space-x-2 ml-4">
+                    <button v-if="!notification.read_at"
+                            @click.stop="markAsRead(notification.id)"
+                            class="text-xs text-blue-600 hover:text-blue-800">
+                      Mark Read
+                    </button>
+                    <button v-else
+                            @click.stop="markAsUnread(notification.id)"
+                            class="text-xs text-gray-600 hover:text-gray-800">
+                      Mark Unread
+                    </button>
+                    <button @click.stop="deleteNotification(notification.id)"
+                            class="text-xs text-red-600 hover:text-red-800">
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

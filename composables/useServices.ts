@@ -215,12 +215,32 @@ export const useServices = () => {
     error.value = null
 
     try {
+      console.log('Fetching service for editing, ID:', id)
       const response = await makeApiCall(`/api/v1/services/${id}/edit`)
+      console.log('Edit service response:', response)
+      
       // ServiceResource returns data wrapped in a 'data' property
       service.value = response.data || response
       return service.value
     } catch (err: any) {
-      error.value = err.data?.message || 'Failed to fetch service'
+      console.error('Fetch service by ID error details:', {
+        status: err.status || err.statusCode,
+        statusText: err.statusText,
+        message: err.message,
+        data: err.data,
+        response: err.response
+      })
+      
+      // Provide more specific error messages
+      if (err.status === 404) {
+        error.value = 'Service not found. It may have been deleted or you may not have permission to edit it.'
+      } else if (err.status === 403) {
+        error.value = 'You do not have permission to edit this service.'
+      } else if (err.status === 401) {
+        error.value = 'You must be logged in to edit services.'
+      } else {
+        error.value = err.data?.message || 'Failed to fetch service for editing'
+      }
       throw err
     } finally {
       loading.value = false
@@ -249,7 +269,7 @@ export const useServices = () => {
       // Add text fields
       Object.entries(serviceData).forEach(([key, value]) => {
         if (key === 'images') return // Handle separately
-        if (key === 'tags' || key === 'requirements') {
+        if (key === 'tags' || key === 'requirements' || key === 'address') {
           formData.append(key, JSON.stringify(value))
         } else if (value !== undefined && value !== null) {
           formData.append(key, String(value))
@@ -294,8 +314,10 @@ export const useServices = () => {
       // Add text fields
       Object.entries(serviceData).forEach(([key, value]) => {
         if (key === 'images') return // Handle separately
-        if (key === 'tags' || key === 'requirements') {
-          formData.append(key, JSON.stringify(value))
+        if (key === 'tags' || key === 'requirements' || key === 'address') {
+          if (value !== undefined && value !== null) {
+            formData.append(key, JSON.stringify(value))
+          }
         } else if (value !== undefined && value !== null) {
           formData.append(key, String(value))
         }
@@ -357,12 +379,25 @@ export const useServices = () => {
 
       return true
     } catch (err: any) {
-      console.error('Delete service error:', err)
-      console.error('Error response:', err.response)
-      console.error('Error data:', err.data)
-      console.error('Error status:', err.status)
+      console.error('Delete service error details:', {
+        id,
+        status: err.status || err.statusCode,
+        statusText: err.statusText,
+        message: err.message,
+        data: err.data,
+        response: err.response
+      })
       
-      error.value = err.data?.message || err.message || 'Failed to delete service'
+      // Provide more specific error messages
+      if (err.status === 404) {
+        error.value = 'Service not found. It may have already been deleted or you may not have permission to delete it.'
+      } else if (err.status === 403) {
+        error.value = 'You do not have permission to delete this service.'
+      } else if (err.status === 401) {
+        error.value = 'You must be logged in to delete services.'
+      } else {
+        error.value = err.data?.message || err.message || 'Failed to delete service'
+      }
       throw err
     } finally {
       loading.value = false

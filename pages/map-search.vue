@@ -10,31 +10,27 @@
     <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
-          <Transition name="slide-right" appear>
-            <div class="flex items-center space-x-8">
-              <NuxtLink to="/" class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                ORDO
+          <div class="flex items-center space-x-8">
+            <NuxtLink to="/" class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              ORDO
+            </NuxtLink>
+            <nav class="hidden md:flex space-x-8">
+              <NuxtLink to="/search" class="text-gray-700 hover:text-blue-600 transition-colors duration-200">Search</NuxtLink>
+              <NuxtLink to="/map-search" class="text-blue-600 font-medium relative">
+                Map Search
+                <div class="absolute -bottom-2 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
               </NuxtLink>
-              <nav class="hidden md:flex space-x-8">
-                <NuxtLink to="/search" class="text-gray-700 hover:text-blue-600 transition-colors duration-200">Search</NuxtLink>
-                <NuxtLink to="/map-search" class="text-blue-600 font-medium relative">
-                  Map Search
-                  <div class="absolute -bottom-2 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
-                </NuxtLink>
-                <NuxtLink to="/how-it-works" class="text-gray-700 hover:text-blue-600 transition-colors duration-200">How it Works</NuxtLink>
-                <NuxtLink to="/about" class="text-gray-700 hover:text-blue-600 transition-colors duration-200">About us</NuxtLink>
-              </nav>
-            </div>
-          </Transition>
+              <NuxtLink to="/how-it-works" class="text-gray-700 hover:text-blue-600 transition-colors duration-200">How it Works</NuxtLink>
+              <NuxtLink to="/about" class="text-gray-700 hover:text-blue-600 transition-colors duration-200">About us</NuxtLink>
+            </nav>
+          </div>
           
-          <Transition name="slide-left" appear>
-            <div class="flex items-center space-x-4">
-              <NuxtLink to="/login" class="text-blue-600 hover:text-blue-800 transition-colors duration-200">Login</NuxtLink>
-              <NuxtLink to="/register" class="backdrop-blur-sm bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-300">
-                Register
-              </NuxtLink>
-            </div>
-          </Transition>
+          <div class="flex items-center space-x-4">
+            <NuxtLink to="/login" class="text-blue-600 hover:text-blue-800 transition-colors duration-200">Login</NuxtLink>
+            <NuxtLink to="/register" class="backdrop-blur-sm bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-300">
+              Register
+            </NuxtLink>
+          </div>
         </div>
       </div>
     </header>
@@ -44,60 +40,19 @@
       <div class="flex h-screen">
         <!-- Map Section -->
         <div class="flex-1 relative">
-          <div class="absolute inset-0 bg-gray-200 flex items-center justify-center">
-            <!-- Placeholder for map -->
-            <div class="text-center">
-              <svg class="w-24 h-24 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 7" />
-              </svg>
-              <p class="text-gray-600 text-lg">Interactive Map</p>
-              <p class="text-gray-500 text-sm">Google Maps integration would go here</p>
-            </div>
-          </div>
-
-          <!-- Map Overlays -->
-          <div class="absolute inset-0 pointer-events-none">
-            <!-- Service Markers -->
-            <div
-              v-for="marker in mapMarkers"
-              :key="marker.id"
-              :style="{ left: marker.x + '%', top: marker.y + '%' }"
-              class="absolute pointer-events-auto transform -translate-x-1/2 -translate-y-1/2"
-            >
-              <button
-                @click="selectMarker(marker)"
-                class="backdrop-blur-sm bg-white/90 border border-white/30 rounded-full p-2 shadow-lg hover:scale-110 transition-all duration-300"
-                :class="selectedMarker?.id === marker.id ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:bg-white'"
-              >
-                <component :is="getMarkerIcon(marker.category)" class="w-5 h-5" :class="getMarkerColor(marker.category)" />
-              </button>
-            </div>
-          </div>
-
-          <!-- Map Controls -->
-          <div class="absolute top-4 right-4 flex flex-col space-y-2">
-            <button class="backdrop-blur-sm bg-white/90 border border-white/30 rounded-xl p-3 shadow-lg hover:bg-white transition-all duration-300">
-              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-            </button>
-            <button class="backdrop-blur-sm bg-white/90 border border-white/30 rounded-xl p-3 shadow-lg hover:bg-white transition-all duration-300">
-              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
-              </svg>
-            </button>
-            <button class="backdrop-blur-sm bg-white/90 border border-white/30 rounded-xl p-3 shadow-lg hover:bg-white transition-all duration-300">
-              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </button>
-          </div>
+          <GoogleMapsView
+            :services="filteredServices"
+            :center="mapCenter"
+            :zoom="mapZoom"
+            :customer-location="customerLocation"
+            @service-selected="handleServiceSelected"
+            @map-click="handleMapClick"
+          />
 
           <!-- Search Bar Overlay -->
-          <div class="absolute top-4 left-4 right-20">
-            <Transition name="scale-up" appear>
-              <div class="backdrop-blur-xl bg-white/80 border border-white/20 rounded-2xl p-4 shadow-lg">
+          <div class="absolute top-4 left-4 right-4 z-30">
+            <div class="backdrop-blur-xl bg-white/80 border border-white/20 rounded-2xl p-4 shadow-lg max-w-md">
+              <div class="space-y-3">
                 <div class="flex items-center space-x-3">
                   <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -110,14 +65,27 @@
                     @keyup.enter="searchServices"
                   />
                   <button
-                    @click="searchServices"
-                    class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-xl font-medium hover:shadow-md transition-all duration-300"
+                    @click="toggleLocationSelector"
+                    class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-2 rounded-xl font-medium hover:shadow-md transition-all duration-300"
+                    :class="{ 'bg-green-600': customerLocation }"
                   >
-                    Search
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
                   </button>
                 </div>
+                
+                <!-- Location Selector -->
+                <div v-if="showLocationSelector" class="border-t border-white/20 pt-3">
+                  <LocationSelector
+                    v-model="customerLocation"
+                    :default-radius="searchRadius"
+                    @update:radius="updateSearchRadius"
+                  />
+                </div>
               </div>
-            </Transition>
+            </div>
           </div>
         </div>
 
@@ -125,247 +93,159 @@
         <div class="w-96 bg-white/20 backdrop-blur-xl border-l border-white/20 overflow-y-auto">
           <div class="p-6">
             <!-- Filters -->
-            <Transition name="fade-up" appear>
-              <div class="mb-6">
-                <h2 class="text-xl font-semibold text-gray-900 mb-4">Filters</h2>
-                <div class="space-y-4">
-                  <!-- Category Filter -->
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                    <div class="flex flex-wrap gap-2">
-                      <button
-                        v-for="category in categories"
-                        :key="category.id"
-                        @click="toggleCategory(category.slug)"
-                        :disabled="loading"
-                        class="px-3 py-1 rounded-full text-sm font-medium transition-all duration-200"
-                        :class="selectedCategories.includes(category.slug) 
-                          ? 'bg-blue-600 text-white' 
-                          : 'bg-white/50 text-gray-700 hover:bg-white/70'"
-                      >
-                        {{ category.name }}
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- Distance Filter -->
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Distance</label>
-                    <select
-                      v-model="selectedDistance"
-                      class="w-full px-3 py-2 backdrop-blur-sm bg-white/50 border border-white/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            <div class="mb-6">
+              <h2 class="text-xl font-semibold text-gray-900 mb-4">Filters</h2>
+              <div class="space-y-4">
+                <!-- Category Filter -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <div class="flex flex-wrap gap-2">
+                    <button
+                      v-for="category in categories"
+                      :key="category.id"
+                      @click="toggleCategory(category.slug)"
+                      :disabled="loading"
+                      class="px-3 py-1 rounded-full text-sm font-medium transition-all duration-200"
+                      :class="selectedCategories.includes(category.slug) 
+                        ? 'bg-blue-600 text-white' 
+                        : 'bg-white/50 text-gray-700 hover:bg-white/70'"
                     >
-                      <option value="">Any distance</option>
-                      <option value="1">Within 1 km</option>
-                      <option value="5">Within 5 km</option>
-                      <option value="10">Within 10 km</option>
-                      <option value="20">Within 20 km</option>
-                    </select>
+                      {{ category.name }}
+                    </button>
                   </div>
+                </div>
 
-                  <!-- Price Range -->
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
-                    <div class="space-y-2">
-                      <input
-                        v-model="priceRange[0]"
-                        type="range"
-                        min="0"
-                        max="2000"
-                        step="50"
-                        class="w-full"
-                      />
-                      <div class="flex justify-between text-sm text-gray-600">
-                        <span>R{{ priceRange[0] }}</span>
-                        <span>R{{ priceRange[1] }}+</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Rating Filter -->
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Rating</label>
-                    <div class="flex space-x-2">
-                      <button
-                        v-for="rating in [3, 4, 5]"
-                        :key="rating"
-                        @click="selectedRating = rating"
-                        class="flex items-center px-3 py-1 rounded-full text-sm font-medium transition-all duration-200"
-                        :class="selectedRating === rating 
-                          ? 'bg-yellow-100 text-yellow-800' 
-                          : 'bg-white/50 text-gray-700 hover:bg-white/70'"
-                      >
-                        <svg class="w-4 h-4 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                        {{ rating }}+
-                      </button>
+                <!-- Price Range -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                  <div class="space-y-2">
+                    <input
+                      v-model="priceRange[0]"
+                      type="range"
+                      min="0"
+                      max="5000"
+                      step="100"
+                      class="w-full"
+                    />
+                    <div class="flex justify-between text-sm text-gray-600">
+                      <span>R{{ priceRange[0] }}</span>
+                      <span>R{{ priceRange[1] }}+</span>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Transition>
 
-            <!-- Results -->
-            <Transition name="fade-up" appear>
-              <div>
-                <div class="flex items-center justify-between mb-4">
-                  <h3 class="text-lg font-semibold text-gray-900">
-                    {{ filteredServices.length }} Services Found
-                  </h3>
+                <!-- Sort Options -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
                   <select
                     v-model="sortBy"
-                    class="px-3 py-1 text-sm backdrop-blur-sm bg-white/50 border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                    class="w-full px-3 py-2 bg-white/50 border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="distance">Distance</option>
+                    <option value="relevance">Relevance</option>
+                    <option value="distance" :disabled="!customerLocation">Distance</option>
+                    <option value="price">Price (Low to High)</option>
                     <option value="rating">Rating</option>
-                    <option value="price">Price</option>
+                    <option value="newest">Newest</option>
                   </select>
                 </div>
 
-                <div class="space-y-4">
-                  <TransitionGroup name="list-stagger" appear>
-                    <div
-                      v-for="(service, index) in filteredServices"
-                      :key="service.id"
-                      :style="{ '--delay': index * 0.1 + 's' }"
-                      class="backdrop-blur-sm bg-white/70 border border-white/20 rounded-xl p-4 cursor-pointer hover:bg-white/80 hover:shadow-md transition-all duration-300"
-                      @click="selectService(service)"
-                      :class="selectedService?.id === service.id ? 'ring-2 ring-blue-500 bg-white/80' : ''"
-                    >
-                      <div class="flex items-start space-x-3">
-                        <img
-                          :src="service.image"
-                          :alt="service.name"
-                          class="w-16 h-16 rounded-xl object-cover"
-                        />
-                        <div class="flex-1 min-w-0">
-                          <div class="flex items-start justify-between">
-                            <div>
-                              <h4 class="font-medium text-gray-900 truncate">{{ service.name }}</h4>
-                              <p class="text-sm text-gray-600">{{ service.category }}</p>
-                            </div>
-                            <div class="text-right">
-                              <div class="text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                {{ formatPrice(service.price, 'ZAR') }}
-                              </div>
-                              <div class="text-xs text-gray-500">{{ service.distance }} km away</div>
-                            </div>
-                          </div>
-                          
-                          <div class="mt-2 flex items-center justify-between">
-                            <div class="flex items-center">
-                              <svg class="w-4 h-4 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                              </svg>
-                              <span class="text-sm font-medium text-gray-700">{{ service.rating }}</span>
-                              <span class="text-xs text-gray-500 ml-1">({{ service.reviews }})</span>
-                            </div>
-                            <span class="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">
-                              {{ service.availability }}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </TransitionGroup>
+                <button
+                  @click="clearFilters"
+                  class="w-full px-4 py-2 bg-white/50 border border-white/30 rounded-lg text-gray-700 hover:bg-white/70 transition-colors"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            </div>
+
+            <!-- Services List -->
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-gray-900">Services Near You</h3>
+                <span class="text-sm text-gray-500">{{ filteredServices.length }} found</span>
+              </div>
+
+              <div
+                v-for="service in filteredServices"
+                :key="service.id"
+                class="backdrop-blur-sm bg-white/60 border border-white/30 rounded-xl p-4 hover:bg-white/80 transition-all duration-300 cursor-pointer"
+                :class="selectedService?.id === service.id ? 'ring-2 ring-blue-500 bg-blue-50/50' : ''"
+                @click="selectServiceFromSidebar(service)"
+              >
+                <div class="flex items-start justify-between mb-2">
+                  <h4 class="font-semibold text-gray-900">{{ service.name }}</h4>
+                  <span class="text-sm font-medium text-green-600">R{{ service.price }}</span>
+                </div>
+                <p class="text-sm text-gray-600 mb-2">{{ service.categoryName }}</p>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center text-sm text-gray-500">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span v-if="service.distance !== null">{{ service.distance.toFixed(1) }}km away</span>
+                    <span v-else>{{ service.location }}</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg class="w-4 h-4 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    <span class="text-sm text-gray-600">{{ service.rating }}</span>
+                  </div>
                 </div>
               </div>
-            </Transition>
+
+              <div v-if="filteredServices.length === 0" class="text-center py-8">
+                <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <p class="text-gray-600">No services found</p>
+                <p class="text-sm text-gray-500">Try adjusting your filters or location</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <!-- Selected Service Modal -->
-      <Transition name="modal-fade">
-        <div
-          v-if="selectedService"
-          class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-          @click="selectedService = null"
-        >
-          <div
-            class="backdrop-blur-xl bg-white/90 border border-white/20 rounded-2xl p-6 max-w-md w-full shadow-2xl"
-            @click.stop
-          >
-            <div class="flex items-start space-x-4">
-              <img
-                :src="selectedService.image"
-                :alt="selectedService.name"
-                class="w-20 h-20 rounded-xl object-cover"
-              />
-              <div class="flex-1">
-                <h3 class="text-xl font-semibold text-gray-900 mb-1">{{ selectedService.name }}</h3>
-                <p class="text-gray-600 mb-2">{{ selectedService.category }}</p>
-                <div class="flex items-center mb-3">
-                  <svg class="w-4 h-4 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                  <span class="text-sm font-medium text-gray-700">{{ selectedService.rating }}</span>
-                  <span class="text-xs text-gray-500 ml-1">({{ selectedService.reviews }} reviews)</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <div class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    {{ formatPrice(selectedService.price, 'ZAR') }}
-                  </div>
-                  <div class="text-sm text-gray-500">{{ selectedService.distance }} km away</div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="mt-6 flex space-x-3">
-              <button
-                @click="bookService(selectedService)"
-                class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300"
-              >
-                Book Now
-              </button>
-              <button
-                @click="viewService(selectedService)"
-                class="px-4 py-3 backdrop-blur-sm bg-white/50 border border-white/30 rounded-xl font-medium text-gray-700 hover:bg-white/70 transition-all duration-300"
-              >
-                View Details
-              </button>
-            </div>
-          </div>
-        </div>
-      </Transition>
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, h, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
-// Use services composable
+// Meta
+definePageMeta({
+  layout: false
+})
+
+// Composables
 const { fetchServices, fetchCategories, categories, loading, formatPrice } = useServices()
 
-// Search state
+// State
 const searchQuery = ref('')
 const selectedCategories = ref([])
-const selectedDistance = ref('')
-const priceRange = ref([0, 2000])
-const selectedRating = ref(null)
-const sortBy = ref('distance')
-
-// Map state
-const selectedMarker = ref(null)
+const customerLocation = ref(null)
+const searchRadius = ref(10)
+const showLocationSelector = ref(false)
+const priceRange = ref([0, 5000])
+const sortBy = ref('relevance')
+const services = ref([])
 const selectedService = ref(null)
 
-// Services state - will be populated from backend
-const servicesData = ref([])
+// Map state
+const mapCenter = ref({ lat: -26.2041, lng: 28.0473 }) // Johannesburg default
+const mapZoom = ref(10)
 
 // Load data on mount
 onMounted(async () => {
   try {
-    // Load categories from backend
     await fetchCategories()
     
-    // Load services from backend
     const response = await fetchServices({
-      per_page: 50,
+      per_page: 100,
       sort: 'popular'
     })
-    servicesData.value = response.data || []
+    services.value = response.data || []
   } catch (error) {
     console.error('Error loading data:', error)
   }
@@ -376,254 +256,167 @@ const transformServiceForDisplay = (service) => {
   return {
     id: service.id,
     name: service.title,
-    category: service.category?.name || 'Service',
-    categorySlug: service.category?.slug || 'service',
+    category: service.category?.slug || 'service',
+    categoryName: service.category?.name || 'Service',
+    location: service.location_display || 'Location not specified',
+    latitude: service.latitude,
+    longitude: service.longitude,
     price: service.base_price,
     rating: service.average_rating || 4.5,
     reviews: service.review_count || 0,
-    distance: Math.random() * 5 + 0.5, // Mock distance for now
-    availability: 'Available Today', // Mock availability
-    image: service.primary_image?.url || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=100&h=100&fit=crop',
-    full_slug: service.full_slug
+    full_slug: service.full_slug,
+    distance: null
   }
 }
 
-// Transform backend services to display format
-const services = computed(() => {
-  return servicesData.value.map(transformServiceForDisplay)
-})
+// Calculate distance between two points using Haversine formula
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371 // Earth's radius in kilometers
+  const dLat = (lat2 - lat1) * Math.PI / 180
+  const dLon = (lon2 - lon1) * Math.PI / 180
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2)
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  return R * c
+}
 
-// Generate map markers from services
-const mapMarkers = computed(() => {
-  return services.value.slice(0, 8).map((service, index) => ({
-    id: service.id,
-    x: 30 + (index % 3) * 20 + Math.random() * 10,
-    y: 30 + Math.floor(index / 3) * 20 + Math.random() * 10,
-    category: service.category,
-    categorySlug: service.categorySlug,
-    name: service.name
-  }))
-})
-
-
-// Computed properties
+// Filtered and sorted services
 const filteredServices = computed(() => {
-  let filtered = services.value.filter(service => {
+  const transformedServices = services.value.map(transformServiceForDisplay)
+  
+  let filtered = transformedServices.filter(service => {
     const matchesSearch = !searchQuery.value || 
       service.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      service.category.toLowerCase().includes(searchQuery.value.toLowerCase())
+      service.categoryName.toLowerCase().includes(searchQuery.value.toLowerCase())
     
     const matchesCategory = selectedCategories.value.length === 0 || 
-      selectedCategories.value.includes(service.categorySlug)
+      selectedCategories.value.includes(service.category)
     
-    const matchesDistance = !selectedDistance.value || 
-      service.distance <= parseFloat(selectedDistance.value)
+    const matchesPrice = service.price >= priceRange.value[0] && service.price <= priceRange.value[1]
     
-    const matchesPrice = service.price >= priceRange.value[0] && 
-      service.price <= priceRange.value[1]
+    // Location-based filtering
+    let matchesLocation = true
+    if (customerLocation.value && service.latitude && service.longitude) {
+      const distance = calculateDistance(
+        customerLocation.value.latitude,
+        customerLocation.value.longitude,
+        service.latitude,
+        service.longitude
+      )
+      matchesLocation = distance <= searchRadius.value
+      service.distance = distance
+    } else if (customerLocation.value && (!service.latitude || !service.longitude)) {
+      matchesLocation = false
+    }
     
-    const matchesRating = !selectedRating.value || 
-      service.rating >= selectedRating.value
-    
-    return matchesSearch && matchesCategory && matchesDistance && matchesPrice && matchesRating
+    return matchesSearch && matchesCategory && matchesPrice && matchesLocation
   })
 
-  // Sort results
-  if (sortBy.value === 'distance') {
-    filtered.sort((a, b) => a.distance - b.distance)
+  // Sorting
+  if (sortBy.value === 'price') {
+    filtered.sort((a, b) => a.price - b.price)
   } else if (sortBy.value === 'rating') {
     filtered.sort((a, b) => b.rating - a.rating)
-  } else if (sortBy.value === 'price') {
-    filtered.sort((a, b) => a.price - b.price)
+  } else if (sortBy.value === 'distance' && customerLocation.value) {
+    filtered.sort((a, b) => (a.distance || 999) - (b.distance || 999))
+  } else if (sortBy.value === 'newest') {
+    filtered.sort((a, b) => b.id - a.id)
   }
 
   return filtered
 })
 
-// Functions
-const toggleCategory = (category) => {
-  const index = selectedCategories.value.indexOf(category)
+// Methods
+const toggleCategory = (categorySlug) => {
+  const index = selectedCategories.value.indexOf(categorySlug)
   if (index > -1) {
     selectedCategories.value.splice(index, 1)
   } else {
-    selectedCategories.value.push(category)
+    selectedCategories.value.push(categorySlug)
   }
 }
 
-const selectMarker = (marker) => {
-  selectedMarker.value = marker
-  const service = services.value.find(s => s.id === marker.id)
-  if (service) {
-    selectedService.value = service
-  }
+const toggleLocationSelector = () => {
+  showLocationSelector.value = !showLocationSelector.value
 }
 
-const selectService = (service) => {
-  selectedService.value = service
-  // Find corresponding marker
-  const marker = mapMarkers.value.find(m => m.id === service.id)
-  if (marker) {
-    selectedMarker.value = marker
-  }
+const updateSearchRadius = (radius) => {
+  searchRadius.value = radius
+}
+
+const clearFilters = () => {
+  searchQuery.value = ''
+  selectedCategories.value = []
+  priceRange.value = [0, 5000]
+  sortBy.value = 'relevance'
 }
 
 const searchServices = () => {
-  // Handle search functionality
-  console.log('Searching for:', searchQuery.value)
+  // Trigger search - filtering happens automatically via computed
 }
 
-const bookService = (service) => {
-  if (service.full_slug) {
-    navigateTo(`/services/${service.full_slug}`)
-  } else {
-    navigateTo(`/vendor/${service.id}`)
+const handleServiceSelected = (service) => {
+  selectedService.value = service
+}
+
+const handleMapClick = () => {
+  selectedService.value = null
+}
+
+const selectServiceFromSidebar = (service) => {
+  selectedService.value = service
+  
+  // Center map on selected service
+  if (service.latitude && service.longitude) {
+    mapCenter.value = { lat: service.latitude, lng: service.longitude }
   }
 }
 
-const viewService = (service) => {
-  if (service.full_slug) {
-    navigateTo(`/services/${service.full_slug}`)
-  } else {
-    navigateTo(`/vendor/${service.id}`)
+// Watch customer location changes to update map center
+watch(customerLocation, (newLocation) => {
+  if (newLocation) {
+    mapCenter.value = { lat: newLocation.latitude, lng: newLocation.longitude }
+    mapZoom.value = 12
   }
-}
-
-// Marker icon helpers
-const getMarkerIcon = (category) => {
-  const icons = {
-    'Barber': h('svg', { class: 'w-5 h-5', fill: 'currentColor', viewBox: '0 0 20 20' }, [
-      h('path', { d: 'M10 2L3 7v11c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V7l-7-5z' })
-    ]),
-    'Wedding': h('svg', { class: 'w-5 h-5', fill: 'currentColor', viewBox: '0 0 20 20' }, [
-      h('path', { d: 'M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z' })
-    ]),
-    'Equipment': h('svg', { class: 'w-5 h-5', fill: 'currentColor', viewBox: '0 0 20 20' }, [
-      h('path', { d: 'M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z' })
-    ]),
-    'Photography': h('svg', { class: 'w-5 h-5', fill: 'currentColor', viewBox: '0 0 20 20' }, [
-      h('path', { 'fill-rule': 'evenodd', d: 'M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z', 'clip-rule': 'evenodd' })
-    ]),
-    'Catering': h('svg', { class: 'w-5 h-5', fill: 'currentColor', viewBox: '0 0 20 20' }, [
-      h('path', { d: 'M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z' })
-    ]),
-    'Events': h('svg', { class: 'w-5 h-5', fill: 'currentColor', viewBox: '0 0 20 20' }, [
-      h('path', { 'fill-rule': 'evenodd', d: 'M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z', 'clip-rule': 'evenodd' })
-    ])
-  }
-  return icons[category] || icons['Equipment']
-}
-
-const getMarkerColor = (category) => {
-  const colors = {
-    'Barber': 'text-blue-600',
-    'Wedding': 'text-pink-600',
-    'Equipment': 'text-green-600',
-    'Photography': 'text-purple-600',
-    'Catering': 'text-orange-600',
-    'Events': 'text-red-600'
-  }
-  return colors[category] || 'text-gray-600'
-}
-
-// Set page title
-useHead({
-  title: 'Map Search - ORDO'
-})
+}, { deep: true })
 </script>
 
 <style scoped>
-/* Transition Animations */
-.fade-up-enter-active,
-.fade-up-leave-active {
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+/* Glassmorphism effects */
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
 }
 
-.fade-up-enter-from {
-  opacity: 0;
-  transform: translateY(30px);
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px);
 }
 
-.fade-up-leave-to {
-  opacity: 0;
-  transform: translateY(-30px);
-}
-
-.scale-up-enter-active {
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.scale-up-enter-from {
-  opacity: 0;
-  transform: scale(0.9) translateY(20px);
-}
-
-.slide-right-enter-active {
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+/* Transitions */
+.slide-right-enter-active,
+.slide-left-enter-active,
+.scale-up-enter-active,
+.fade-up-enter-active {
+  transition: all 0.3s ease-out;
 }
 
 .slide-right-enter-from {
   opacity: 0;
-  transform: translateX(-30px);
-}
-
-.slide-left-enter-active {
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(-20px);
 }
 
 .slide-left-enter-from {
   opacity: 0;
-  transform: translateX(30px);
+  transform: translateX(20px);
 }
 
-/* List Stagger Animation */
-.list-stagger-enter-active {
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  transition-delay: var(--delay);
-}
-
-.list-stagger-enter-from {
+.scale-up-enter-from {
   opacity: 0;
-  transform: translateX(30px);
+  transform: scale(0.95);
 }
 
-/* Modal Animation */
-.modal-fade-enter-active,
-.modal-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.modal-fade-enter-from,
-.modal-fade-leave-to {
+.fade-up-enter-from {
   opacity: 0;
-}
-
-.modal-fade-enter-active .backdrop-blur-xl,
-.modal-fade-leave-active .backdrop-blur-xl {
-  transition: transform 0.3s ease;
-}
-
-.modal-fade-enter-from .backdrop-blur-xl,
-.modal-fade-leave-to .backdrop-blur-xl {
-  transform: scale(0.9);
-}
-
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.5);
-  border-radius: 10px;
-  backdrop-filter: blur(10px);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.7);
+  transform: translateY(10px);
 }
 </style>

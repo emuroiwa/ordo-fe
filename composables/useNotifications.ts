@@ -4,7 +4,6 @@ import { ref, computed, readonly, onUnmounted, type ComputedRef } from 'vue'
 declare global {
   const useRuntimeConfig: () => any
   const useAuth: () => any
-  const $fetch: <T = any>(url: string, options?: any) => Promise<T>
   const navigateTo: (to: string) => Promise<void>
 }
 
@@ -111,11 +110,16 @@ export const useNotifications = () => {
         ...(options.priority && { priority: options.priority }),
       })
 
-      const response = await $fetch<NotificationResponse>(`/api/v1/notifications?${queryParams}`, {
-        baseURL: config.public.apiBase,
+      const fetchResponse = await fetch(`${config.public.apiBase}/api/v1/notifications?${queryParams}`, {
+        method: 'GET',
         headers: getHeaders(),
-        timeout: 10000
       })
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+      }
+      
+      const response = await fetchResponse.json() as NotificationResponse
 
       if (options.append) {
         notifications.value = [...notifications.value, ...response.notifications]
@@ -139,11 +143,16 @@ export const useNotifications = () => {
     if (!token.value) return []
     
     try {
-      const response = await $fetch<{ notifications: Notification[], unread_count: number }>(`/api/v1/notifications/recent?limit=${limit}`, {
-        baseURL: config.public.apiBase,
+      const fetchResponse = await fetch(`${config.public.apiBase}/api/v1/notifications/recent?limit=${limit}`, {
+        method: 'GET',
         headers: getHeaders(),
-        timeout: 5000
       })
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+      }
+      
+      const response = await fetchResponse.json() as { notifications: Notification[], unread_count: number }
 
       notifications.value = response.notifications
       unreadCount.value = response.unread_count
@@ -179,12 +188,14 @@ export const useNotifications = () => {
     if (!token.value) return false
     
     try {
-      await $fetch(`/api/v1/notifications/${notificationId}/read`, {
+      const fetchResponse = await fetch(`${config.public.apiBase}/api/v1/notifications/${notificationId}/read`, {
         method: 'PATCH',
-        baseURL: config.public.apiBase,
         headers: getHeaders(),
-        timeout: 5000
       })
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+      }
 
       // Update local state
       const notification = notifications.value.find(n => n.id === notificationId)
@@ -231,12 +242,14 @@ export const useNotifications = () => {
     if (!token.value) return false
     
     try {
-      await $fetch('/api/v1/notifications/mark-all-read', {
+      const fetchResponse = await fetch(`${config.public.apiBase}/api/v1/notifications/mark-all-read`, {
         method: 'POST',
-        baseURL: config.public.apiBase,
         headers: getHeaders(),
-        timeout: 5000
       })
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+      }
 
       // Update local state
       notifications.value.forEach(notification => {

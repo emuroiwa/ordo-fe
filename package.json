@@ -16,6 +16,7 @@
     "tailwindcss": "^3.3.6"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.10",
     "@headlessui/vue": "^1.7.16",
     "@heroicons/vue": "^2.0.18",
     "lodash-es": "^4.17.21",

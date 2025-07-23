@@ -52,14 +52,15 @@ export interface ProfileStats {
 }
 
 export const useProfile = () => {
-  // State
-  const { $fetch } = useNuxtApp()
-  const user: Ref<User | null> = ref(null)
+  // Get global user state from auth
+  const { user } = useAuth()
+  
+  // Local state
   const stats: Ref<ProfileStats | null> = ref(null)
   const loading = ref(false)
   const uploading = ref(false)
   const error: Ref<string | null> = ref(null)
-
+  
   // Fetch user profile
   const fetchProfile = async () => {
     // Don't attempt to fetch if we're already loading or in SSR
@@ -71,13 +72,28 @@ export const useProfile = () => {
     error.value = null
 
     try {
+      const config = useRuntimeConfig()
+      const { token } = useAuth()
       
-      user.value = await $fetch('/api/v1/profile', {
+      const response = await fetch(`${config.public.apiBase}/api/v1/profile`, {
+        method: 'GET',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token.value}`,
         }
       })
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const userData = await response.json()
+      // Ensure roles is always an array
+      if (userData) {
+        userData.roles = Array.isArray(userData.roles) ? userData.roles : []
+      }
+      user.value = userData
       return user.value
     } catch (err: any) {
       console.error('Profile fetch error:', err)
@@ -109,12 +125,27 @@ export const useProfile = () => {
         }
       })
 
-      const { $fetch } = useNuxtApp()
-      const response = await $fetch('/api/v1/profile', {
+      const config = useRuntimeConfig()
+      const { token } = useAuth()
+      
+      const fetchResponse = await fetch(`${config.public.apiBase}/api/v1/profile`, {
         method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token.value}`,
+        },
         body: formData
       })
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+      }
+      
+      const response = await fetchResponse.json()
 
+      // Ensure roles is always an array for updated user
+      if (response.user) {
+        response.user.roles = Array.isArray(response.user.roles) ? response.user.roles : []
+      }
       user.value = response.user
       return response
     } catch (err: any) {
@@ -131,11 +162,23 @@ export const useProfile = () => {
     error.value = null
 
     try {
-      const { $fetch } = useNuxtApp()
-      const response = await $fetch('/api/v1/profile/password', {
+      const config = useRuntimeConfig()
+      const { token } = useAuth()
+      
+      const fetchResponse = await fetch(`${config.public.apiBase}/api/v1/profile/password`, {
         method: 'PUT',
-        body: passwordData
+        headers: {
+          'Authorization': `Bearer ${token.value}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(passwordData)
       })
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+      }
+      
+      const response = await fetchResponse.json()
 
       return response
     } catch (err: any) {
@@ -155,11 +198,22 @@ export const useProfile = () => {
       const formData = new FormData()
       formData.append('avatar', file)
 
-      const { $fetch } = useNuxtApp()
-      const response = await $fetch('/api/v1/profile/avatar', {
+      const config = useRuntimeConfig()
+      const { token } = useAuth()
+      
+      const fetchResponse = await fetch(`${config.public.apiBase}/api/v1/profile/avatar`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token.value}`,
+        },
         body: formData
       })
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+      }
+      
+      const response = await fetchResponse.json()
 
       // Update user avatar URL
       if (user.value) {
@@ -181,10 +235,21 @@ export const useProfile = () => {
     error.value = null
 
     try {
-      const { $fetch } = useNuxtApp()
-      const response = await $fetch('/api/v1/profile/avatar', {
-        method: 'DELETE'
+      const config = useRuntimeConfig()
+      const { token } = useAuth()
+      
+      const fetchResponse = await fetch(`${config.public.apiBase}/api/v1/profile/avatar`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token.value}`,
+        }
       })
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+      }
+      
+      const response = await fetchResponse.json()
 
       // Update user avatar URL
       if (user.value) {

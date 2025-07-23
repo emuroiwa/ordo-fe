@@ -3,19 +3,42 @@
     <div>
       <!-- Calendar Header -->
       <div class="mb-6">
-        <div class="flex items-center justify-between">
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900">Calendar</h1>
-            <p class="text-gray-600">Manage your appointments and availability</p>
+        <!-- Mobile: Stack layout -->
+        <div class="md:flex md:items-center md:justify-between space-y-4 md:space-y-0">
+          <div class="text-center md:text-left">
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Calendar</h1>
+            <p class="text-gray-600 text-sm sm:text-base">Manage your appointments and availability</p>
           </div>
           
-          <div class="flex items-center space-x-4">
-            <!-- View Toggle -->
-            <div class="bg-gray-100 p-1 rounded-lg flex">
+          <!-- Mobile: Actions First -->
+          <div class="flex flex-col space-y-3 md:flex-row md:items-center md:space-y-0 md:space-x-4">
+            <!-- Mobile: Quick Actions (Priority) -->
+            <div class="flex space-x-3 order-1 md:order-2">
+              <button
+                @click="showAvailabilityModal = true"
+                class="flex-1 md:flex-none inline-flex items-center justify-center px-4 py-3 md:py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 touch-target"
+              >
+                <ClockIcon class="w-4 h-4 mr-2" />
+                <span class="hidden sm:inline">Set Availability</span>
+                <span class="sm:hidden">Availability</span>
+              </button>
+              
+              <button
+                @click="showBookingModal = true"
+                class="flex-1 md:flex-none inline-flex items-center justify-center px-4 py-3 md:py-2 border border-transparent shadow-sm text-sm font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 touch-target"
+              >
+                <PlusIcon class="w-4 h-4 mr-2" />
+                <span class="hidden sm:inline">New Appointment</span>
+                <span class="sm:hidden">Add</span>
+              </button>
+            </div>
+            
+            <!-- Mobile: View Toggle (Secondary) -->
+            <div class="bg-gray-100 p-1 rounded-xl flex order-2 md:order-1">
               <button
                 @click="currentView = 'month'"
                 :class="[
-                  'px-3 py-1 text-sm font-medium rounded-md transition-colors',
+                  'flex-1 md:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-colors touch-target',
                   currentView === 'month' 
                     ? 'bg-white text-blue-600 shadow-sm' 
                     : 'text-gray-600 hover:text-gray-900'
@@ -26,7 +49,7 @@
               <button
                 @click="currentView = 'week'"
                 :class="[
-                  'px-3 py-1 text-sm font-medium rounded-md transition-colors',
+                  'flex-1 md:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-colors touch-target',
                   currentView === 'week' 
                     ? 'bg-white text-blue-600 shadow-sm' 
                     : 'text-gray-600 hover:text-gray-900'
@@ -37,7 +60,7 @@
               <button
                 @click="currentView = 'day'"
                 :class="[
-                  'px-3 py-1 text-sm font-medium rounded-md transition-colors',
+                  'flex-1 md:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-colors touch-target',
                   currentView === 'day' 
                     ? 'bg-white text-blue-600 shadow-sm' 
                     : 'text-gray-600 hover:text-gray-900'
@@ -46,53 +69,36 @@
                 Day
               </button>
             </div>
-
-            <!-- Quick Actions -->
-            <button
-              @click="showAvailabilityModal = true"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <ClockIcon class="w-4 h-4 mr-2" />
-              Set Availability
-            </button>
-            
-            <button
-              @click="showBookingModal = true"
-              class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <PlusIcon class="w-4 h-4 mr-2" />
-              New Appointment
-            </button>
           </div>
         </div>
       </div>
 
       <!-- Calendar Navigation -->
-      <div class="bg-white rounded-lg shadow mb-6 p-4">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-6 p-4">
         <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-4">
+          <div class="flex items-center space-x-2 md:space-x-4">
             <button
               @click="navigateCalendar('prev')"
-              class="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              class="p-3 md:p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-xl transition-colors touch-target"
             >
-              <ChevronLeftIcon class="w-5 h-5" />
+              <ChevronLeftIcon class="w-6 h-6 md:w-5 md:h-5" />
             </button>
             
-            <h2 class="text-lg font-semibold text-gray-900">
+            <h2 class="text-base sm:text-lg font-semibold text-gray-900 min-w-0 flex-1 text-center md:text-left truncate">
               {{ formatCurrentPeriod }}
             </h2>
             
             <button
               @click="navigateCalendar('next')"
-              class="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              class="p-3 md:p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-xl transition-colors touch-target"
             >
-              <ChevronRightIcon class="w-5 h-5" />
+              <ChevronRightIcon class="w-6 h-6 md:w-5 md:h-5" />
             </button>
           </div>
           
           <button
             @click="goToToday"
-            class="px-3 py-1 text-sm text-blue-600 hover:text-blue-700 font-medium"
+            class="px-4 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-medium rounded-xl transition-colors touch-target"
           >
             Today
           </button>
@@ -100,17 +106,19 @@
       </div>
 
       <!-- Calendar Content -->
-      <div class="bg-white rounded-lg shadow">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200">
         <!-- Month View -->
-        <div v-if="currentView === 'month'" class="p-6">
+        <div v-if="currentView === 'month'" class="p-3 sm:p-6">
           <!-- Days of Week Header -->
           <div class="grid grid-cols-7 gap-1 mb-4">
             <div 
-              v-for="day in daysOfWeek" 
+              v-for="(day, index) in daysOfWeek" 
               :key="day"
-              class="p-2 text-center text-sm font-medium text-gray-500"
+              class="p-2 text-center text-xs sm:text-sm font-medium text-gray-500"
             >
-              {{ day }}
+              <!-- Mobile: Show only first letter on very small screens -->
+              <span class="sm:hidden">{{ day.charAt(0) }}</span>
+              <span class="hidden sm:inline">{{ day }}</span>
             </div>
           </div>
           
@@ -120,7 +128,7 @@
               v-for="(day, index) in calendarDays"
               :key="`${day.date}-${index}`"
               :class="[
-                'min-h-[120px] p-2 border border-gray-100 cursor-pointer transition-colors',
+                'min-h-[80px] sm:min-h-[100px] lg:min-h-[120px] p-2 border border-gray-100 cursor-pointer transition-colors touch-target',
                 day.isCurrentMonth ? 'bg-white hover:bg-gray-50' : 'bg-gray-50 text-gray-400',
                 day.isToday ? 'bg-blue-50 border-blue-200' : '',
                 day.isSelected ? 'bg-blue-100 border-blue-300' : ''
@@ -141,24 +149,62 @@
                 <!-- Availability Indicator -->
                 <div 
                   v-if="day.isAvailable && day.isCurrentMonth"
-                  class="w-2 h-2 bg-green-400 rounded-full"
+                  class="w-2 h-2 bg-green-400 rounded-full flex-shrink-0"
                   title="Available"
                 ></div>
               </div>
               
               <!-- Appointments for this day -->
-              <div class="space-y-1">
-                <div
-                  v-for="appointment in day.appointments"
-                  :key="appointment.id"
-                  :class="[
-                    'text-xs p-1 rounded truncate cursor-pointer',
-                    getAppointmentColor(appointment.status)
-                  ]"
-                  @click.stop="viewAppointment(appointment)"
-                  :title="`${appointment.time} - ${appointment.service?.title}`"
-                >
-                  {{ appointment.time }} {{ appointment.customer?.name }}
+              <div class="space-y-1 overflow-hidden">
+                <!-- Mobile: Show appointment count if more than 1 -->
+                <div v-if="day.appointments.length > 1" class="sm:hidden">
+                  <div class="text-xs p-1 rounded bg-blue-100 text-blue-800 text-center touch-target">
+                    {{ day.appointments.length }} appts
+                  </div>
+                </div>
+                
+                <!-- Desktop: Show individual appointments -->
+                <div v-else-if="day.appointments.length === 1" class="sm:space-y-1">
+                  <div
+                    v-for="appointment in day.appointments.slice(0, 2)"
+                    :key="appointment.id"
+                    :class="[
+                      'text-xs p-1 rounded truncate cursor-pointer touch-target',
+                      getAppointmentColor(appointment.status)
+                    ]"
+                    @click.stop="viewAppointment(appointment)"
+                    :title="`${appointment.time} - ${appointment.service?.title}`"
+                  >
+                    <!-- Mobile: Show time only -->
+                    <span class="sm:hidden">{{ appointment.time }}</span>
+                    <!-- Desktop: Show full info -->
+                    <span class="hidden sm:inline">{{ appointment.time }} {{ appointment.customer?.name }}</span>
+                  </div>
+                  
+                  <!-- Show +N more indicator if there are more appointments -->
+                  <div v-if="day.appointments.length > 2" class="hidden sm:block text-xs text-gray-500 text-center">
+                    +{{ day.appointments.length - 2 }} more
+                  </div>
+                </div>
+                
+                <!-- Multiple appointments on mobile -->
+                <div v-else class="hidden sm:block space-y-1">
+                  <div
+                    v-for="appointment in day.appointments.slice(0, 3)"
+                    :key="appointment.id"
+                    :class="[
+                      'text-xs p-1 rounded truncate cursor-pointer touch-target',
+                      getAppointmentColor(appointment.status)
+                    ]"
+                    @click.stop="viewAppointment(appointment)"
+                    :title="`${appointment.time} - ${appointment.service?.title}`"
+                  >
+                    {{ appointment.time }} {{ appointment.customer?.name }}
+                  </div>
+                  
+                  <div v-if="day.appointments.length > 3" class="text-xs text-gray-500 text-center">
+                    +{{ day.appointments.length - 3 }} more
+                  </div>
                 </div>
               </div>
             </div>
@@ -166,66 +212,69 @@
         </div>
 
         <!-- Week View -->
-        <div v-else-if="currentView === 'week'" class="p-6">
-          <div class="grid grid-cols-8 gap-1">
-            <!-- Time Column -->
-            <div class="space-y-1">
-              <div class="h-12"></div> <!-- Header spacer -->
-              <div
-                v-for="hour in dayHours"
-                :key="hour"
-                class="h-16 text-xs text-gray-500 pr-2 text-right"
-              >
-                {{ formatHour(hour) }}
-              </div>
-            </div>
-            
-            <!-- Days -->
-            <div
-              v-for="day in weekDays"
-              :key="day.date"
-              class="border-l border-gray-200"
-            >
-              <!-- Day Header -->
-              <div 
-                :class="[
-                  'h-12 p-2 text-center border-b border-gray-200',
-                  day.isToday ? 'bg-blue-50' : 'bg-gray-50'
-                ]"
-              >
-                <div class="text-xs text-gray-500">{{ day.dayName }}</div>
-                <div 
-                  :class="[
-                    'text-sm font-medium',
-                    day.isToday ? 'text-blue-600' : 'text-gray-900'
-                  ]"
-                >
-                  {{ day.date }}
-                </div>
-              </div>
-              
-              <!-- Time Slots -->
-              <div class="relative">
+        <div v-else-if="currentView === 'week'" class="p-3 sm:p-6 overflow-x-auto">
+          <!-- Mobile: Horizontal scroll wrapper -->
+          <div class="min-w-[600px] sm:min-w-0">
+            <div class="grid grid-cols-8 gap-1">
+              <!-- Time Column -->
+              <div class="space-y-1">
+                <div class="h-12 sm:h-16"></div> <!-- Header spacer -->
                 <div
                   v-for="hour in dayHours"
                   :key="hour"
-                  class="h-16 border-b border-gray-100"
-                  @click="createAppointment(day, hour)"
-                ></div>
-                
-                <!-- Appointments -->
-                <div
-                  v-for="appointment in day.appointments"
-                  :key="appointment.id"
-                  :class="[
-                    'absolute left-1 right-1 p-1 rounded text-xs cursor-pointer z-10',
-                    getAppointmentColor(appointment.status)
-                  ]"
-                  :style="getAppointmentStyle(appointment)"
-                  @click="viewAppointment(appointment)"
+                  class="h-12 sm:h-16 text-xs text-gray-500 pr-1 sm:pr-2 text-right flex items-center justify-end"
                 >
-                  <div class="font-medium">{{ appointment.customer?.name }}</div>
-                  <div>{{ appointment.service?.title }}</div>
+                  {{ formatHour(hour) }}
+                </div>
+              </div>
+              
+              <!-- Days -->
+              <div
+                v-for="day in weekDays"
+                :key="day.date"
+                class="border-l border-gray-200 min-w-[70px] sm:min-w-0"
+              >
+                <!-- Day Header -->
+                <div 
+                  :class="[
+                    'h-12 sm:h-16 p-1 sm:p-2 text-center border-b border-gray-200',
+                    day.isToday ? 'bg-blue-50' : 'bg-gray-50'
+                  ]"
+                >
+                  <div class="text-xs text-gray-500">{{ day.dayName }}</div>
+                  <div 
+                    :class="[
+                      'text-sm font-medium',
+                      day.isToday ? 'text-blue-600' : 'text-gray-900'
+                    ]"
+                  >
+                    {{ day.date }}
+                  </div>
+                </div>
+                
+                <!-- Time Slots -->
+                <div class="relative">
+                  <div
+                    v-for="hour in dayHours"
+                    :key="hour"
+                    class="h-12 sm:h-16 border-b border-gray-100 hover:bg-gray-50 cursor-pointer touch-target"
+                    @click="createAppointment(day, hour)"
+                  ></div>
+                  
+                  <!-- Appointments -->
+                  <div
+                    v-for="appointment in day.appointments"
+                    :key="appointment.id"
+                    :class="[
+                      'absolute left-0.5 right-0.5 sm:left-1 sm:right-1 p-1 rounded text-xs cursor-pointer z-10 touch-target',
+                      getAppointmentColor(appointment.status)
+                    ]"
+                    :style="getAppointmentStyle(appointment)"
+                    @click="viewAppointment(appointment)"
+                  >
+                    <div class="font-medium truncate">{{ appointment.customer?.name }}</div>
+                    <div class="truncate">{{ appointment.service?.title }}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -233,41 +282,43 @@
         </div>
 
         <!-- Day View -->
-        <div v-else-if="currentView === 'day'" class="p-6">
-          <div class="grid grid-cols-2 gap-6">
+        <div v-else-if="currentView === 'day'" class="p-3 sm:p-6">
+          <!-- Mobile: Stack layout -->
+          <div class="space-y-6 lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0">
             <!-- Time Slots -->
-            <div>
+            <div class="order-2 lg:order-1">
               <h3 class="text-lg font-medium text-gray-900 mb-4">
                 {{ formatSelectedDate }}
               </h3>
               
-              <div class="space-y-1">
+              <div class="space-y-2">
                 <div
                   v-for="hour in dayHours"
                   :key="hour"
                   :class="[
-                    'flex items-center justify-between p-3 border border-gray-200 rounded-lg cursor-pointer transition-colors',
+                    'flex items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer transition-colors touch-target',
                     isHourAvailable(hour) ? 'hover:bg-gray-50' : 'bg-gray-100 cursor-not-allowed'
                   ]"
                   @click="isHourAvailable(hour) && createAppointment(selectedDay, hour)"
                 >
-                  <span class="font-medium">{{ formatHour(hour) }}</span>
+                  <span class="font-medium text-base">{{ formatHour(hour) }}</span>
                   
                   <div v-if="getAppointmentForHour(hour)" class="flex items-center space-x-2">
+                    <div class="text-right flex-1">
+                      <div class="text-sm font-medium text-gray-900">{{ getAppointmentForHour(hour).customer?.name }}</div>
+                      <div class="text-xs text-gray-500">{{ getAppointmentForHour(hour).service?.title }}</div>
+                    </div>
                     <span 
                       :class="[
-                        'px-2 py-1 rounded text-xs',
+                        'px-2 py-1 rounded-lg text-xs font-medium',
                         getAppointmentColor(getAppointmentForHour(hour).status)
                       ]"
                     >
                       {{ getAppointmentForHour(hour).status }}
                     </span>
-                    <span class="text-sm text-gray-600">
-                      {{ getAppointmentForHour(hour).customer?.name }}
-                    </span>
                   </div>
                   
-                  <div v-else-if="isHourAvailable(hour)" class="text-sm text-green-600">
+                  <div v-else-if="isHourAvailable(hour)" class="text-sm text-green-600 font-medium">
                     Available
                   </div>
                   
@@ -279,41 +330,41 @@
             </div>
             
             <!-- Day Summary -->
-            <div>
+            <div class="order-1 lg:order-2">
               <h3 class="text-lg font-medium text-gray-900 mb-4">Day Summary</h3>
               
-              <div class="space-y-4">
+              <div class="space-y-6">
                 <!-- Stats -->
                 <div class="grid grid-cols-2 gap-4">
-                  <div class="bg-blue-50 p-4 rounded-lg">
+                  <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
                     <div class="text-2xl font-bold text-blue-600">{{ dayStats.totalAppointments }}</div>
-                    <div class="text-sm text-blue-600">Appointments</div>
+                    <div class="text-sm text-blue-600 font-medium">Appointments</div>
                   </div>
-                  <div class="bg-green-50 p-4 rounded-lg">
+                  <div class="bg-green-50 p-4 rounded-xl border border-green-100">
                     <div class="text-2xl font-bold text-green-600">{{ dayStats.availableSlots }}</div>
-                    <div class="text-sm text-green-600">Available Slots</div>
+                    <div class="text-sm text-green-600 font-medium">Available Slots</div>
                   </div>
                 </div>
                 
                 <!-- Upcoming Appointments -->
                 <div v-if="dayAppointments.length > 0">
-                  <h4 class="font-medium text-gray-900 mb-2">Today's Appointments</h4>
-                  <div class="space-y-2">
+                  <h4 class="font-medium text-gray-900 mb-3">Today's Appointments</h4>
+                  <div class="space-y-3">
                     <div
                       v-for="appointment in dayAppointments"
                       :key="appointment.id"
-                      class="p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
+                      class="p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors touch-target"
                       @click="viewAppointment(appointment)"
                     >
-                      <div class="flex items-center justify-between">
-                        <div>
-                          <div class="font-medium">{{ appointment.time }}</div>
-                          <div class="text-sm text-gray-600">{{ appointment.customer?.name }}</div>
-                          <div class="text-sm text-gray-500">{{ appointment.service?.title }}</div>
+                      <div class="flex items-start justify-between">
+                        <div class="flex-1 min-w-0">
+                          <div class="font-medium text-gray-900">{{ appointment.time }}</div>
+                          <div class="text-sm text-gray-600 truncate">{{ appointment.customer?.name }}</div>
+                          <div class="text-sm text-gray-500 truncate">{{ appointment.service?.title }}</div>
                         </div>
                         <span 
                           :class="[
-                            'px-2 py-1 rounded text-xs',
+                            'px-3 py-1 rounded-lg text-xs font-medium ml-3 flex-shrink-0',
                             getAppointmentColor(appointment.status)
                           ]"
                         >
@@ -326,7 +377,7 @@
                 
                 <div v-else class="text-center py-8 text-gray-500">
                   <CalendarIcon class="w-12 h-12 mx-auto mb-2 text-gray-300" />
-                  <p>No appointments scheduled for this day</p>
+                  <p class="text-sm">No appointments scheduled for this day</p>
                 </div>
               </div>
             </div>
@@ -734,3 +785,119 @@ onMounted(() => {
   loadCalendarData()
 })
 </script>
+
+<style scoped>
+/* Mobile-First Touch Targets */
+.touch-target {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Calendar Grid Responsiveness */
+.grid-cols-7 > div {
+  position: relative;
+}
+
+/* Mobile: Better spacing for calendar cells */
+@media (max-width: 640px) {
+  .touch-target {
+    min-height: 48px;
+  }
+  
+  /* Improve calendar day cells on mobile */
+  .grid-cols-7 > div {
+    min-height: 80px;
+  }
+  
+  /* Better text sizing on mobile */
+  .text-xs {
+    font-size: 0.75rem;
+  }
+  
+  /* Improve button spacing */
+  .space-x-3 > * + * {
+    margin-left: 0.75rem;
+  }
+  
+  /* Optimize week view scrolling */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .overflow-x-auto::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .grid-cols-7 > div {
+    min-height: 100px;
+  }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1025px) {
+  .grid-cols-7 > div {
+    min-height: 120px;
+  }
+  
+  .touch-target {
+    min-height: 40px;
+  }
+}
+
+/* Appointment status colors - enhanced for mobile */
+.bg-yellow-100 {
+  background-color: rgb(254 249 195);
+}
+
+.bg-blue-100 {
+  background-color: rgb(219 234 254);
+}
+
+.bg-green-100 {
+  background-color: rgb(220 252 231);
+}
+
+.bg-purple-100 {
+  background-color: rgb(243 232 255);
+}
+
+.bg-red-100 {
+  background-color: rgb(254 226 226);
+}
+
+/* Mobile week view improvements */
+.min-w-\[600px\] {
+  min-width: 600px;
+}
+
+.min-w-\[70px\] {
+  min-width: 70px;
+}
+
+/* Enhanced focus states for touch devices */
+@media (pointer: coarse) {
+  .hover\:bg-gray-50:hover {
+    background-color: rgb(249 250 251);
+    transition: background-color 0.2s ease;
+  }
+  
+  .hover\:bg-blue-50:hover {
+    background-color: rgb(239 246 255);
+    transition: background-color 0.2s ease;
+  }
+}
+
+/* Smooth transitions for mobile interactions */
+.transition-colors {
+  transition-property: color, background-color, border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+</style>

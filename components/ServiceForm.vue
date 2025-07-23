@@ -214,42 +214,63 @@
         </div>
 
         <!-- Address (if not online) -->
-        <div v-if="form.location_type !== 'online'" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label for="city" class="block text-sm font-medium text-gray-700 mb-2">
-              City *
-            </label>
-            <input
-              id="city"
-              v-model="addressForm.city"
-              type="text"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="e.g., Cape Town"
-            >
-          </div>
+        <div v-if="form.location_type !== 'online'">
+          <GoogleMapsAddressAutocomplete
+            v-model="selectedGoogleAddress"
+            :label="form.location_type === 'client_location' ? 'Service Area (where you travel to)' : 'Your Business Address'"
+            :placeholder="form.location_type === 'client_location' ? 'Enter city or area you serve' : 'Enter your business address'"
+            :required="true"
+          />
           
-          <div>
-            <label for="province" class="block text-sm font-medium text-gray-700 mb-2">
-              Province *
-            </label>
-            <select
-              id="province"
-              v-model="addressForm.province"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">Select Province</option>
-              <option value="Western Cape">Western Cape</option>
-              <option value="Eastern Cape">Eastern Cape</option>
-              <option value="Northern Cape">Northern Cape</option>
-              <option value="Free State">Free State</option>
-              <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-              <option value="North West">North West</option>
-              <option value="Gauteng">Gauteng</option>
-              <option value="Mpumalanga">Mpumalanga</option>
-              <option value="Limpopo">Limpopo</option>
-            </select>
+          <!-- Fallback manual entry -->
+          <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="text-sm font-medium text-gray-900">Manual Entry (if needed)</h4>
+              <button
+                type="button"
+                @click="showManualEntry = !showManualEntry"
+                class="text-sm text-blue-600 hover:text-blue-800"
+              >
+                {{ showManualEntry ? 'Hide' : 'Show' }} Manual Entry
+              </button>
+            </div>
+            
+            <div v-if="showManualEntry" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="manual-city" class="block text-sm font-medium text-gray-700 mb-2">
+                  City
+                </label>
+                <input
+                  id="manual-city"
+                  v-model="manualAddressForm.city"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="e.g., Cape Town"
+                >
+              </div>
+              
+              <div>
+                <label for="manual-province" class="block text-sm font-medium text-gray-700 mb-2">
+                  Province
+                </label>
+                <select
+                  id="manual-province"
+                  v-model="manualAddressForm.province"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select Province</option>
+                  <option value="Western Cape">Western Cape</option>
+                  <option value="Eastern Cape">Eastern Cape</option>
+                  <option value="Northern Cape">Northern Cape</option>
+                  <option value="Free State">Free State</option>
+                  <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                  <option value="North West">North West</option>
+                  <option value="Gauteng">Gauteng</option>
+                  <option value="Mpumalanga">Mpumalanga</option>
+                  <option value="Limpopo">Limpopo</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -398,6 +419,15 @@ const addressForm = reactive({
   street_address: ''
 })
 
+const manualAddressForm = reactive({
+  city: '',
+  province: '',
+  street_address: ''
+})
+
+const selectedGoogleAddress = ref(null)
+const showManualEntry = ref(false)
+
 const tagsInput = ref('')
 const requirementsInput = ref('')
 
@@ -405,12 +435,16 @@ const requirementsInput = ref('')
 const isEditing = computed(() => !!props.service)
 
 const isFormValid = computed(() => {
+  const hasValidAddress = form.location_type === 'online' || 
+                         selectedGoogleAddress.value || 
+                         (manualAddressForm.city && manualAddressForm.province)
+  
   return form.title.trim() !== '' &&
          form.description.trim() !== '' &&
          form.short_description.trim() !== '' &&
          form.category_id !== '' &&
          form.base_price > 0 &&
-         (form.location_type === 'online' || (addressForm.city && addressForm.province))
+         hasValidAddress
 })
 
 // Watchers
@@ -434,18 +468,60 @@ watch([requirementsInput], () => {
     .filter(req => req.length > 0)
 })
 
-watch([addressForm], () => {
-  if (form.location_type !== 'online') {
+// Watch for Google Maps address selection
+watch([selectedGoogleAddress], () => {
+  if (selectedGoogleAddress.value && form.location_type !== 'online') {
+    const googleAddr = selectedGoogleAddress.value
     form.address = {
-      city: addressForm.city,
-      province: addressForm.province,
-      street_address: addressForm.street_address,
-      country: 'South Africa'
+      formatted_address: googleAddr.formatted_address,
+      street_address: googleAddr.street_address,
+      city: googleAddr.city,
+      province: googleAddr.province,
+      postal_code: googleAddr.postal_code,
+      country: googleAddr.country,
+      place_id: googleAddr.place_id
     }
-  } else {
-    form.address = undefined
+    form.latitude = googleAddr.latitude
+    form.longitude = googleAddr.longitude
+    
+    // Update addressForm for backwards compatibility
+    addressForm.city = googleAddr.city
+    addressForm.province = googleAddr.province
+    addressForm.street_address = googleAddr.street_address
   }
 }, { deep: true })
+
+// Watch for manual address entry
+watch([manualAddressForm], () => {
+  if (!selectedGoogleAddress.value && form.location_type !== 'online') {
+    if (manualAddressForm.city || manualAddressForm.province) {
+      form.address = {
+        city: manualAddressForm.city,
+        province: manualAddressForm.province,
+        street_address: manualAddressForm.street_address,
+        country: 'South Africa'
+      }
+      // Clear coordinates for manual entry since we don't have exact location
+      form.latitude = undefined
+      form.longitude = undefined
+      
+      // Update addressForm for backwards compatibility
+      addressForm.city = manualAddressForm.city
+      addressForm.province = manualAddressForm.province
+      addressForm.street_address = manualAddressForm.street_address
+    }
+  }
+}, { deep: true })
+
+// Watch for location type changes
+watch(() => form.location_type, (newType) => {
+  if (newType === 'online') {
+    form.address = undefined
+    form.latitude = undefined
+    form.longitude = undefined
+    selectedGoogleAddress.value = null
+  }
+})
 
 // Methods
 const populateForm = (service: Service) => {
@@ -463,13 +539,38 @@ const populateForm = (service: Service) => {
   form.requirements = service.requirements || []
   form.instant_booking = service.instant_booking
   
-  // Populate address
+  // Populate address and coordinates
   if (service.address) {
     addressForm.city = service.address.city || ''
     addressForm.province = service.address.province || ''
     addressForm.street_address = service.address.street_address || ''
     form.address = service.address
+    
+    // If we have coordinates and a formatted address, populate Google Maps selection
+    if (service.latitude && service.longitude && service.address.formatted_address) {
+      selectedGoogleAddress.value = {
+        formatted_address: service.address.formatted_address,
+        street_address: service.address.street_address || '',
+        city: service.address.city || '',
+        province: service.address.province || '',
+        postal_code: service.address.postal_code || '',
+        country: service.address.country || 'South Africa',
+        latitude: service.latitude,
+        longitude: service.longitude,
+        place_id: service.address.place_id || ''
+      }
+    } else {
+      // Fallback to manual entry for existing services without coordinates
+      manualAddressForm.city = service.address.city || ''
+      manualAddressForm.province = service.address.province || ''
+      manualAddressForm.street_address = service.address.street_address || ''
+      showManualEntry.value = true
+    }
   }
+  
+  // Populate coordinates
+  form.latitude = service.latitude
+  form.longitude = service.longitude
   
   // Populate tags and requirements inputs
   tagsInput.value = form.tags.join(', ')

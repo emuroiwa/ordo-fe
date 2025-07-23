@@ -85,18 +85,25 @@ export const useAuth = () => {
     try {
       isLoading.value = true
       const config = useRuntimeConfig()
-      
-      const response = await $fetch<LoginResponse>('/api/v1/login', {
+      const fetchResponse = await fetch(`${config.public.apiBase}/api/v1/login`, {
         method: 'POST',
-        baseURL: config.public.apiBase,
-        body: credentials,
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify(credentials)
       })
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+      }
+      
+      const response = await fetchResponse.json() as LoginResponse
 
       if (response.token && response.user) {
+        // Ensure roles is always an array
+        response.user.roles = Array.isArray(response.user.roles) ? response.user.roles : []
+        
         token.value = response.token
         user.value = response.user
         tokenCookie.value = response.token
@@ -122,6 +129,7 @@ export const useAuth = () => {
     try {
       isLoading.value = true
       const config = useRuntimeConfig()
+      const { $fetch } = useNuxtApp()
       
       const response = await $fetch<RegisterResponse>('/api/v1/register', {
         method: 'POST',
@@ -134,6 +142,9 @@ export const useAuth = () => {
       })
 
       if (response.token && response.user) {
+        // Ensure roles is always an array
+        response.user.roles = Array.isArray(response.user.roles) ? response.user.roles : []
+        
         token.value = response.token
         user.value = response.user
         tokenCookie.value = response.token
@@ -159,6 +170,7 @@ export const useAuth = () => {
     try {
       isLoading.value = true
       const config = useRuntimeConfig()
+      const { $fetch } = useNuxtApp()
       
       if (token.value) {
         await $fetch('/api/v1/logout', {
@@ -186,6 +198,7 @@ export const useAuth = () => {
     try {
       isLoading.value = true
       const config = useRuntimeConfig()
+      const { $fetch } = useNuxtApp()
       
       if (!token.value) {
         return null
@@ -203,10 +216,27 @@ export const useAuth = () => {
       userCookie.value = response.user
       lastActivity.value = Date.now()
       return response.user
-    } catch (error) {
+    } catch (error: any) {
       console.error('Fetch user error:', error)
-      // If token is invalid, clear auth state
-      await logout()
+      
+      // Extract error details for better handling
+      const statusCode = error?.status || error?.statusCode || error?.response?.status
+      const statusMessage = error?.statusMessage || error?.message
+      
+      console.log(`API Error - Status: ${statusCode}, Message: ${statusMessage}`)
+      
+      // Only logout on authentication errors (401/403), not on network/server errors
+      if (statusCode === 401 || statusCode === 403) {
+        console.log('Authentication error detected, logging out user')
+        await logout()
+      } else if (statusCode >= 500) {
+        console.log('Server error detected, keeping user logged in and will retry later')
+      } else if (!statusCode) {
+        console.log('Network error detected (no status code), keeping user logged in')
+      } else {
+        console.log(`Other error (${statusCode}), keeping user logged in`)
+      }
+      
       return null
     } finally {
       isLoading.value = false
@@ -230,6 +260,7 @@ export const useAuth = () => {
       if (!token.value) return false
       
       const config = useRuntimeConfig()
+      const { $fetch } = useNuxtApp()
       const response = await $fetch<{ token: string }>('/api/v1/refresh', {
         method: 'POST',
         baseURL: config.public.apiBase,
@@ -247,9 +278,27 @@ export const useAuth = () => {
       }
       
       return false
-    } catch (error) {
+    } catch (error: any) {
       console.error('Token refresh error:', error)
-      await logout()
+      
+      // Extract error details for better handling
+      const statusCode = error?.status || error?.statusCode || error?.response?.status
+      const statusMessage = error?.statusMessage || error?.message
+      
+      console.log(`Token Refresh Error - Status: ${statusCode}, Message: ${statusMessage}`)
+      
+      // Only logout on authentication errors (401/403), not on network/server errors
+      if (statusCode === 401 || statusCode === 403) {
+        console.log('Token refresh authentication error, logging out user')
+        await logout()
+      } else if (statusCode >= 500) {
+        console.log('Server error during token refresh, keeping user logged in')
+      } else if (!statusCode) {
+        console.log('Network error during token refresh, will retry later')
+      } else {
+        console.log(`Other token refresh error (${statusCode}), keeping user logged in`)
+      }
+      
       return false
     }
   }

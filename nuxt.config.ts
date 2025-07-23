@@ -12,7 +12,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: process.env.API_BASE_URL || 'http://localhost:8001'
+      apiBase: process.env.API_BASE_URL || 'http://localhost:8001',
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
     }
   },
   nitro: {

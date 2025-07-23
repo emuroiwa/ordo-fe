@@ -91,7 +91,7 @@
               <!-- Role Badges -->
               <div class="flex gap-2 justify-center mt-3">
                 <span
-                  v-for="role in user.roles"
+                  v-for="role in (user?.roles || [])"
                   :key="role"
                   class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                   :class="role === 'vendor' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'"
@@ -205,13 +205,19 @@
                   <label for="service_category" class="block text-sm font-medium text-gray-700 mb-2">
                     Service Category
                   </label>
-                  <input
+                  <select
                     id="service_category"
                     v-model="profileForm.service_category"
-                    type="text"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., Web Development, Photography, Consulting"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                   >
+                    <option 
+                      v-for="category in serviceCategories" 
+                      :key="category.value" 
+                      :value="category.value"
+                    >
+                      {{ category.label }}
+                    </option>
+                  </select>
                 </div>
 
                 <!-- Role Toggle -->
@@ -398,6 +404,33 @@ const passwordForm = reactive<PasswordForm>({
   password_confirmation: ''
 })
 
+// Service category options
+const serviceCategories = [
+  { value: '', label: 'Select a category' },
+  { value: 'beauty-wellness', label: 'Beauty & Wellness' },
+  { value: 'business-consulting', label: 'Business & Consulting' },
+  { value: 'cleaning-maintenance', label: 'Cleaning & Maintenance' },
+  { value: 'construction-trades', label: 'Construction & Trades' },
+  { value: 'education-tutoring', label: 'Education & Tutoring' },
+  { value: 'event-planning', label: 'Event Planning' },
+  { value: 'fitness-sports', label: 'Fitness & Sports' },
+  { value: 'food-catering', label: 'Food & Catering' },
+  { value: 'graphic-design', label: 'Graphic Design' },
+  { value: 'health-medical', label: 'Health & Medical' },
+  { value: 'home-garden', label: 'Home & Garden' },
+  { value: 'it-technology', label: 'IT & Technology' },
+  { value: 'legal-services', label: 'Legal Services' },
+  { value: 'marketing-advertising', label: 'Marketing & Advertising' },
+  { value: 'music-entertainment', label: 'Music & Entertainment' },
+  { value: 'photography-video', label: 'Photography & Video' },
+  { value: 'real-estate', label: 'Real Estate' },
+  { value: 'transportation', label: 'Transportation' },
+  { value: 'travel-tourism', label: 'Travel & Tourism' },
+  { value: 'web-development', label: 'Web Development' },
+  { value: 'writing-translation', label: 'Writing & Translation' },
+  { value: 'other', label: 'Other' }
+]
+
 // Watch for user data and populate form
 watch(user, (newUser) => {
   if (newUser) {
@@ -406,7 +439,7 @@ watch(user, (newUser) => {
     profileForm.phone = newUser.phone || ''
     profileForm.business_name = newUser.business_name || ''
     profileForm.service_category = newUser.service_category || ''
-    profileForm.roles = [...newUser.roles]
+    profileForm.roles = Array.isArray(newUser.roles) ? [...newUser.roles] : []
   }
 }, { immediate: true })
 

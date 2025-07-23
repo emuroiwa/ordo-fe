@@ -1,27 +1,33 @@
 <template>
   <div v-if="isOpen" class="fixed inset-0 z-50 overflow-y-auto" @click="closeModal">
-    <div class="flex items-center justify-center min-h-screen px-4">
+    <!-- Mobile: Bottom sheet, Desktop: Center modal -->
+    <div class="flex items-end sm:items-center justify-center min-h-screen px-0 sm:px-4">
       <!-- Backdrop -->
       <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
       
       <!-- Modal -->
-      <div class="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden" @click.stop>
-        <!-- Header -->
-        <div class="flex items-center justify-between p-6 border-b border-gray-200">
-          <div>
-            <h2 class="text-2xl font-bold text-gray-900">Book {{ service?.title }}</h2>
-            <p class="text-sm text-gray-600 mt-1">{{ service?.formatted_price }} • {{ service?.duration_minutes }} minutes</p>
+      <div class="relative bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden" @click.stop>
+        <!-- Mobile-First Header -->
+        <div class="sticky top-0 bg-white px-4 sm:px-6 py-4 border-b border-gray-200 rounded-t-2xl sm:rounded-none z-10">
+          <div class="flex items-center justify-between">
+            <!-- Mobile drag handle -->
+            <div class="absolute top-2 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-gray-300 rounded-full sm:hidden"></div>
+            
+            <div class="flex-1 min-w-0 mt-2 sm:mt-0">
+              <h2 class="text-lg sm:text-2xl font-bold text-gray-900 truncate">Book {{ service?.title }}</h2>
+              <p class="text-sm text-gray-600 mt-1">{{ service?.formatted_price }} • {{ service?.duration_minutes }} minutes</p>
+            </div>
+            <button @click="closeModal" class="p-2 hover:bg-gray-100 rounded-full transition-colors touch-target ml-3 flex-shrink-0">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-          <button @click="closeModal" class="text-gray-400 hover:text-gray-600 transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
         </div>
 
         <!-- Content -->
-        <div class="modal-content p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="modal-content p-4 sm:p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             <!-- Calendar -->
             <div class="lg:col-span-2">
               <div class="bg-gray-50 rounded-xl p-6">
@@ -197,8 +203,18 @@
 
             <!-- Booking Summary -->
             <div class="lg:col-span-1">
-              <div class="bg-gray-50 rounded-xl p-6 sticky top-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Booking Summary</h3>
+              <div id="booking-summary" class="bg-gray-50 rounded-xl p-4 sm:p-6 sticky top-6">
+                <!-- Mobile: Show scroll hint -->
+                <div class="lg:hidden flex items-center justify-between mb-3">
+                  <h3 class="text-lg font-semibold text-gray-900">Booking Summary</h3>
+                  <div v-if="!selectedSlot" class="text-xs text-blue-600 animate-pulse flex items-center">
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-5 5-5-5" />
+                    </svg>
+                    Select time below
+                  </div>
+                </div>
+                <h3 class="hidden lg:block text-lg font-semibold text-gray-900 mb-4">Booking Summary</h3>
                 
                 <!-- Service Details -->
                 <div class="space-y-3 mb-6">
@@ -461,6 +477,15 @@ const nextPeriod = () => {
 
 const selectTimeSlot = (slot: any) => {
   selectedSlot.value = slot
+  
+  // Mobile: Scroll to booking summary when time is selected
+  if (window.innerWidth < 1024) { // lg breakpoint
+    nextTick(() => {
+      setTimeout(() => {
+        scrollToBookingSummary()
+      }, 150) // Small delay for smooth UX
+    })
+  }
 }
 
 const selectDate = (day: any) => {
@@ -491,6 +516,32 @@ const selectDate = (day: any) => {
       }
     }, 100) // Small delay to ensure the time slots have rendered
   })
+}
+
+// Mobile: Scroll to booking summary function
+const scrollToBookingSummary = () => {
+  const bookingSummary = document.querySelector('#booking-summary')
+  const modalContent = document.querySelector('.modal-content')
+  
+  if (bookingSummary && modalContent) {
+    const summaryTop = bookingSummary.offsetTop
+    const modalHeight = modalContent.clientHeight
+    const summaryHeight = bookingSummary.clientHeight
+    
+    // Calculate scroll position to show booking summary prominently
+    const targetScrollTop = summaryTop - (modalHeight * 0.3) // Show summary in upper third
+    
+    modalContent.scrollTo({
+      top: Math.max(0, targetScrollTop),
+      behavior: 'smooth'
+    })
+    
+    // Add visual feedback - subtle bounce animation
+    bookingSummary.classList.add('booking-summary-highlight')
+    setTimeout(() => {
+      bookingSummary.classList.remove('booking-summary-highlight')
+    }, 1000)
+  }
 }
 
 // Load available slots from API
@@ -624,5 +675,118 @@ watch(calendarView, () => {
 
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
+}
+
+/* Booking summary highlight animation */
+@keyframes booking-highlight {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.3);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.booking-summary-highlight {
+  animation: booking-highlight 1s ease-out;
+  border: 2px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Touch targets for mobile */
+.touch-target {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile-specific enhancements */
+@media (max-width: 640px) {
+  /* Touch targets are larger on mobile */
+  .touch-target {
+    min-height: 48px;
+  }
+  
+  /* Modal slides up from bottom on mobile */
+  .fixed.inset-0 .relative {
+    margin-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  
+  /* Smoother scrolling on mobile */
+  .modal-content {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .modal-content::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Better form inputs on mobile */
+  input, select {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Enhanced touch targets */
+  button {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  /* Better spacing on mobile */
+  .grid {
+    gap: 1.5rem;
+  }
+  
+  /* Booking summary mobile optimizations */
+  #booking-summary {
+    position: relative;
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    backdrop-filter: blur(8px);
+    background: rgba(249, 250, 251, 0.95);
+  }
+  
+  /* Pulse animation for scroll hint */
+  @keyframes scroll-hint {
+    0%, 100% {
+      opacity: 0.6;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(2px);
+    }
+  }
+  
+  .animate-pulse {
+    animation: scroll-hint 2s infinite;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1023px) {
+  /* Tablet optimizations */
+  .touch-target {
+    min-height: 44px;
+  }
+  
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .modal-content {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 </style>

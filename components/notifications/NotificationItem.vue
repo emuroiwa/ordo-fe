@@ -5,6 +5,9 @@
     @click="$emit('click', notification)"
   >
     <div class="flex items-start space-x-3">
+      <!-- Debug -->
+      <div class="text-xs text-blue-500 mb-2">NotificationItem: {{ notification?.id }}</div>
+      
       <!-- Icon -->
       <div class="flex-shrink-0">
         <div 
@@ -124,12 +127,36 @@ const emit = defineEmits<{
   delete: [notificationId: string]
 }>()
 
-const { 
-  getNotificationTitle, 
-  getNotificationMessage, 
-  formatNotificationTime,
-  isNotificationUnread 
-} = useNotifications()
+// Helper functions - inline for now to avoid composable issues
+const getNotificationTitle = (notification: Notification): string => {
+  return notification.data?.title || 'Notification'
+}
+
+const getNotificationMessage = (notification: Notification): string => {
+  return notification.data?.message || ''
+}
+
+const formatNotificationTime = (notification: Notification): string => {
+  if (!notification.created_at) return ''
+  
+  const date = new Date(notification.created_at)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMins / 60)
+  const diffDays = Math.floor(diffHours / 24)
+
+  if (diffMins < 1) return 'Just now'
+  if (diffMins < 60) return `${diffMins}m ago`
+  if (diffHours < 24) return `${diffHours}h ago`
+  if (diffDays < 7) return `${diffDays}d ago`
+  
+  return date.toLocaleDateString()
+}
+
+const isNotificationUnread = (notification: Notification): boolean => {
+  return !notification.read_at
+}
 
 const isUnread = computed(() => isNotificationUnread(props.notification))
 
