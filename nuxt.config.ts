@@ -38,6 +38,12 @@ export default defineNuxtConfig({
     // Dashboard - SPA for performance
     '/dashboard/**': { ssr: false },
     
+    // Vendor verification - SPA to avoid role check issues
+    '/vendor/**': { ssr: false },
+    
+    // Admin pages - SPA for performance
+    '/admin/**': { ssr: false },
+    
     // Auth pages - SPA for better UX
     '/login': { ssr: false },
     '/register': { ssr: false },

@@ -481,7 +481,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 // Set page meta
 definePageMeta({
   layout: false,
-  middleware: 'auth'
+  middleware: ['auth', 'vendor-verified']
 })
 
 // Use composables

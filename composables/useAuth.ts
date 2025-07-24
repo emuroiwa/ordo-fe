@@ -129,17 +129,22 @@ export const useAuth = () => {
     try {
       isLoading.value = true
       const config = useRuntimeConfig()
-      const { $fetch } = useNuxtApp()
       
-      const response = await $fetch<RegisterResponse>('/api/v1/register', {
+      const url = `${config.public.apiBase}/api/v1/register`
+      const fetchResponse = await fetch(url, {
         method: 'POST',
-        baseURL: config.public.apiBase,
-        body: userData,
+        body: JSON.stringify(userData),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         }
       })
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+      }
+      
+      const response = await fetchResponse.json() as RegisterResponse
 
       if (response.token && response.user) {
         // Ensure roles is always an array
@@ -170,12 +175,11 @@ export const useAuth = () => {
     try {
       isLoading.value = true
       const config = useRuntimeConfig()
-      const { $fetch } = useNuxtApp()
       
       if (token.value) {
-        await $fetch('/api/v1/logout', {
+        const url = `${config.public.apiBase}/api/v1/logout`
+        await fetch(url, {
           method: 'POST',
-          baseURL: config.public.apiBase,
           headers: {
             'Authorization': `Bearer ${token.value}`,
             'Accept': 'application/json'
@@ -198,19 +202,24 @@ export const useAuth = () => {
     try {
       isLoading.value = true
       const config = useRuntimeConfig()
-      const { $fetch } = useNuxtApp()
       
       if (!token.value) {
         return null
       }
 
-      const response = await $fetch<{user: User}>('/api/v1/user', {
-        baseURL: config.public.apiBase,
+      const url = `${config.public.apiBase}/api/v1/user`
+      const fetchResponse = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token.value}`,
           'Accept': 'application/json'
         }
       })
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+      }
+      
+      const response = await fetchResponse.json() as {user: User}
 
       user.value = response.user
       userCookie.value = response.user
@@ -260,15 +269,20 @@ export const useAuth = () => {
       if (!token.value) return false
       
       const config = useRuntimeConfig()
-      const { $fetch } = useNuxtApp()
-      const response = await $fetch<{ token: string }>('/api/v1/refresh', {
+      const url = `${config.public.apiBase}/api/v1/refresh`
+      const fetchResponse = await fetch(url, {
         method: 'POST',
-        baseURL: config.public.apiBase,
         headers: {
           'Authorization': `Bearer ${token.value}`,
           'Accept': 'application/json'
         }
       })
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+      }
+      
+      const response = await fetchResponse.json() as { token: string }
 
       if (response.token) {
         token.value = response.token

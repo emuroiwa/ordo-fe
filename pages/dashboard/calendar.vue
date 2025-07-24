@@ -428,7 +428,7 @@ import AppointmentModal from '~/components/calendar/AppointmentModal.vue'
 
 // Page meta
 definePageMeta({
-  middleware: 'auth'
+  middleware: ['auth', 'vendor-verified']
 })
 
 // Page head

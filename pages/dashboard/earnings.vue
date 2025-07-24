@@ -522,7 +522,7 @@ import type { DateRange, PayoutRequest } from '~/composables/useEarnings'
 // Set page meta
 definePageMeta({
   layout: false,
-  middleware: 'auth'
+  middleware: ['auth', 'vendor-verified']
 })
 
 // Use composables

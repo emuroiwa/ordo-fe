@@ -21,6 +21,7 @@ interface _GlobalComponents {
     'LocationSelector': typeof import("../components/LocationSelector.vue")['default']
     'ServiceCreationWizard': typeof import("../components/ServiceCreationWizard.vue")['default']
     'ServiceForm': typeof import("../components/ServiceForm.vue")['default']
+    'VendorVerificationBanner': typeof import("../components/VendorVerificationBanner.vue")['default']
     'BookingAvailabilityCalendar': typeof import("../components/booking/AvailabilityCalendar.vue")['default']
     'BookingDetailsModal': typeof import("../components/booking/BookingDetailsModal.vue")['default']
     'BookingForm': typeof import("../components/booking/BookingForm.vue")['default']
@@ -65,6 +66,7 @@ interface _GlobalComponents {
     'LazyLocationSelector': LazyComponent<typeof import("../components/LocationSelector.vue")['default']>
     'LazyServiceCreationWizard': LazyComponent<typeof import("../components/ServiceCreationWizard.vue")['default']>
     'LazyServiceForm': LazyComponent<typeof import("../components/ServiceForm.vue")['default']>
+    'LazyVendorVerificationBanner': LazyComponent<typeof import("../components/VendorVerificationBanner.vue")['default']>
     'LazyBookingAvailabilityCalendar': LazyComponent<typeof import("../components/booking/AvailabilityCalendar.vue")['default']>
     'LazyBookingDetailsModal': LazyComponent<typeof import("../components/booking/BookingDetailsModal.vue")['default']>
     'LazyBookingForm': LazyComponent<typeof import("../components/booking/BookingForm.vue")['default']>
@@ -115,6 +117,7 @@ export const ImageUpload: typeof import("../components/ImageUpload.vue")['defaul
 export const LocationSelector: typeof import("../components/LocationSelector.vue")['default']
 export const ServiceCreationWizard: typeof import("../components/ServiceCreationWizard.vue")['default']
 export const ServiceForm: typeof import("../components/ServiceForm.vue")['default']
+export const VendorVerificationBanner: typeof import("../components/VendorVerificationBanner.vue")['default']
 export const BookingAvailabilityCalendar: typeof import("../components/booking/AvailabilityCalendar.vue")['default']
 export const BookingDetailsModal: typeof import("../components/booking/BookingDetailsModal.vue")['default']
 export const BookingForm: typeof import("../components/booking/BookingForm.vue")['default']
@@ -159,6 +162,7 @@ export const LazyImageUpload: LazyComponent<typeof import("../components/ImageUp
 export const LazyLocationSelector: LazyComponent<typeof import("../components/LocationSelector.vue")['default']>
 export const LazyServiceCreationWizard: LazyComponent<typeof import("../components/ServiceCreationWizard.vue")['default']>
 export const LazyServiceForm: LazyComponent<typeof import("../components/ServiceForm.vue")['default']>
+export const LazyVendorVerificationBanner: LazyComponent<typeof import("../components/VendorVerificationBanner.vue")['default']>
 export const LazyBookingAvailabilityCalendar: LazyComponent<typeof import("../components/booking/AvailabilityCalendar.vue")['default']>
 export const LazyBookingDetailsModal: LazyComponent<typeof import("../components/booking/BookingDetailsModal.vue")['default']>
 export const LazyBookingForm: LazyComponent<typeof import("../components/booking/BookingForm.vue")['default']>

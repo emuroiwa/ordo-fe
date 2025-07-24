@@ -277,7 +277,7 @@ import type { DateRange } from '~/composables/useAnalytics'
 // Set page meta
 definePageMeta({
   layout: false,
-  middleware: 'auth'
+  middleware: ['auth', 'vendor-verified']
 })
 
 // Use composables

@@ -653,6 +653,12 @@ const _inlineRuntimeConfig = {
       "/dashboard/**": {
         "ssr": false
       },
+      "/vendor/**": {
+        "ssr": false
+      },
+      "/admin/**": {
+        "ssr": false
+      },
       "/login": {
         "ssr": false
       },

@@ -1,6 +1,9 @@
 <template>
   <NuxtLayout name="dashboard">
     <div>
+      <!-- Vendor Verification Banner -->
+      <VendorVerificationBanner v-if="user" :user="user" />
+      
       <!-- Loading State -->
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="text-center">
@@ -391,6 +394,7 @@ definePageMeta({
 })
 
 // Use composables
+const { user } = useAuth()
 const { currentRole } = useRole()
 const { 
   dashboardData, 
